@@ -1,4 +1,4 @@
-import { makeToJSON } from './helpers'
+import { makeToJSON } from '../utils/helpers'
 import Lexer from './Lexer'
 import Pitch from './Pitch'
 import Duration from './Duration'
@@ -14,8 +14,8 @@ class Note {
     } else if (typeof note === 'string') {
       this.parse(new Lexer(note))
     } else {
-      this.pitch = note.pitch
-      this.duration = note.duration
+      this.pitch = new Pitch(note.pitch, style)
+      this.duration = new Duration(note.duration, style)
     }
   }
 
