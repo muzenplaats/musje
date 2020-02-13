@@ -1,8 +1,8 @@
 {
   "name": "musje",
-  "description": "A numbered musical notation.",
+  "description": "A numbered musical notation in sheet music.",
   "version": "2.0.0-delta",
-  "internalVersion": "2.0.0.0-delta",
+  "internalVersion": "2.0.0.1-delta",
   "status": "held",
   "state": "steady",
   "main": "index.js",
