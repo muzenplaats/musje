@@ -7,10 +7,16 @@
   "state": "steady",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
   },
   "keywords": [
-    "music", "jianpu"
+    "music",
+    "jianpu"
   ],
   "author": "Malcom Wu <malcomwu@hotmail.com>",
   "license": "Unlicensed"
