@@ -7,7 +7,7 @@ class Staff {
   constructor(staff, style) {
     this.name = 'staff'
     this.style = style
-    if (staff.name= 'lexer') {
+    if (staff.name === 'lexer') {
       this.parse(staff)
     } else if (typeof staff === 'string') {
       this.parse(new Lexer(staff))

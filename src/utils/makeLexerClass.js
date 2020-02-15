@@ -1,5 +1,5 @@
 
-export default function makeLexerClass(patterns) => {
+export default function makeLexerClass(patterns) {
 
   return class Lexer {
     constructor(src) {
