@@ -3,7 +3,7 @@ import { makeToJSON, repeat } from '../utils/helpers'
 
 const STEP_TO_SEMITONE = { 1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11 }
 
-class Pitch {
+export default class Pitch {
   constructor(pitch, style) {
     this.name = 'pitch'
     this.style = style
@@ -19,7 +19,12 @@ class Pitch {
   }
 
   parse(lexer) {
-
+    lexer.optional('accidental', lexeme => { this.accidental = lexeme })
+    lexer.token('step', lexeme => { this.step = +lexeme })
+    lexer.optional('octave', lexeme => {
+      this.octave = lexeme[0] === `'` ? lexeme.length :
+                    lexeme[0] === ',' ? -lexeme.length : 0
+    })
   }
 
   get midiNumber() {
@@ -36,5 +41,3 @@ class Pitch {
 
   toJSON = makeToJSON('step', 'accidental', 'octave')
 }
-
-export default Pitch

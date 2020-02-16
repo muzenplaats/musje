@@ -2,9 +2,7 @@ import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 import Duration from './Duration'
 
-export default Rest
-
-class Rest {
+export default class Rest {
   constructor(rest, style) {
     this.name = 'rest'
     this.style = style
@@ -19,7 +17,7 @@ class Rest {
 
   parse(lexer) {
     lexer.token('0')
-    this.duration = new Duration(lexer, style)
+    this.duration = new Duration(lexer, this.style)
   }
 
   toString() { return '0' + this.duration }

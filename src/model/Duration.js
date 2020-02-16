@@ -1,10 +1,14 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
+import { repeat, swapObject, makeToJSON } from '../utils/helpers'
 
-export default Duration
+const STR_TO_TYPE = {
+  '---': 1, '-': 2, '': 4, '_': 8, '=': 16, '=_': 32, '==': 64,
+  '==_': 128, '===': 256, '===_': 512, '====': 1024
+}
+const TYPE_TO_STR = swapObject(STR_TO_TYPE)
 
-class Duration {
-  constructo(duration, style) {
+export default class Duration {
+  constructor(duration, style) {
     this.name = 'duration'
     if (duration.name === 'lexer') {
       this.parse(duration)
@@ -17,9 +21,10 @@ class Duration {
   }
 
   parse(lexer) {
-
+    lexer.optional('type', lexeme => { this.type = STR_TO_TYPE[lexeme] })
+    lexer.optional('dot', lexeme => { this.dot = lexeme.length })
   }
 
-  toString() {}
+  toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dot)}` }
   toJSON = makeToJSON('type', 'dot')
 }

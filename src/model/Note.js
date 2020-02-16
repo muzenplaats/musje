@@ -3,9 +3,7 @@ import Lexer from './Lexer'
 import Pitch from './Pitch'
 import Duration from './Duration'
 
-export default Note
-
-class Note {
+export default class Note {
   constructor(note, style) {
     this.name = 'note'
     this.style = style
@@ -22,9 +20,8 @@ class Note {
   parse(lexer) {
     this.pitch = new Pitch(lexer, this.style)
     this.duration = new Duration(lexer, this.style)
-    lexer.skipSS()
   }
 
-  toString() { return `${pitch}${duration}`}
+  toString() { return `${this.pitch}${this.duration}`}
   toJSON = makeToJSON('pitch', 'duration')
 }

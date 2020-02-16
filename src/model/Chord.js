@@ -1,10 +1,9 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
+import Pitch from './Pitch'
 import Duration from './Duration'
 
-export default Chord
-
-class Chord {
+export default class Chord {
   constructor(chord, style) {
     this.name = 'chord'
     this.style = style
@@ -13,15 +12,19 @@ class Chord {
     } else if (typeof chord === 'string') {
       this.parse(new Lexer(chord))
     } else {
-      this.pitches = chord.pitches
+      this.pitches = chord.pitches.map(pitch => new Pitch(pitch))
       this.duration = new Duration(chord.duration, style)
     }
   }
 
   parse(lexer) {
-
+    this.pitches = []
+    lexer.token('<')
+    while (lexer.is('pitch')) this.pitches.push(new Pitch(lexer))
+    lexer.token('>')
+    this.duration = new Duration(lexer)
   }
 
-  toString() { return this.pitches.join('') + this.duration }
+  toString() { return `<${this.pitches.join('')}>${this.duration}` }
   toJSON = makeToJSON('pitches', 'duration')
 }
