@@ -1,9 +1,7 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
-export default Time
-
-class Time {
+export default class Time {
   constructor(time, style) {
     this.name = 'time'
     this.style = style
@@ -18,7 +16,9 @@ class Time {
   }
 
   parse(lexer) {
-
+    lexer.token('beats', lexeme => { this.beats = +lexeme })
+    lexer.token('/')
+    lexer.token('beatType', lexeme => { this.beatType = +lexeme })
   }
 
   toString() { return `${this.beats}/${this.beatType}` }

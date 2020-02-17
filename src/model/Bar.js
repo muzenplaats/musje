@@ -1,21 +1,21 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
-export default Bar
-
-class Bar {
+export default class Bar {
   constructor(bar, style) {
     this.name = 'bar'
     this.style = style
     if (bar.name === 'lexer') {
       this.parse(bar)
-    } else {
+    } else if (typeof bar === 'string') {
       this.parse(new Lexer(bar))
+    } else {
+      this.value = bar.value
     }
   }
 
   parse(lexer) {
-
+    lexer.token('bar', lexeme => { this.value = lexeme })
   }
 
   toString() { return this.value }

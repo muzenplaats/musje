@@ -16,15 +16,15 @@ export default class Duration {
       this.parse(new Lexer(duration))
     } else {
       this.type = duration.type
-      this.dot = duration.dot
+      this.dots = duration.dots
     }
   }
 
   parse(lexer) {
     lexer.optional('type', lexeme => { this.type = STR_TO_TYPE[lexeme] })
-    lexer.optional('dot', lexeme => { this.dot = lexeme.length })
+    lexer.optional('dots', lexeme => { this.dots = lexeme.length })
   }
 
-  toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dot)}` }
-  toJSON = makeToJSON('type', 'dot')
+  toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` }
+  toJSON = makeToJSON('type', 'dots')
 }

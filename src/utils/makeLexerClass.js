@@ -46,7 +46,6 @@ const getPatterns = patterns => {
 }
 
 export default function makeLexerClass(patterns) {
-
   return class Lexer {
     constructor(src) {
       this.name = 'lexer'
@@ -60,17 +59,24 @@ export default function makeLexerClass(patterns) {
     get line() { return this.lines.line }
     get ln() { return this.lines.ln }
     get col() { return this.line.col }
+    get eol() { return this.line.eol }
+    get eof() { return this.lines.eof }
 
-    newLine() { this.lines.newLine() }
+    nextLine() { this.lines.nextLine() }
 
     getPattern(token) {
       if (token in this.patterns) return this.patterns[token]
-      this.error(`undefined token [${token}]`)
+      this.error(`Undefined token [${token}]`)
+    }
+
+    getWithoutPattern(token) {
+      if (token in this.withoutPatterns) return this.withoutPatterns[token]
+      this.error(`Undefined token [${token}]`)
     }
 
     eat(token) {
       const matched = this.line.rest.match(this.getPattern(token))
-      if (!matched) this.error(`[$token]`)
+      if (!matched) this.error(`token [${token}]`)
       this.lexeme = matched[0]
       this.line.advance(this.lexeme.length)
     }
@@ -114,12 +120,18 @@ export default function makeLexerClass(patterns) {
     }
 
     error(message) {
-      throw new Error(`${message} at line ${this.ln} column ${this.col}.
+      throw new Error(`${message} at line ${this.ln + 1} column ${this.col + 1}.
 ${this.line.str}
 ${repeat(' ', this.line.col)}^`)
     }
 
     skipSS() { this.optional('SS') }
-    skipWhite() { this.mlwithout('SS') }
+
+    skipWhite() {
+      while (this.is('S') && !this.eof) {
+        this.token('SS')
+        if (this.eol) this.nextLine()
+      }
+    }
   }
 }
