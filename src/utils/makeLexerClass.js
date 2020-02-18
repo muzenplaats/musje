@@ -128,9 +128,12 @@ ${repeat(' ', this.line.col)}^`)
     skipSS() { this.optional('SS') }
 
     skipWhite() {
-      while (this.is('S') && !this.eof) {
-        this.token('SS')
-        if (this.eol) this.nextLine()
+      while ((this.is('S') || this.eol) && !this.eof) {
+        if (this.eol) {
+          this.nextLine()
+        } else {
+          this.token('SS')
+        }
       }
     }
   }
