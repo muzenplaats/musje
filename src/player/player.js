@@ -1,12 +1,11 @@
+import play from './play'
+
 var _ctx
-const getContext = () => _ctx || (_ctx = new AudioContext())
 
-export const play = (f) => {
-  const context = getContext()
-  var oscillator = context.createOscillator();
-
-  oscillator.type = 'square'
-  oscillator.frequency.setValueAtTime(f, context.currentTime) // value in hertz
-  oscillator.connect(context.destination)
-  oscillator.start()
+class Player {
+  constructor() {}
+  get context() { return  _ctx || (_ctx = new AudioContext()) }
+  play = play
 }
+
+export default new Player()

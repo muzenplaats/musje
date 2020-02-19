@@ -2,6 +2,9 @@ import Lexer from './Lexer'
 import { makeToJSON, repeat } from '../utils/helpers'
 
 const STEP_TO_SEMITONE = { 1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11 }
+const ACCIDENTAL_TO_ALTER = {
+  '#': 1, '##': 2, n: 0, '': 0, b: -1, bb: -2
+}
 
 export default class Pitch {
   constructor(pitch, style) {
@@ -26,6 +29,12 @@ export default class Pitch {
                     lexeme[0] === ',' ? -lexeme.length : 0
     })
   }
+
+  get alter() {
+    return typeof this._alter === 'number' ? this._alter :
+           ACCIDENTAL_TO_ALTER[this.accidental]
+  }
+  set alter(alt) { this._alter = alt }
 
   get midiNumber() {
     return STEP_TO_SEMITONE[this.step] + this.alter + this.octave * 12 + 60

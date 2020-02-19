@@ -9,7 +9,7 @@ import Multipart from './model/Multipart'
 import Bar from './model/Bar'
 import Cell from './model/Cell'
 import Staff from './model/Staff'
-import { play } from './player/player'
+import player from './player/player'
 
 const { slice } = []
 function test() {
@@ -35,12 +35,26 @@ test(Cell, { data: [new Time('6/8'), new Note('5'), new Rest('0'),
            '2/4 7,1 0   <246>_ <1 1|2 > \\be \n 1 /ab  | 2 ')
 test(Staff, '2/4 1 1 | 5  <15> | 6  \n 6 | 5- ')
 
+const obj = new Cell('1155665- 4433221- 5544332- 5544332- 1155665- 4433221-')
+
 function component() {
   const div = document.createElement('div')
-  const btn = document.createElement('button')
-  btn.innerHTML = '&gt;'
-  btn.addEventListener('click', () => play(p.frequency), false);
-  div.appendChild(btn)
+  const editor = document.createElement('textarea')
+
+  const btnRefrash = document.createElement('button')
+  btnRefrash.innerHTML = '()'
+  btnRefrash.addEventListener('click', () => {}, false)
+
+  const btnPlay = document.createElement('button')
+  btnPlay.innerHTML = '&gt;'
+  btnPlay.addEventListener('click', () => player.play(obj), false)
+
+  const info = document.createElement('pre')
+
+  div.appendChild(editor)
+  div.appendChild(btnRefrash)
+  div.appendChild(btnPlay)
+  div.appendChild(info)
   return div;
 }
 

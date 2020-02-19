@@ -6,6 +6,7 @@ const STR_TO_TYPE = {
   '==_': 128, '===': 256, '===_': 512, '====': 1024
 }
 const TYPE_TO_STR = swapObject(STR_TO_TYPE)
+const DOTS_MULTIPLIERS = [1, 1.5, 1.75]
 
 export default class Duration {
   constructor(duration, style) {
@@ -23,6 +24,10 @@ export default class Duration {
   parse(lexer) {
     lexer.optional('type', lexeme => { this.type = STR_TO_TYPE[lexeme] })
     lexer.optional('dots', lexeme => { this.dots = lexeme.length })
+  }
+
+  get quarters() {
+    return 4 / this.type * DOTS_MULTIPLIERS[this.dots]
   }
 
   toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` }
