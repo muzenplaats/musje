@@ -35,11 +35,14 @@ test(Cell, { data: [new Time('6/8'), new Note('5'), new Rest('0'),
            '2/4 7,1 0   <246>_ <1 1|2 > \\be \n 1 /ab  | 2 ')
 test(Staff, '2/4 1 1 | 5  <15> | 6  \n 6 | 5- ')
 
-const obj = new Cell('1155665- 4433221- 5544332- 5544332- 1155665- 4433221-')
+const value = `1155665- 4433221- 5544332- 5544332- 1155665-
+1 <13> <135> <1357> <13571'> <1357> <135> <13> 1`
+const cell = new Cell(value)
 
 function component() {
   const div = document.createElement('div')
   const editor = document.createElement('textarea')
+  editor.value = value
 
   const btnRefrash = document.createElement('button')
   btnRefrash.innerHTML = '()'
@@ -47,13 +50,19 @@ function component() {
 
   const btnPlay = document.createElement('button')
   btnPlay.innerHTML = '&gt;'
-  btnPlay.addEventListener('click', () => player.play(obj), false)
+  btnPlay.addEventListener('click', () => player.play(cell), false)
+
+  const btnStop = document.createElement('button')
+  btnStop.innerHTML = '[]'
+  btnStop.addEventListener('click', () => player.stop(), false)
 
   const info = document.createElement('pre')
+  info.innerHTML = cell
 
   div.appendChild(editor)
   div.appendChild(btnRefrash)
   div.appendChild(btnPlay)
+  div.appendChild(btnStop)
   div.appendChild(info)
   return div;
 }

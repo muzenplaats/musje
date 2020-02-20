@@ -2,7 +2,7 @@ import makeLexerClass from '../utils/makeLexerClass'
 
 const cjk = '\u2E80-\u2FD5\u3190-\u319f\u3400-\u4DBF\u4E00-\u9FCC\uF900-\uFAAD'
 const letter = `A-Za-z${cjk}`
-const pitch = '[#nb]*[1-7]'
+const pitch = '[#nb]*[1-7][,\']*'
 
 const Lexer = makeLexerClass({
   0: '0',
