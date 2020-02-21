@@ -10,6 +10,7 @@ import Bar from './model/Bar'
 import Cell from './model/Cell'
 import Staff from './model/Staff'
 import player from './player/player'
+import Document, { Comment, Attrs } from './utils/XmlDocument'
 
 const { slice } = []
 function test() {
@@ -21,6 +22,7 @@ function test() {
   })
 }
 
+// ----------------------------------------------------------------
 test(Time, '3/4')
 test(Pitch, { step: 6, octave: 0, accidental: '' }, '#3,')
 test(Duration, '=_..')
@@ -34,6 +36,11 @@ test(Cell, { data: [new Time('6/8'), new Note('5'), new Rest('0'),
                     new Chord(`<572'>`), new Bar('||')] },
            '2/4 7,1 0   <246>_ <1 1|2 > \\be \n 1 /ab  | 2 ')
 test(Staff, '2/4 1 1 | 5  <15> | 6  \n 6 | 5- ')
+
+// ----------------------------------------------------------------
+test(Attrs, 'abc="efg" xyz="123"')
+test(Comment, '<!-- abc \n  def -->')
+// ----------------------------------------------------------------
 
 const value = `1155665- 4433221- 5544332- 5544332- 1155665-
 1 <13> <135> <1357> <13571'> <1357> <135> <13> 1`
