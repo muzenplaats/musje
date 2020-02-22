@@ -108,6 +108,7 @@ export default function makeLexerClass(patterns) {
       const pattern = this.getWithoutPattern(token)
       const strs = []
       let matched = this.line.rest.match(pattern)
+
       while (!matched) {
         strs.push(this.line.rest)
         this.line.advance(this.line.rest.length)
@@ -116,8 +117,9 @@ export default function makeLexerClass(patterns) {
         matched = this.line.rest.match(pattern)
       }
       if (matched) {
-        strs.push(this.line.rest.substr(0, matched.index))
-        this.line.advance(matched.index)
+        let without = this.line.rest.substr(0, matched.index)
+        strs.push(without)
+        this.line.advance(without.length)
       }
       this.lexeme = strs.join('\n')
       if (act) act(this.lexeme)

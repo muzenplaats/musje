@@ -1,15 +1,16 @@
 import makeLexerClass from './makeLexerClass'
-import { makeToJSON } from './helpers'
+import { makeToJSON, repeat } from './helpers'
 
 const Lexer = makeLexerClass({
   '<': '<',
   '>': '>',
-  '</': '</',
-  '/>': '/>',
+  '</': '<\\/',
+  '/>': '\\/>',
   '=': '=',
   '"': '"',
   '<?xml': '<\\?xml',
   '?>': '\\?>',
+  '<!Doctype': '<![Dd][Oo][Cc][Tt][Yy][Pp][Ee]',
   '<!--': '<!--',
   '-->': '-->',
   name: '[a-z_-]+'
@@ -23,21 +24,37 @@ export default class Document {
     } else if (typeof document === 'string') {
       this.parse(new Lexer(document))
     } else {
-      this.xmlDecl = new XmlDecl(document.xmlDecl)
-      this.doctype = new Doctype(document.doctype)
+      if (document.xmlDecl) this.xmlDecl = new XmlDecl(document.xmlDecl)
+      if (document.doctype) this.doctype = new Doctype(document.doctype)
       this.root = new Element(document.root)
     }
   }
 
   parse(lexer) {
-
+    lexer.skipWhite()
+    if (lexer.is('<?xml')) this.xmlDecl = new XmlDecl(lexer)
+    if (lexer.is('<!Doctype')) this.doctype = new Doctype(lexer)
+    while (!lexer.eof) {
+      if (lexer.is('<!--')) {
+        new Comment(lexer)
+      } else {
+        this.root = new Element(lexer)
+      }
+    }
   }
 
-  toString() {}
+  toString() {
+    const strs = []
+    if (this.xmlDecl) strs.push(this.xmlDecl)
+    if (this.doctype) strs.push(this.doctype)
+    strs.push(this.root)
+    return strs.join('\n')
+  }
+
   toJSON = makeToJSON('xmlDecl', 'doctype', 'root')
 }
 
-class XmlDecl {
+export class XmlDecl {
   constructor(xmlDecl) {
     this.name = 'xml-decl'
     if (xmlDecl.name === 'lexer') {
@@ -50,14 +67,18 @@ class XmlDecl {
   }
 
   parse(lexer) {
-
+    lexer.token('<?xml')
+    lexer.skipWhite()
+    this.attrs = new Attrs(lexer)
+    lexer.token('?>')
+    lexer.skipWhite()
   }
 
-  toString() { `<!` }
+  toString() { return `<?xml ${this.attrs}?>` }
   toJSON = makeToJSON('attrs')
 }
 
-class Doctype {
+export class Doctype {
   constructor(doctype) {
     this.name = 'doctype'
     if (doctype.name === 'lexer') {
@@ -70,16 +91,21 @@ class Doctype {
   }
 
   parse(lexer) {
-
+    lexer.token('<!Doctype')
+    lexer.mlwithout('>', lexeme => { this.value = lexeme.trim() })
+    lexer.token('>')
+    lexer.skipWhite()
   }
 
-  toString() {}
+  toString() { return `<!Doctype ${this.value}>` }
   toJSON = makeToJSON('value')
 }
 
-class Element {
-  constructor(element) {
+export class Element {
+  constructor(element, level = 0, indent = 2) {
     this.name = 'element'
+    this.level = level
+    this.indent = indent
     if (element.name === 'lexer') {
       this.parse(element)
     } else if (typeof element === 'string') {
@@ -92,8 +118,8 @@ class Element {
         if (typeof child === 'string') {
           this.content.push(child)
         } else if (child.name === 'element') {
-          this.content.push(new Element(child))
-        } else if (child.name === 'comment') {
+          this.content.push(new Element(child, level + 1, indent))
+        // } else if (child.name === 'comment') {
 
         }
       })
@@ -105,20 +131,23 @@ class Element {
     lexer.token('<')
     lexer.token('name', lexeme => { this.elName = lexeme })
     lexer.skipWhite()
-    if (lexer.is('name')) this.attrs = new Attrs(lexer)
+    this.attrs = new Attrs(lexer)
     if (lexer.is('/>')) { lexer.token('/>'); return }
     lexer.token('>')
 
     lexer.skipWhite()
-    while (lexer.is('<')) {
-      if (lexer.is('<!--')) {
+    while (!lexer.eof) {
+      if (lexer.is('</')) {
+        if (this.content.length === 0) this.content = ''
+        break
+      } else if (lexer.is('<!--')) {
         new Comment(lexer)
       } else if (lexer.is('<')) {
-        this.content.push(new Element(lexer))
+        this.content.push(new Element(lexer, this.level + 1, this.indent))
       } else {
         lexer.mlwithout('<', lexeme => { this.content = lexeme.trim() })
       }
-      this.skipWhite()
+      lexer.skipWhite()
     }
 
     lexer.token('</')
@@ -128,17 +157,33 @@ class Element {
     })
     lexer.skipWhite()
     lexer.token('>')
+    lexer.skipWhite()
   }
 
   toString() {
-
+    const { level, indent, elName, attrs, content } = this
+    const strs = []
+    if (level > 0) strs.push('\n' + repeat(' ', level * indent))
+    strs.push(`<${elName}`)
+    if (attrs.hasAttr) strs.push(' ' + attrs)
+    if (Array.isArray(content)) {
+      if (content.length === 0) {
+        strs.push('/>')
+      } else {
+        strs.push('>', content.join(''))
+        strs.push('\n', repeat(' ', level * indent), `</${elName}>`)
+      }
+    } else {
+      strs.push(`>${content}</${elName}>`)
+    }
+    return strs.join('')
   }
 
   toJSON = makeToJSON('elName', 'attrs', 'content')
 }
 
 export class Attrs {
-  constructor(attrs) {
+  constructor(attrs = {}) {
     this.name = 'attrs'
     if (attrs.name === 'lexer') {
       this.parse(attrs)
@@ -162,7 +207,10 @@ export class Attrs {
       lexer.token('"')
       lexer.skipWhite()
     }
+    lexer.skipWhite()
   }
+
+  get hasAttr() { return Object.keys(this.value).length > 0 }
 
   toString() {
     const strs = []
