@@ -111,18 +111,17 @@ export class Element {
     } else if (typeof element === 'string') {
       this.parse(new Lexer(element))
     } else {
-      this.elName = element.elName
-      this.attrs = new Attrs(element.attrs)
+      const { elName, attrs, content } = element
+      this.elName = elName
+      this.attrs = new Attrs(attrs)
       this.content = []
-      element.content.forEach(child => {
-        if (typeof child === 'string') {
-          this.content.push(child)
-        } else if (child.name === 'element') {
+      if (Array.isArray(content)) {
+        content.forEach(child => {
           this.content.push(new Element(child, level + 1, indent))
-        // } else if (child.name === 'comment') {
-
-        }
-      })
+        })
+      } else {
+        this.content = content
+      }
     }
   }
 
@@ -158,6 +157,15 @@ export class Element {
     lexer.skipWhite()
     lexer.token('>')
     lexer.skipWhite()
+  }
+
+  eachChild(cb) {
+    const { content } = this
+    if (!Array.isArray(content)) {
+      return cb(content, )
+    } else {
+      content.forEach(cb)
+    }
   }
 
   toString() {
@@ -242,4 +250,13 @@ export class Comment {
 
   toString() { return `<!--${this.value}-->` }
   toJSON = makeToJSON('value')
+}
+
+export const el = (elName, attrs, content) => {
+  if (Array.isArray(attrs) || typeof attrs !== 'object') {
+    content = attrs
+    attrs = {}
+  }
+
+  return { name: 'element', elName, attrs, content }
 }

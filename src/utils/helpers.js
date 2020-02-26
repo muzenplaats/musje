@@ -1,4 +1,10 @@
 
+export const arrayToSet = arr => {
+  const result = {}
+  arr.forEach(name => { result[name] = true })
+  return result
+}
+
 export const repeat = (rep, num) => new Array(num + 1).join(rep)
 
 export const swapObject = obj => {

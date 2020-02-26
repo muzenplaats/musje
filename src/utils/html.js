@@ -1,18 +1,102 @@
+import { arrayToSet, makeToJSON, repeat } from './helpers'
 
-export const el = (name, attrs, content) => {
+const EVENT_TYPES = arrayToSet([
+  /* mouse */ 'mousedown', 'mouseup', 'click', 'dblclick', 'mousemove',
+              'mouseover', 'mousewheel', 'mouseout', 'contextmenu',
+  /* touch */ 'touchstart', 'touchmove', 'touchend', 'touchcancel',
+  /* keyboard */ 'keydown', 'keypress', 'keyup',
+  /* form */ 'focus', 'blur', 'change', 'submit',
+  /* window */ 'scroll', 'resize', 'hashchange', 'load', 'unload'
+])
 
-  this.name = name
-  this.attrs = {}
-  this.content = []
+export class Element {
+  constructor(element, level = 0, indent = 2) {
+    this.name = 'element'
+    this.level = level
+    this.indent = indent
 
-  for (let att in attrs) {
-    this.attrs[att] = attrs[att]
+    this.elName = element.elName
+    this.attrs = new Attrs(element.attrs)
+    this.content = []
+    element.content.forEach(child => {
+      if (child.name === 'element') {
+        this.content.push(new Element(child, level + 1, indent))
+      } else {
+        this.content.push(child)
+      }
+    })
   }
-  content.forEach(child => {
-    if (typeof child === 'string') {
-      this.content.push(child)
+
+  eachChild(cb) { this.content.forEach(cb) }
+  eachAttr(cb) { this.attrs.each(cb) }
+
+  create() {
+    const { content } = this
+    const element = document.createElement(this.elName)
+
+    this.eachAttr((value, name) => {
+      if (EVENT_TYPES[name]) {
+        element.addEventListener(name, value)
+      } else {
+        element.setAttribute(name, value)
+      }
+    })
+
+    this.eachChild(child => {
+      if (child instanceof Element) {
+        element.appendChild(child.create())
+      } else {
+        element.innerHTML = child
+      }
+    })
+    return element
+  }
+
+  toString() {
+    const { level, indent, elName, attrs, content } = this
+    const strs = []
+    if (level > 0) strs.push('\n' + repeat(' ', level * indent))
+    strs.push(`<${elName}`)
+    if (attrs.hasAttr) strs.push(' ' + attrs)
+    if (content.length === 0) {
+      strs.push('/>')
+    } else if (content[0].name !== 'element') {
+      strs.push(`>${content}</${elName}>`)
     } else {
-      this.content.push(el)
+      strs.push('>', content.join(''))
+      strs.push('\n', repeat(' ', level * indent), `</${elName}>`)
     }
-  })
+    return strs.join('')
+  }
+
+  toJSON = makeToJSON('elName', 'attrs', 'content')
+}
+
+export class Attrs {
+  constructor(attrs = {}) {
+    this.name = 'attrs'
+    this.value = attrs
+  }
+
+  get hasAttr() { return Object.keys(this.value).length > 0 }
+
+  each(cb) {
+    const { value } = this
+    Object.keys(value).forEach((name, i) => cb(value[name], name, i))
+  }
+
+  toString() {
+    const strs = []
+    for (let name in this.value) strs.push(`${name}="${this.value[name]}"`)
+    return strs.join(' ')
+  }
+
+  toJSON = makeToJSON('value')
+}
+
+export const el = (elName, attrs = {}, content = []) => {
+  if (!Array.isArray(content)) content = [content]
+  if (typeof attrs !== 'object') attrs = [attrs]
+  if (Array.isArray(attrs)) { content = attrs; attrs = {} }
+  return { name: 'element', elName, attrs, content }
 }
