@@ -8,6 +8,32 @@ const EVENT_TYPES = arrayToSet([
   /* form */ 'focus', 'blur', 'change', 'submit',
   /* window */ 'scroll', 'resize', 'hashchange', 'load', 'unload'
 ])
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
+const SVG_ELEMENT_NAMES = arrayToSet([
+  'a', 'animate', 'animateMotion', 'animateTransform',
+  'circle', 'clipPath', 'color-profile',
+  'defs', 'desc', 'discard',
+  'ellipse',
+  'feBlend', 'feColorMatrix', 'feComponentTransfer', 'feComposite',
+  'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap',
+  'feDistantLight','feDropShadow', 'feFlood',
+  'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR',
+  'feGaussianBlur', 'feImage', 'feMerge', 'feMergeNode', 'feMorphology',
+  'feOffset', 'fePointLight', 'feSpecularLighting', 'feSpotLight',
+  'feTile', 'feTurbulence', 'filter', 'foreignObject',
+  'g',
+  'hatch', 'hatchpath',
+  'image',
+  'line', 'linearGradient',
+  'marker', 'mask', 'mesh', 'meshgradient', 'meshpatch', 'meshrow',
+  'metadata', 'mpath',
+  'path', 'pattern', 'polygon', 'polyline',
+  'radialGradient', 'rect',
+  'script', 'set', 'solidcolor', 'stop', 'style', 'svg', 'switch', 'symbol',
+  'text', 'textPath', 'title', 'tspan',
+  'unknown', 'use',
+  'view'
+])
 
 export class Element {
   constructor(element, level = 0, indent = 2) {
@@ -31,8 +57,10 @@ export class Element {
   eachAttr(cb) { this.attrs.each(cb) }
 
   create() {
-    const { content } = this
-    const element = document.createElement(this.elName)
+    const { elName, content } = this
+    const element = SVG_ELEMENT_NAMES[elName] ?
+                    document.createElementNS(SVG_NAMESPACE, elName) :
+                    document.createElement(elName)
 
     this.eachAttr((value, name) => {
       if (EVENT_TYPES[name]) {
@@ -45,6 +73,9 @@ export class Element {
     this.eachChild(child => {
       if (child instanceof Element) {
         element.appendChild(child.create())
+      // } else if (typeof child === 'function') {
+      //   child.bind(element)
+      //   child()
       } else {
         element.innerHTML = child
       }

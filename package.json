@@ -7,9 +7,14 @@
   "state": "steady",
   "main": "webpack.config.js",
   "scripts": {
+    "serve": "webpack-dev-server --mode development",
     "watch": "webpack --mode development --watch",
     "start": "webpack --mode development",
     "deploy": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/malcomwu/musje.git"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -17,7 +22,8 @@
     "@babel/preset-env": "^7.8.4",
     "babel-loader": "^8.0.6",
     "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   },
   "keywords": [
     "music",

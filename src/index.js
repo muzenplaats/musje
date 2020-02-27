@@ -12,6 +12,7 @@ import Staff from './model/Staff'
 import player from './player/player'
 // import Document, { XmlDecl, Doctype, Comment, Attrs, Element, el } from './utils/XmlDocument'
 import { el, Element } from './utils/html'
+import { load } from './utils/helpers'
 
 const { slice } = []
 function test() {
@@ -98,16 +99,30 @@ const value = `1155665- 4433221- 5544332- 5544332- 1155665-
 const cell = new Cell(value)
 
 function component() {
-  const testel = new Element(el('div', { style: 'width: 500px; margin: 15px' }, [
+  const testel = new Element(el('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
-    el('textarea',{ style: 'width: 100%; height: 100px' }, value),
-    el('button', '()'),
-    el('button', { click: () => player.play(cell) }, '&gt;'),
-    el('button', { click: () => player.stop() }, '[]'),
-    el('pre', { style: 'width: 100%; white-space: pre-wrap' }, cell)
+    el('div', { style: 'width: 47%; float: left'}, [
+      el('textarea', { style: 'width: 100%; height: 100px' },
+        value
+        // function () { load('scores/001.musje', txt => this.value = txt) }
+      ),
+      el('button', '()'),
+      el('button', { click: () => player.play(cell) }, '&gt;'),
+      el('button', { click: () => player.stop() }, '[]'),
+      el('pre', { style: 'width: 100%; white-space: pre-wrap' }, cell),
+    ]),
+    el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
+      el('svg', { width: 500, height: 200 }, [
+        el('rect', { x: 0, y: 0, width: 500, height: 200, style: 'fill: none; stroke-width: 1; stroke: black' }),
+        el('circle', { cx: 20, cy: 20, r: 10}),
+        el('text', { x: 20, y: 50 }, '5')
+      ])
+    ])
   ]))
   // console.log(JSON.parse(JSON.stringify(testel)), '' + testel)
   // console.log(testel.create())
+
+  // load('scores/001.musje', txt => console.log(txt))
 
   return testel.create()
 }

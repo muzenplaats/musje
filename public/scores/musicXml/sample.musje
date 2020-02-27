@@ -1,0 +1,32 @@
+title: The Title                     // score = Score {
+subtitle: The Subtitle               //   head: Head {
+composer: The Composer               //     title: {},
+lyricist: The Lyricist               //     composer: {}
+arranger: The Arranger               //   },
+                                     //   body: Body {
+=                                    //     parts: [Part {
+3/4 1 2 3 | 4-. | 5 5 5 |            //       head: PartHead {},
+6 6- | 6 0- | 7 1'- |]               //       staves: [Stave {
+                                     //         measures: [Cell {
+                                     //           data: (Time|Note|Rest|Chord|Multipart|Bar|Direction)*
+                                     //         ]
+=                                    //       }]
+3/4 1 2 3 | 4-. | 5 5 5 |            //     }]
+6 6- | 6 0- | 7 1'- |]               //   }
+                                     // }
+= Harmonica 1 (Ha.1)
+3/4 1 2 3 | 4-. | 5 5 5 |
+6 6- | 6 0- | 7 1'- |]
+Lyrics Go after the Music.
+
+= Harmonica 2 (Ha.2)
+3/4 1 2 3 | 4-. | 5 5 5 |
+6 6- | 6 0- | 7 1'- |]
+
+= Baritone (Br)
+-
+3/4 1 2 3 | 4-. | 5 5 5 |
+6 6- | 6 0- | 7 1'- |]
+-
+3/4 1 2 3 | 4-. | 5 5 5 |
+6 6- | 6 0- | 7 1'- |]
