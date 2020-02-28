@@ -1,5 +1,5 @@
 # musje
-![alt musje 123](https://github.com/malcomwu/musje/blob/master/public/assets/musje123-64x64.jpg)
+![alt musje 123](https://github.com/malcomwu/musje/blob/master/dist/assets/musje123-64x64.jpg)
 <br>
 A numbered musical notation in sheet music.
 
