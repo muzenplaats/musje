@@ -1,5 +1,6 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
+import Part from './Part'
 
 export default Body
 
@@ -12,12 +13,17 @@ class Body {
     } else if (typeof body === 'string') {
       this.parse(new Lexer (body))
     } else {
-      this.parts = body.parts
+      this.parts = body.parts.map(part => new Part(part))
     }
   }
 
   parse(lexer) {
-
+    this.parts = []
+    let part
+    do {
+      part = new Part(lexer)
+      if (!part.isEmpty) this.parts.push(part)
+    } while (lexer.is('part-head'))
   }
 
   toString() {}

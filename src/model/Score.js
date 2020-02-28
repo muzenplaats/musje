@@ -16,10 +16,11 @@ class Score {
   }
 
   parse(lexer) {
+    lexer.skipWhite()
     this.head = new Head(lexer, this.style)
     this.body = new Body(lexer, this.style)
   }
 
-  toString() {}
+  toString() { return [this.head, this.body].join('\n') }
   toJSON = makeToJSON('head', 'body')
 }

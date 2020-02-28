@@ -18,6 +18,12 @@ const Lexer = makeLexerClass({
   letter: `[${letter}]`,
   word: `[${letter}]+`,
   words: `[${letter} ]+`,
+  title: 'title:',
+  subtitle: 'subtitle:',
+  composer: 'composer:',
+  lyricist: 'lyricist:',
+  arranger: 'arranger:',
+  source: 'source:',
   beats: '[1-9]\\d{0,3}',
   beatType: '[1-9]\\d{0,3}',
   step: '[1-7]',
@@ -36,7 +42,8 @@ const Lexer = makeLexerClass({
   bar: '(:\\|:?|\\|:|\\|[\\|\\]]?)',
   cell: '([#nb]?\\d|<|[\\:\\|]|[\\/\\\\])',
   'sl-comment': '\\/\\/',
-  'ml-comment': '\\/\\*'
+  'ml-comment': '\\/\\*',
+  comment: '\\/[\\/\\*]'
 })
 
 export default Lexer

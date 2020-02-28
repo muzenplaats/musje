@@ -1,9 +1,7 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
-export default Head
-
-class Head {
+export default class Head {
   constructor(head, style) {
     this.name = 'head'
     this.style = style
@@ -12,20 +10,51 @@ class Head {
     } else if (typeof head === 'string') {
       this.parse(new Lexer(head))
     } else {
-      this.title = title
-      this.subtitle = subtitle
-      this.composer = composer
-      this.lyricist = lyricist
-      this.arranger = arranger
-      this.source = source
+      this.title = head.title
+      this.subtitle = head.subtitle
+      this.composer = head.composer
+      this.lyricist = head.lyricist
+      this.arranger = head.arranger
+      this.source = head.source
     }
   }
 
   parse(lexer) {
-
+    const process = name => {
+      lexer.token(name)
+      lexer.without('comment', lexeme => { this[name] = lexeme.trim() })
+    }
+    while (!lexer.eof) {
+      if (lexer.is('title')) {
+        process('title')
+      } else if (lexer.is('subtitle')) {
+        process('subtitle')
+      } else if (lexer.is('composer')) {
+        process('composer')
+      } else if (lexer.is('lyricist')) {
+        process('lyricist')
+      } else if (lexer.is('arranger')) {
+        process('arranger')
+      } else if (lexer.is('source')) {
+        process('source')
+      } else {
+        break
+      }
+      lexer.skipWhite()
+    }
   }
 
-  toString() {}
+  toString() {
+    const strs = []
+    if (this.title) strs.push(`title: ${this.title}`)
+    if (this.subtitle) strs.push(`subtitle: ${this.subtitle}`)
+    if (this.composer) strs.push(`composer: ${this.composer}`)
+    if (this.lyricist) strs.push(`lyricist: ${this.lyricist}`)
+    if (this.arranger) strs.push(`arranger: ${this.arranger}`)
+    if (this.source) strs.push(`source: ${this.source}`)
+    return strs.join('\n')
+  }
+
   toJSON = makeToJSON('title', 'subtitle', 'composer', 'lyricist',
                       'arranger', 'source')
 }

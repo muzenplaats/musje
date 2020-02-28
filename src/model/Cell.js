@@ -8,6 +8,8 @@ import Multipart from './Multipart'
 import Direction from './Direction'
 import Bar from './Bar'
 
+const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
+
 export default class Cell {
   constructor(cell, style) {
     this.name = 'cell'
@@ -30,6 +32,7 @@ export default class Cell {
         }
       })
     }
+    this.setAlters()
   }
 
   parse(lexer) {
@@ -57,6 +60,46 @@ export default class Cell {
     }
   }
 
-  toString() { return this.data.join(' ') }
+  setAlters() {
+    const currAccidental = { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '' }
+    const setAlter = pitch => {
+      const { step, accidental } = pitch
+      if (accidental) currAccidental[step] = accidental
+      pitch.alter = ACCIDENTAL_TO_ALTER[currAccidental[step]]
+    }
+    this.data.forEach(dt => {
+      switch (dt.name) {
+        case 'note': return setAlter(dt.pitch)
+        case 'chord': return dt.pitches.forEach(setAlter)
+        case 'multipart': return
+      }
+    })
+  }
+
+  toString() {
+    // const data = []
+    // const beamed = []
+    // let bardata = this.leftBar.value === '|' ? [] : [this.leftBar]
+    // bardata = bardata.concat(this.data, this.rightBar)
+    // bardata.forEach(dt => {
+    //   const { duration } = dt
+    //   if (!duration || duration.type < 8) return data.push(dt)
+    //   const { beams } = duration
+    //   const isEnd = () => {
+    //     return !beams.some(b => b.type === 'begin' || b.type === 'continue')
+    //   }
+    //   if (beams.some(beam => beam.type !== 'single')) {
+    //     beamed.push(dt)
+    //   } else {
+    //     data.push(dt)
+    //   }
+    //   if (beamed.length > 0 && isEnd()) {
+    //     data.push(beamed.join(''))
+    //     beamed.length = 0
+    //   }
+    // })
+    return this.data.join(' ')
+  }
+
   toJSON = makeToJSON('data')
 }

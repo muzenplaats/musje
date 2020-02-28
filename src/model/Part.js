@@ -4,7 +4,7 @@ import PartHead from './PartHead'
 import Staff from './Staff'
 
 export default class Part {
-  constructor(part) {
+  constructor(part = { staves: [] }) {
     this.name = 'part'
     if (part.name === 'lexer') {
       this.parse(part)
@@ -16,14 +16,21 @@ export default class Part {
     }
   }
 
-  parse(lexer) {
-    this.head = new PartHead(lexer)
-    this.staves = []
-    while (!lexer.eof) {
-      this.staves.push(new Staff(lexer))
-    }
+  get isEmpty() {
+    return this.staves.length === 1 && this.staves[0].cells.length === 0
   }
 
-  toString() {}
+  parse(lexer) {
+    if (lexer.is('part-head')) {
+    this.head = lexer.is('part-head') ? new PartHead(lexer) : new PartHead()
+    this.staves = []
+    lexer.skipWhite()
+    do {
+      this.staves.push(new Staff(lexer))
+    } while (lexer.is('--'))
+    lexer.skipWhite()
+  }
+
+  toString() { return this.head +'\n' + this.staves.join('\n\n--\n') }
   toJSON = makeToJSON('head', 'staves')
 }

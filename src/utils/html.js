@@ -73,9 +73,6 @@ export class Element {
     this.eachChild(child => {
       if (child instanceof Element) {
         element.appendChild(child.create())
-      // } else if (typeof child === 'function') {
-      //   child.bind(element)
-      //   child()
       } else {
         element.innerHTML = child
       }

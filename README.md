@@ -11,7 +11,11 @@ areas of Asia, and called jianpu in Chinese. The musje 123 is a
 music processor based on this notation.
 
 ## Development
-This project was initiated about year 2015. Due to several reasons
-from the author, several attempts has been missed or discontinued.
-However, the experiences are not wasted. This current
-implementation is called musje 2 (codename: gezondheid).
+This project was initiated about year 2015; however, several attempts
+has been missed or discontinued. This version is musje 2 (codename: gezondheid).
+
+```sh
+npm run serve
+```
+
+and http://localhost:9000/.
