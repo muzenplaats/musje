@@ -1,3 +1,12 @@
+const { concat } = []
+
+export const flatten = arr => concat.apply([], arr)
+
+export const range = num => {
+  const result = []
+  for (let i = 0; i < num; i++) result.push(i)
+  return result
+}
 
 export const arrayToSet = arr => {
   const result = {}

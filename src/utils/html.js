@@ -1,4 +1,4 @@
-import { arrayToSet, makeToJSON, repeat } from './helpers'
+import { arrayToSet, makeToJSON, repeat, flatten } from './helpers'
 
 const EVENT_TYPES = arrayToSet([
   /* mouse */ 'mousedown', 'mouseup', 'click', 'dblclick', 'mousemove',
@@ -73,6 +73,8 @@ export class Element {
     this.eachChild(child => {
       if (child instanceof Element) {
         element.appendChild(child.create())
+      } else if (typeof child === 'object') {
+        element.appendChild(child)   // DOM Element
       } else {
         element.innerHTML = child
       }
@@ -126,5 +128,6 @@ export const el = (elName, attrs = {}, content = []) => {
   if (!Array.isArray(content)) content = [content]
   if (typeof attrs !== 'object') attrs = [attrs]
   if (Array.isArray(attrs)) { content = attrs; attrs = {} }
+  content = flatten(content)
   return { name: 'element', elName, attrs, content }
 }

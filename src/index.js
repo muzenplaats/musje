@@ -1,4 +1,5 @@
 import Cell from './model/Cell'
+import Staff from './model/Staff'
 import player from './player/player'
 import { el, Element } from './utils/html'
 import { load } from './utils/helpers'
@@ -6,11 +7,17 @@ import { load } from './utils/helpers'
 // import './test/testModel'
 // import './test/testXml'
 
+import Pitch from './model/Pitch'
+import pitchElement from './view/pitchElement'
+import style from './view/style.json'
+const pitch = new Pitch('3,,')
+
 function component() {
-  let editor, info, cell
+  let editor, info, staff, cell
   const editorChange = () => {
-    cell = new Cell(editor.value)
-    info.innerHTML = cell + '\ncell = ' + JSON.stringify(cell, null, 2)
+    staff = new Staff(editor.value)
+    info.innerHTML = staff + '\n' + JSON.stringify(staff, null, 2)
+    cell = staff.cells[0]
   }
 
   const main = new Element(el('div', { style: 'width: 90%; margin: 15px' }, [
@@ -29,8 +36,7 @@ function component() {
       el('svg', { width: 500, height: 200 }, [
         el('rect', { x: 0, y: 0, width: 500, height: 200,
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
-        el('circle', { cx: 20, cy: 20, r: 10}),
-        el('text', { x: 20, y: 50 }, '5')
+        pitchElement(pitch, style)
       ])
     ])
   ])).create()

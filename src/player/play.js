@@ -1,3 +1,4 @@
+const tos = []
 
 export function play(obj) {
   const { context } = this
@@ -8,7 +9,7 @@ export function play(obj) {
 }
 
 export function stop() {
-  tos.forEach(to => clearTimeout(to))
+  tos.forEach(clearTimeout)
   tos.length = 0
 }
 
@@ -32,6 +33,17 @@ const oscPlay = (t, freq, dur, onended, context) => {
 
 const getDur = dt => dt.duration.quarters * 60 / 120
 
+// export const playStaff = staff => {
+//   staff.cells.forEach(cell => {
+//     cell.data.forEach(dt => {
+//       switch (dt.name) {
+//         case 'note': return playNote(dt)
+//         case 'chord': return playChord(dt)
+//       }
+//     })
+//   })
+// }
+
 const playCell = (t, cell, context) => {
   const tempo = 60 / 90
   cell.data.forEach(dt => {
@@ -49,8 +61,6 @@ const playCell = (t, cell, context) => {
     }
   })
 }
-
-const tos = []
 
 const playNote = (t, note, context) => {
   const { pitch, duration } = note

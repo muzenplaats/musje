@@ -1,5 +1,6 @@
 import Lexer from './Lexer'
 import { repeat, swapObject, makeToJSON } from '../utils/helpers'
+import { Q } from './constants'
 
 const STR_TO_TYPE = {
   '---': 1, '-': 2, '': 4, '_': 8, '=': 16, '=_': 32, '==': 64,
@@ -26,9 +27,13 @@ export default class Duration {
     lexer.optional('dots', lexeme => { this.dots = lexeme.length })
   }
 
-  get quarters() {
-    return 4 / this.type * DOTS_MULTIPLIERS[this.dots]
+  get quartersQ() {
+    const mod = this.modification
+    return Q * 4 / this.type * DOTS_MULTIPLIERS[this.dots] *
+           (mod ? mod.normal / mod.actual : 1)
   }
+
+  get quarters() { return this.quartersQ / Q }
 
   toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` }
   toJSON = makeToJSON('type', 'dots')
