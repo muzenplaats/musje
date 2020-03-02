@@ -31,14 +31,3 @@ export function makeToJSON() {
     return result
   }
 }
-
-export const load = (filename, action) => {
-  const xhttp = new XMLHttpRequest()
-  xhttp.onreadystatechange = function () {
-    if (this.readyState === 4 && this.status === 200) {
-      action(xhttp.responseText)
-    }
-  }
-  xhttp.open('GET', filename, true)
-  xhttp.send()
-}

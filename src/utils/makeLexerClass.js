@@ -50,7 +50,7 @@ export default function makeLexerClass(patterns) {
     constructor(src) {
       this.name = 'lexer'
       this.src = src.replace(/\r\n/g, '\n')
-      this.lines = new Lines(src)
+      this.lines = new Lines(this.src)
       const ptrns = getPatterns(patterns)
       this.withoutPatterns = ptrns[0]
       this.patterns = ptrns[1]

@@ -1,10 +1,8 @@
 
 export default class PitchLayout {
   constructor(pitch, style) {
+    this.pitch = pitch
     this.style = style
-    this.step = pitch.step
-    this.accidental = pitch.accidental
-    this.octave = pitch.octave
   }
 
   get stepSize() { return this.style.stepFont }

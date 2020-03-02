@@ -1,0 +1,126 @@
+base {
+  size: 20px
+}
+
+title-font {
+  family: Times New Roman
+  size: 150%
+  height-ratio: 0.9
+  dy-ratio: 0.75
+}
+subtitle-font {
+  family: Times New Roman
+  size: 130%
+  width-ratio: 0.45
+  height-ratio: 0.9
+  dy-ratio: 0.8
+}
+creator-font {
+  family: Times New Roman
+  size: 110%
+  width-ratio: 0.45
+  height-ratio: 0.9
+  dy-ratio: 0.8
+}
+time-font {
+  family: Cadence
+  size: 100%
+  width-ratio: 0.45
+  height-ratio: 0.52
+  dy-ratio: 0.51
+}
+step-font, rest-font {
+  family: Times New Roman
+  size: 100%
+  width-ratio: 0.45
+  height-ratio: 0.69
+  dy-ratio: 0.68
+}
+accidental-font {
+  family: Cadence
+  size: 80%
+  width-ratio: 0.3
+  height-ratio: 0.75
+  dx-ratio: 0.3
+  dy-ratio: 0.39
+  lift: 25%
+}
+
+score {
+  width: 450px
+  margin-left: 10px
+  margin-top: 10px
+  margin-right: 10px
+  margin-bottom: 10px
+  head-body-sep: 20px
+}
+
+head {
+  title-subtitle-sep: 90%
+  title-creator-sep: 95%
+  creators-sep: 50%
+}
+
+body {
+  systems-sep: 50%
+}
+
+system {
+  tmp: 0
+}
+
+cell {
+  padding-left: 50%
+  padding-right: 50%
+  data-sep: 25%
+}
+
+bar {
+  line-height: 100%
+  light-width: 5%
+  heavy-width: 15%
+  dot-size: 12%
+  lines-sep: 15%
+  dots-sep: 20%
+  line-dot-sep: 12%
+}
+
+time {
+  line-height: 6%
+  line-ext: 5%
+  line-number-sep: 5%
+}
+
+note {
+  pitch-beam-sep: 9%
+  pitch-line-sep: 25%
+  pitch-dot-sep: 6%
+}
+
+chord {
+  pitches-sep: 10%
+}
+
+pitch {
+  step-accidental-sep: 0%
+  step-octave-sep: 7%
+  octave-size: 12%
+  octaves-sep: 6%
+}
+
+durationGE4 {
+  beam-height: 5%
+  beams-sep: 10%
+  dot-lift: 6%
+  dot-size: 10%
+  dots-sep: 10%
+}
+
+durationLE2 {
+  line-width: 50%
+  line-height: 6%
+  lines-sep: 40%
+  line-dot-sep: 40%
+  dot-size: 10%
+  dots-sep: 40%
+}

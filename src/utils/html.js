@@ -65,6 +65,11 @@ export class Element {
     this.eachAttr((value, name) => {
       if (EVENT_TYPES[name]) {
         element.addEventListener(name, value)
+      } else if (name === 'style') {
+        if (/\n/.test(value)) {
+          value = value.replace(/ *\n */g, ';')
+        }
+        element.setAttribute(name, value)
       } else {
         element.setAttribute(name, value)
       }
@@ -130,4 +135,37 @@ export const el = (elName, attrs = {}, content = []) => {
   if (Array.isArray(attrs)) { content = attrs; attrs = {} }
   content = flatten(content)
   return { name: 'element', elName, attrs, content }
+}
+
+
+let txt
+const cache = {}
+const prepareText = () => {
+  if (txt) return
+  txt = new Element(el('text', { x: 0, y: 50 }, '')).create()
+  const svg = new Element(el('svg', { width: 0, height: 0 }, [txt])).create()
+  document.body.appendChild(svg)
+}
+export const getSize = (font, content) => {
+  const key = font + content
+  if (cache[key]) return cache[key]
+  prepareText()
+  const style = `font-family: ${font.family}; font-size: ${font.size}`
+  txt.setAttribute('style', style)
+  txt.innerHTML = content
+  const { width, height } = txt.getBBox()
+  const result = { width, height }
+  cache[key] = result
+  return result
+}
+
+export const loadText = (url, onsuccess) => {
+  const xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) onsuccess(xhr.responseText)
+    }
+  }
+  xhr.open('GET', url, true)
+  xhr.send(null)
 }

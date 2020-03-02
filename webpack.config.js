@@ -5,9 +5,9 @@ module.exports = {
   entry: './src/index.js',
   module: {
     rules: [
+      { test: /\.style$/, use: 'raw-loader' },
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
+        test: /\.js$/, exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {

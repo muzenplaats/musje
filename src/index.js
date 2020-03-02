@@ -2,15 +2,23 @@ import Cell from './model/Cell'
 import Staff from './model/Staff'
 import player from './player/player'
 import { el, Element } from './utils/html'
-import { load } from './utils/helpers'
+import { loadText } from './utils/html'
 
 // import './test/testModel'
 // import './test/testXml'
 
-import Pitch from './model/Pitch'
-import pitchElement from './view/pitchElement'
-import style from './view/style.json'
-const pitch = new Pitch('3,,')
+import Time from './model/Time'
+import Style from './layout/Style'
+import defaultStyle from './layout/default.style'
+import TimeLayout from './layout/TimeLayout'
+import timeElement from './view/timeElement'
+
+const time = new Time('23/4')
+const style = new Style(defaultStyle).value
+const timeLayout = new TimeLayout(time, style)
+timeLayout.position = { x: 50, y: 50 }
+const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
+logJSON(timeLayout)
 
 function component() {
   let editor, info, staff, cell
@@ -36,14 +44,14 @@ function component() {
       el('svg', { width: 500, height: 200 }, [
         el('rect', { x: 0, y: 0, width: 500, height: 200,
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
-        pitchElement(pitch, style)
+        timeElement(timeLayout)
       ])
     ])
   ])).create()
   editor = main.querySelector('textarea')
   info = main.querySelector('pre')
 
-  load('scores/001.musje', txt => { editor.value = txt; editorChange() })
+  loadText('scores/001.musje', txt => { editor.value = txt; editorChange() })
 
   return main
 }
