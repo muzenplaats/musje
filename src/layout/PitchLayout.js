@@ -1,76 +1,107 @@
+import AbstractLayout from './AbstractLayout'
+import Layout from './Layout'
+import { getSize } from '../utils/html'
+import { range } from '../utils/helpers'
 
-export default class PitchLayout {
+const ACCIDENTAL_FONT_MAP = {
+  '#': '\ue10f', '##': '\ue126', n: '\ue117', b: '\ue11b', bb: '\ue124'
+}
+
+export default class PitchLayout extends AbstractLayout {
   constructor(pitch, style) {
+    super()
     this.pitch = pitch
     this.style = style
+    this.stepLayout = new StepLayout(pitch.step, style)
+    this.accidentalLayout = new AccidentalLayout(pitch.accidental, style)
+    this.octavesLayout = new OctavesLayout(pitch.octave, style)
+    this.setSize()
   }
 
-  get stepSize() { return this.style.stepFont }
-
-  get accidentalCode() { return ACCIDENTAL_CODE[this.accidental] }
-
-  get accidentalSize() {
-    if (this.accidental === 'bb') {
-      const af = this.style.accidentalFont
-      return { ...af, xShift: af.xShift * 0.66 }
-    }
-    return this.style.accidentalFont
-  }
-
-  get octavesSize() {
-    const oct = Math.abs(this.octave)
-    const { octaveSize, octavesSep } = this.style.pitch
-    return {
-      width: octaveSize,
-      height: oct * octaveSize + (oct - 1) * octavesSep,
-      r: octaveSize / 2
-    }
-  }
-
-  get size() {
-    const { accidental, octave } = this
-    const { width: stepW, height: stepH } = this.stepSize
-    const accW = accidental ? this.accidentalSize.width : 0
-    const accH = accidental ? this.accidentalSize.height : 0
-    const octH = octave ? this.octavesSize.height : 0
+  setSize() {
+    const { accidental, octave } = this.pitch
+    const { width: stepW, height: stepH } = this.stepLayout
+    const accW = accidental ? this.accidentalLayout.width : 0
+    const accH = accidental ? this.accidentalLayout.height : 0
+    const octH = octave ? this.octavesLayout.height : 0
     const { stepAccidentalSep, stepOctaveSep } = this.style.pitch
     const { lift } = this.style.accidentalFont
     const stepAccH = accidental ? Math.max(stepH, accH + lift) : stepH
     const stepOctH = stepH + (octave ? octH + stepOctaveSep : 0)
-    return {
-      width: stepW + (accidental ? accW + stepAccidentalSep : 0),
-      height: octave >= 0 ? Math.max(stepAccH, stepOctH)
-                          : stepAccH + stepOctaveSep + octH
-    }
+    this.width = stepW + (accidental ? accW + stepAccidentalSep : 0),
+    this.height = octave >= 0 ? Math.max(stepAccH, stepOctH)
+                              : stepAccH + stepOctaveSep + octH
   }
 
   set position(pos) {
-    const { accidental, octave } = this
-    const { stepOctaveSep, octaveSize, octavesSep } = this.style.pitch
+    const { accidental, octave } = this.pitch
+    const { stepOctaveSep } = this.style.pitch
     const { lift } = this.style.accidentalFont
-    this._position = new Position(pos, this.size)
-    const { x, x2, y2 } = this._position
-    const sy2 = y2 - (octave >= 0 ? 0 : this.octavesSize.height + stepOctaveSep)
-    this.stepPosition = new Position({ x2, y2: sy2 }, this.stepSize)
-    const { cx: scx, y: sy } = this.stepPosition
+
+    Object.assign(this, pos)
+
+    const { x, x2, y2 } = this
+    const sy2 = y2 - (octave >= 0 ? 0 :
+                      this.octavesLayout.height + stepOctaveSep)
+    this.stepLayout.position = { x2, y2: sy2 }
+
+    const { cx: scx, y: sy } = this.stepLayout
+
     if (accidental) {
-      const apos = { x, y2: sy2 - lift }
-      this.accidentalPosition = new Position(apos, this.accidentalSize)
+      this.accidentalLayout.position = { x, y2: sy2 - lift }
     }
+
     if (octave) {
       const opos = octave > 0 ? { cx: scx, y2: sy - stepOctaveSep }
                               : { cx: scx, y: sy2 + stepOctaveSep }
-      this.octavesPosition = new Position(opos, this.octavesSize)
-      this.octavesPositions = []
-      let oy = this.octavesPosition.y
-      const os = { width: octaveSize, height: octaveSize, r: octaveSize / 2 }
-      for (let i = 0; i < Math.abs(octave); i++) {
-        this.octavesPositions.push(new Position({ cx: scx, y: oy }, os))
-        oy += octaveSize + octavesSep
-      }
+      this.octavesLayout.position = opos
     }
   }
 
-  get position() { return this._position }
+  toJSON() {
+    const { stepLayout, accidentalLayout, octavesLayout } = this
+    return { ...super.toJSON(), stepLayout, accidentalLayout, octavesLayout }
+  }
+}
 
+class StepLayout extends AbstractLayout {
+  constructor(step, style) {
+    super()
+    Object.assign(this, style.stepFont)
+  }
+}
+
+class AccidentalLayout extends AbstractLayout {
+  constructor(accidental, style) {
+    super()
+    Object.assign(this, style.accidentalFont)
+    this.char = ACCIDENTAL_FONT_MAP[accidental]
+    if (this.accidental === 'bb') this.dx = style.accidentalFont.dx * 0.66
+  }
+}
+
+class OctavesLayout extends AbstractLayout {
+  constructor(octave, style) {
+    super()
+    const oct = Math.abs(octave)
+    const { octaveSize, octavesSep } = style.pitch
+    this.octave = octave
+    this.style = style
+    this.width = octaveSize
+    this.height = oct * octaveSize + (oct - 1) * octavesSep
+    this.r = octaveSize / 2
+  }
+
+  set position(pos) {
+    Object.assign(this, pos)
+    const { octaveSize, octavesSep } = this.style.pitch
+    this.layouts = []
+    let { cx, y, width, r } = this
+    range(Math.abs(this.octave)).forEach(() => {
+      this.layouts.push(new Layout({ cx, y }, { width, height: width, r }))
+      y += octaveSize + octavesSep
+    })
+  }
+
+  toJSON() { return { ...super.toJSON(), layouts: this.layouts }}
 }

@@ -4,23 +4,20 @@ import AbstractLayout from './AbstractLayout'
 export default class TimeLayout extends AbstractLayout {
   constructor(time, style) {
     super()
-    this.name = 'time-layout'
     this.time = time
     this.style = style
     this.beatsLayout = new BeatsLayout(time.beats, style)
     this.beatTypeLayout = new BeatTypeLayout(time.beatType, style)
     this.lineLayout = new LineLayout(this.beatsLayout,
                                      this.beatTypeLayout, style)
+    this.width = this.lineLayout.width
+    this.setHeight()
   }
 
-  get width() {
-    return this.lineLayout.width
-  }
-
-  get height() {
+  setHeight() {
     const { time, timeFont } = this.style
     const lineH = this.lineLayout.height
-    return timeFont.height * 2 + lineH + time.lineNumberSep * 2
+    this.height = timeFont.height * 2 + lineH + time.lineNumberSep * 2
   }
 
   set position(pos) {
@@ -40,38 +37,24 @@ export default class TimeLayout extends AbstractLayout {
 class BeatsLayout extends AbstractLayout {
   constructor(beats, style) {
     super()
-    this.beats = beats
-    this.style = style
-    const { timeFont } = this.style
-    Object.assign(this, timeFont)
-    this.width = getSize(timeFont, this.beats).width
+    Object.assign(this, style.timeFont)
+    this.width = getSize(style.timeFont, beats).width
   }
 }
 
 class BeatTypeLayout extends AbstractLayout {
   constructor(beatType, style) {
     super()
-    this.beatType = beatType
-    this.style = style
     Object.assign(this, style.timeFont)
-    this.width = getSize(style.timeFont, this.beatType).width
+    this.width = getSize(style.timeFont, beatType).width
   }
 }
 
 class LineLayout extends AbstractLayout {
   constructor(beatsLayout, beatTypeLayout, style) {
     super()
-    this.beatsLayout = beatsLayout
-    this.beatTypeLayout = beatTypeLayout
-    this.style = style
-  }
-
-  get width() {
-    return Math.max(this.beatsLayout.width, this.beatTypeLayout.width) +
-           this.style.time.lineExt * 2
-  }
-
-  get height() {
-    return this.style.time.lineHeight
+    this.width = Math.max(beatsLayout.width, beatTypeLayout.width) +
+                 style.time.lineExt * 2
+    this.height = style.time.lineHeight
   }
 }

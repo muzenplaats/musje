@@ -24,6 +24,10 @@ export default class AbstractLayout {
     const { x, y, width, height } = this
     return { x, y, width, height }
   }
+  get circle() {
+    const { cx, cy, r } = this
+    return { cx, cy, r }
+  }
 
   toJSON() {
     const { x, y, width, height, x2, y2, cx, cy, bx, by, dx, dy } = this

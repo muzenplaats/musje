@@ -81,7 +81,7 @@ export class Element {
       } else if (typeof child === 'object') {
         element.appendChild(child)   // DOM Element
       } else {
-        element.innerHTML = child
+        element.textContent = child
       }
     })
     return element
@@ -152,7 +152,7 @@ export const getSize = (font, content) => {
   prepareText()
   const style = `font-family: ${font.family}; font-size: ${font.size}`
   txt.setAttribute('style', style)
-  txt.innerHTML = content
+  txt.textContent = content
   const { width, height } = txt.getBBox()
   const result = { width, height }
   cache[key] = result

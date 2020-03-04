@@ -7,18 +7,39 @@ import { loadText } from './utils/html'
 // import './test/testModel'
 // import './test/testXml'
 
-import Time from './model/Time'
 import Style from './layout/Style'
 import defaultStyle from './layout/default.style'
+const style = new Style(defaultStyle).value
+
+import Time from './model/Time'
 import TimeLayout from './layout/TimeLayout'
 import timeElement from './view/timeElement'
 
-const time = new Time('23/4')
-const style = new Style(defaultStyle).value
-const timeLayout = new TimeLayout(time, style)
-timeLayout.position = { x: 50, y: 50 }
+import Pitch from './model/Pitch'
+import PitchLayout from './layout/PitchLayout'
+import pitchElement from './view/pitchElement'
+
+import Bar from './model/Bar'
+import BarLayout from './layout/BarLayout'
+import barElement from './view/barElement'
+
 const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
-logJSON(timeLayout)
+
+const time = new Time('23/4')
+const timeLayout = new TimeLayout(time, style)
+timeLayout.position = { x: 50, y2: 50 }
+// logJSON(timeLayout)
+
+const pitch = new Pitch(`b5'''`)
+const pitchLayout = new PitchLayout(pitch, style)
+pitchLayout.position = { x: 100, y2: 50 }
+// logJSON(pitchLayout)
+
+const bar = new Bar('|]')
+const barLayout = new BarLayout(bar, style)
+barLayout.position = { x: 150, y2: 50 }
+logJSON(barLayout)
+
 
 function component() {
   let editor, info, staff, cell
@@ -35,7 +56,7 @@ function component() {
         style: 'width: 100%; height: 100px',
         keyup: editorChange
       }),
-      el('button', { click: () => player.play(cell) }, '&gt;'),
+      el('button', { click: () => player.play(cell) }, '>'),
       el('button', { click: () => player.pause() }, '||'),
       el('button', { click: () => player.stop() }, '[]'),
       el('pre', { style: 'width: 100%; white-space: pre-wrap' }),
@@ -44,7 +65,9 @@ function component() {
       el('svg', { width: 500, height: 200 }, [
         el('rect', { x: 0, y: 0, width: 500, height: 200,
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
-        timeElement(timeLayout)
+        timeElement(timeLayout),
+        pitchElement(pitchLayout),
+        barElement(barLayout)
       ])
     ])
   ])).create()
