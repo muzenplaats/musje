@@ -7,7 +7,7 @@ import { loadText } from './utils/html'
 // import './test/testModel'
 // import './test/testXml'
 
-import Style from './layout/Style'
+import Style from './utils/Style'
 import defaultStyle from './layout/default.style'
 const style = new Style(defaultStyle).value
 
@@ -26,6 +26,10 @@ import barElement from './view/barElement'
 import Duration from './model/Duration'
 import DurationLayout from './layout/DurationLayout'
 import durationElement from './view/durationElement'
+
+import Note from './model/Note'
+import NoteLayout from './layout/NoteLayout'
+import noteElement from './view/noteElement'
 
 const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
 
@@ -47,8 +51,12 @@ barLayout.position = { x: 150, y2: 50 }
 const duration = new Duration('=..')
 const durationLayout = new DurationLayout(duration, style)
 durationLayout.position = { x: 200, y2: 50 }
-logJSON(durationLayout)
+// logJSON(durationLayout)
 
+const note = new Note('n6,=.')
+const noteLayout = new NoteLayout(note, style)
+noteLayout.position = { x: 250, y2: 50 }
+logJSON(noteLayout)
 
 function component() {
   let editor, info, staff, cell
@@ -77,7 +85,8 @@ function component() {
         timeElement(timeLayout),
         pitchElement(pitchLayout),
         barElement(barLayout),
-        durationElement(durationLayout)
+        durationElement(durationLayout),
+        noteElement(noteLayout)
       ])
     ])
   ])).create()

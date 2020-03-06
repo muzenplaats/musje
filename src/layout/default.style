@@ -1,5 +1,5 @@
 base {
-  size: 20px
+  size: 30px
 }
 
 title-font {
@@ -112,7 +112,7 @@ durationGE4 {
   beam-height: 5%
   beams-sep: 10%
   dot-lift: 6%
-  dot-size: 10%
+  dot-size: 12%
   dots-sep: 10%
 }
 
@@ -121,6 +121,6 @@ durationLE2 {
   line-height: 6%
   lines-sep: 40%
   line-dot-sep: 40%
-  dot-size: 10%
+  dot-size: 12%
   dots-sep: 40%
 }

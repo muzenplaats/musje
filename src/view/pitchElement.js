@@ -1,4 +1,5 @@
 import { el, Element } from '../utils/html'
+import box from './box'
 
 export default function pitchElement(pitchLayout) {
   const { pitch, stepLayout, accidentalLayout, octavesLayout } = pitchLayout
@@ -10,6 +11,7 @@ export default function pitchElement(pitchLayout) {
                 text-anchor: middle`
 
   const main = new Element(el('g', [
+    // box(stepLayout, 'magenta'),
     el('text', { ...stepLayout.cxby, style: sty1 }, pitch.step),
     pitch.accidental ? el('text', {
       ...accidentalLayout.cxby, style: sty2

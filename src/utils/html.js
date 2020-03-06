@@ -67,7 +67,7 @@ export class Element {
         element.addEventListener(name, value)
       } else if (name === 'style') {
         if (/\n/.test(value)) {
-          value = value.replace(/ *\n */g, ';')
+          value = value.trim().replace(/ *\n */g, ';')
         }
         element.setAttribute(name, value)
       } else {

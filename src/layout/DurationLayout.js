@@ -8,16 +8,17 @@ export default class DurationLayout extends AbstractLayout {
     this.duration = duration
     this.style = style
     const { type, dots } = duration
+    if (dots) this.dotsLayout = new DotsLayout(duration, style)
     if (type < 4) {
       this.linesLayout = new LinesLayout(duration, style)
     } else if (type > 4) {
-      this.beamsLayout = new BeamsLayout(duration, style)
+      this.beamsLayout = new BeamsLayout(duration, this.dotsLayout, style)
     }
-    if (dots) this.dotsLayout = new DotsLayout(duration, style)
-    this.setSize(type, dots)
+    this.setSize()
   }
 
-  setSize(type, dots) {
+  setSize() {
+    const { type, dots } = this.duration
     if (type === 4) {
       this.setType4Size(dots)
     } else if (type > 4) {
@@ -65,7 +66,7 @@ export default class DurationLayout extends AbstractLayout {
     if (type < 4) {
       this.linesLayout.position = { x, cy }
       if (dots) this.dotsLayout.position = { x2, cy }
-    } else if (type >= 4) {
+    } else {
       if (type > 4) this.beamsLayout.position = { x, y2 }
       if (dots) this.dotsLayout.position = { x2, y }
     }
@@ -111,9 +112,10 @@ class LinesLayout extends AbstractLayout {
 }
 
 class BeamsLayout extends AbstractLayout {
-  constructor(duration, style) {
+  constructor(duration, dotsLayout, style) {
     super()
     this.duration = duration
+    this.dotsLayout = dotsLayout
     this.style = style
     this.setBeamSize()
     this.setSize()
@@ -121,8 +123,8 @@ class BeamsLayout extends AbstractLayout {
 
   setBeamSize() {
     this.beamSize = {
-      width: this.style.stepFont.width + (this.dots ?
-             this.dotsSize.width + this.style.note.pitchDotSep : 0),
+      width: this.style.stepFont.width + (this.duration.dots ?
+             this.dotsLayout.width + this.style.note.pitchDotSep : 0),
       height: this.style.durationGE4.beamHeight
     }
   }
