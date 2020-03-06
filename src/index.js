@@ -23,6 +23,10 @@ import Bar from './model/Bar'
 import BarLayout from './layout/BarLayout'
 import barElement from './view/barElement'
 
+import Duration from './model/Duration'
+import DurationLayout from './layout/DurationLayout'
+import durationElement from './view/durationElement'
+
 const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
 
 const time = new Time('23/4')
@@ -38,7 +42,12 @@ pitchLayout.position = { x: 100, y2: 50 }
 const bar = new Bar('|]')
 const barLayout = new BarLayout(bar, style)
 barLayout.position = { x: 150, y2: 50 }
-logJSON(barLayout)
+// logJSON(barLayout)
+
+const duration = new Duration('=..')
+const durationLayout = new DurationLayout(duration, style)
+durationLayout.position = { x: 200, y2: 50 }
+logJSON(durationLayout)
 
 
 function component() {
@@ -67,7 +76,8 @@ function component() {
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
         timeElement(timeLayout),
         pitchElement(pitchLayout),
-        barElement(barLayout)
+        barElement(barLayout),
+        durationElement(durationLayout)
       ])
     ])
   ])).create()

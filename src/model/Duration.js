@@ -1,5 +1,5 @@
 import Lexer from './Lexer'
-import { repeat, swapObject, makeToJSON } from '../utils/helpers'
+import { repeat, range, swapObject, makeToJSON } from '../utils/helpers'
 import { Q } from './constants'
 
 const STR_TO_TYPE = {
@@ -20,6 +20,12 @@ export default class Duration {
       this.type = duration.type
       this.dots = duration.dots
     }
+    if (this.type > 4) this.initBeams()
+  }
+
+  initBeams() {
+    this.numBeams = Math.log2(this.type) - 2
+    this.beams = range(this.numBeams).map(() => ({ type: 'single' }))
   }
 
   parse(lexer) {
