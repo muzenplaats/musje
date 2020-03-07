@@ -1,5 +1,5 @@
 base {
-  size: 30px
+  size: 20px
 }
 
 title-font {

@@ -31,32 +31,52 @@ import Note from './model/Note'
 import NoteLayout from './layout/NoteLayout'
 import noteElement from './view/noteElement'
 
+import Rest from './model/Rest'
+import RestLayout from './layout/RestLayout'
+import restElement from './view/restElement'
+
+import Chord from './model/Chord'
+import ChordLayout from './layout/ChordLayout'
+import chordElement from './view/chordElement'
+
 const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
+
+const y2 = 100
 
 const time = new Time('23/4')
 const timeLayout = new TimeLayout(time, style)
-timeLayout.position = { x: 50, y2: 50 }
+timeLayout.position = { x: 50, y2 }
 // logJSON(timeLayout)
 
 const pitch = new Pitch(`b5'''`)
 const pitchLayout = new PitchLayout(pitch, style)
-pitchLayout.position = { x: 100, y2: 50 }
+pitchLayout.position = { x: 100, y2 }
 // logJSON(pitchLayout)
 
 const bar = new Bar('|]')
 const barLayout = new BarLayout(bar, style)
-barLayout.position = { x: 150, y2: 50 }
+barLayout.position = { x: 150, y2 }
 // logJSON(barLayout)
 
 const duration = new Duration('=..')
 const durationLayout = new DurationLayout(duration, style)
-durationLayout.position = { x: 200, y2: 50 }
+durationLayout.position = { x: 200, y2 }
 // logJSON(durationLayout)
 
 const note = new Note('n6,=.')
 const noteLayout = new NoteLayout(note, style)
-noteLayout.position = { x: 250, y2: 50 }
-logJSON(noteLayout)
+noteLayout.position = { x: 250, y2 }
+// logJSON(noteLayout)
+
+const rest = new Rest('0=_.')
+const restLayout = new RestLayout(rest, style)
+restLayout.position = { x: 300, y2 }
+// logJSON(restLayout)
+
+const chord = new Chord('<1,#3,5,>=..')
+const chordLayout = new ChordLayout(chord, style)
+chordLayout.position = { x: 350, y2 }
+logJSON(chordLayout)
 
 function component() {
   let editor, info, staff, cell
@@ -86,7 +106,9 @@ function component() {
         pitchElement(pitchLayout),
         barElement(barLayout),
         durationElement(durationLayout),
-        noteElement(noteLayout)
+        noteElement(noteLayout),
+        restElement(restLayout),
+        chordElement(chordLayout)
       ])
     ])
   ])).create()

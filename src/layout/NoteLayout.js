@@ -9,42 +9,42 @@ export default class NoteLayout extends AbstractLayout {
     this.style = style
     this.pitchLayout = new PitchLayout(note.pitch, style)
     this.durationLayout = new DurationLayout(note.duration, style)
-    this.setSize()
+    this.setSize(note.duration, this.pitchLayout)
   }
 
-  setSize() {
-    const { type, dots } = this.note.duration
+  setSize(duration, pl) {
+    const { type, dots } = duration
     if (type < 4) {
-      this.setTypeLt4Size()
+      this.setTypeLt4Size(pl)
     } else if (type === 4) {
-      this.setType4Size(dots)
+      this.setType4Size(dots, pl)
     } else {
-      this.setTypeGt4Size(dots)
+      this.setTypeGt4Size(dots, pl)
     }
   }
 
-  setTypeLt4Size() {
-    const { pitchLayout, durationLayout } = this
+  setTypeLt4Size(pl) {
+    const { durationLayout } = this
     const { pitchLineSep } = this.style.note
-    this.width = pitchLayout.width + pitchLineSep + durationLayout.width
-    this.height = pitchLayout.height
+    this.width = pl.width + pitchLineSep + durationLayout.width
+    this.height = pl.height
   }
 
-  setType4Size(dots) {
+  setType4Size(dots, pl) {
     const { pitchDotSep } = this.style.note
-    const { pitchLayout, durationLayout } = this
-    this.width = pitchLayout.width +
+    const { durationLayout } = this
+    this.width = pl.width +
                 (dots ? durationLayout.width + pitchDotSep : 0)
-    this.height = pitchLayout.height
+    this.height = pl.height
   }
 
-  setTypeGt4Size(dots) {
+  setTypeGt4Size(dots, pl) {
     const { pitchBeamSep } = this.style.note
     const { stepFont } = this.style
-    const { pitchLayout, durationLayout } = this
-    this.width = pitchLayout.width + (dots ?
+    const { durationLayout } = this
+    this.width = pl.width + (dots ?
                  durationLayout.width - stepFont.width : 0)
-    this.height = pitchLayout.height + pitchBeamSep +
+    this.height = pl.height + pitchBeamSep +
                   durationLayout.beamsLayout.height
   }
 
