@@ -42,6 +42,9 @@ export default class Pitch {
 
   get frequency() { return Math.pow(2, (this.midiNumber - 69) / 12) * 440 }
 
+  onplay() {}
+  onstop() {}
+
   toString() {
     const { step, accidental, octave } = this
     const oct = octave > 0 ? repeat('\'', octave) : repeat(',', -octave)

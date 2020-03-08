@@ -5,5 +5,8 @@ export default class MultipartLayout extends AbstractLayout {
     super()
     this.multipart = multipart
     this.style = style
+
+    this.width = 20
+    this.height = 20
   }
 }

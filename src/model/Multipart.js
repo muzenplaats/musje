@@ -17,6 +17,7 @@ export default class Multipart {
   parse(lexer) {
     this.layers = []
     lexer.token('<')
+    lexer.skipWhite()
     while(!lexer.is('>') && !lexer.eof) {
       this.layers.push(new Layer(lexer))
     }

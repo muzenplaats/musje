@@ -54,7 +54,7 @@ export default class Cell {
         this.data.push(new Bar(lexer))
         lexer.skipWhite(); break
       } else {
-        lexer.skipWhite(); break
+        lexer.error('music data in cell')
       }
       lexer.skipWhite()
     }

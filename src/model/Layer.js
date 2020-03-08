@@ -39,8 +39,10 @@ export default class Layer {
       } else if (lexer.is('|')) {
         lexer.token('|')
         lexer.skipWhite(); break
+      } else if (lexer.is('>')) {
+        break
       } else {
-        lexer.skipWhite(); break
+        lexer.error('music data in layer')
       }
       lexer.skipWhite()
     }

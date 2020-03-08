@@ -30,12 +30,16 @@ function component() {
   }
 
   const editorChange = () => {
-    staff = new Staff(editor.value)
-    info.innerHTML = staff + '\n' + JSON.stringify(staff, null, 2)
-    cell = staff.cells[0]
-    renderCell(cell, 0, 70)
-    renderCell(staff.cells[1], 1, 110)
-    renderCell(staff.cells[2], 2, 150)
+    try {
+      staff = new Staff(editor.value)
+      info.textContent = staff + '\n' + JSON.stringify(staff, null, 2)
+      cell = staff.cells[0]
+      renderCell(cell, 0, 70)
+      renderCell(staff.cells[1], 1, 110)
+      renderCell(staff.cells[2], 2, 150)
+    } catch (e) {
+      info.textContent = e
+    }
   }
 
   const main = new Element(el('div', { style: 'width: 90%; margin: 15px' }, [
