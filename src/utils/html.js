@@ -136,7 +136,9 @@ export const el = (elName, attrs = {}, content = []) => {
   content = flatten(content)
   return { name: 'element', elName, attrs, content }
 }
-
+el.create = (elName, attrs, content) => {
+  return new Element(el(elName, attrs, content)).create()
+}
 
 let txt
 const cache = {}

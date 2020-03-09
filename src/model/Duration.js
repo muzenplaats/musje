@@ -41,6 +41,9 @@ export default class Duration {
 
   get quarters() { return this.quartersQ / Q }
 
+  onplay() {}
+  onstop() {}
+
   toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` }
   toJSON = makeToJSON('type', 'dots')
 }

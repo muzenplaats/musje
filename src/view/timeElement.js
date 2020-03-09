@@ -1,4 +1,4 @@
-import { el, Element } from '../utils/html'
+import { el } from '../utils/html'
 
 export default function timeElement(timeLayout) {
   const { time, beatsLayout, lineLayout, beatTypeLayout } = timeLayout
@@ -9,11 +9,9 @@ export default function timeElement(timeLayout) {
                 font-size: ${beatTypeLayout.size}
                 text-anchor: middle`
 
-  const main = new Element(el('g', [
+  return el.create('g', [
     el('text', { ...beatsLayout.cxby, style: sty1 }, time.beats),
     el('rect', lineLayout.rect),
     el('text', { ...beatTypeLayout.cxby, style: sty2 }, time.beatType)
-  ])).create()
-
-  return main
+  ])
 }

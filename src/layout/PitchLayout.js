@@ -38,8 +38,7 @@ export default class PitchLayout extends AbstractLayout {
     const { stepOctaveSep } = this.style.pitch
     const { lift } = this.style.accidentalFont
 
-    Object.assign(this, pos)
-
+    super.position = pos
     const { x, x2, y2 } = this
     const sy2 = y2 - (octave >= 0 ? 0 :
                       this.octavesLayout.height + stepOctaveSep)

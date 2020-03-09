@@ -1,4 +1,4 @@
-import { el, Element } from '../utils/html'
+import { el } from '../utils/html'
 import box from './box'
 
 export default function pitchElement(pitchLayout) {
@@ -14,16 +14,16 @@ export default function pitchElement(pitchLayout) {
     text-anchor: middle
   `
 
-  const stepElement = new Element(el('text', {
+  const stepElement = el.create('text', {
     ...stepLayout.cxby, style: sty1
-  }, pitch.step)).create()
+  }, pitch.step)
 
-  const accidentalElement = pitch.accidental ? new Element(el('text', {
+  const accidentalElement = pitch.accidental ? el.create('text', {
     ...accidentalLayout.cxby, style: sty2
-  }, accidentalLayout.char)).create() : []
+  }, accidentalLayout.char) : []
 
   const octaveElements = pitch.octave ? octavesLayout.layouts.map(layout => {
-    return new Element(el('circle', layout.circle)).create()
+    return el.create('circle', layout.circle)
   }) : []
 
   const setColor = color => {
@@ -37,15 +37,10 @@ export default function pitchElement(pitchLayout) {
   pitch.onplay = () => setColor('#b5c')
   pitch.onstop = () => setColor('black')
 
-  // setTimeout(() => setColor('#b5c'), 3000)
-
-  const main = new Element(el('g', [
+  return el.create('g', [
     // box(stepLayout, 'magenta'),
     stepElement,
     accidentalElement,
     octaveElements
-  ])).create()
-
-
-  return main
+  ])
 }

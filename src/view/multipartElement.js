@@ -1,4 +1,4 @@
-import { el, Element } from '../utils/html'
+import { el } from '../utils/html'
 import noteElement from './noteElement'
 import restElement from './restElement'
 import chordElement from './chordElement'
@@ -6,7 +6,8 @@ import box from './box'
 
 export default function cellElement(cellLayout) {
   const { dataLayout } = cellLayout
-  const main = new Element(el('g', [
+
+  return el.create('g', [
     // box(cellLayout, 'green'),
     // box(dataLayout, 'blue'),
     // dataLayout.layouts.map(layout => {
@@ -15,7 +16,5 @@ export default function cellElement(cellLayout) {
     //   if ('rest' in layout) return restElement(layout)
     //   if ('chord' in layout) return chordElement(layout)
     // })
-  ])).create()
-
-  return main
+  ])
 }

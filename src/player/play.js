@@ -67,8 +67,8 @@ const playNote = (t, note, context) => {
   const dur = getDur(note)
   tos.push(setTimeout(() => {
     // console.log(`play: ${note}`, pitch.frequency)
-    pitch.onplay()
-    oscPlay(0, pitch.frequency, dur, () => pitch.onstop(), context)
+    note.onplay()
+    oscPlay(0, pitch.frequency, dur, () => note.onstop(), context)
   }, t * 1000))
 }
 

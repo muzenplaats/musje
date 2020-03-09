@@ -34,6 +34,14 @@ import Cell from '../model/Cell'
 import CellLayout from '../layout/CellLayout'
 import cellElement from '../view/cellElement'
 
+import Head from '../model/Head'
+import HeadLayout from '../layout/HeadLayout'
+import headElement from '../view/headElement'
+
+// import Score from '../model/Score'
+// import ScoreLayout from '../layout/ScoreLayout'
+// import scoreElement from '../view/scoreElement'
+
 const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
 
 const y2 = 90
@@ -78,17 +86,23 @@ const cellLayout = new CellLayout(cell, style)
 cellLayout.position = { x: 50, y2: 180 }
 // logJSON(cellLayout)
 
+const head = new Head('title: The Title\nsubtitle: The Subtitle')
+const headLayout = new HeadLayout(head, style)
+headLayout.position = { x: 50, y: 50 }
+logJSON(headLayout)
+
 import { el, Element } from '../utils/html'
 export default function testElement() {
   const main = new Element(el('g', [
-    timeElement(timeLayout),
-    pitchElement(pitchLayout),
-    barElement(barLayout),
-    durationElement(durationLayout),
-    noteElement(noteLayout),
-    restElement(restLayout),
-    chordElement(chordLayout),
-    cellElement(cellLayout)
+    // timeElement(timeLayout),
+    // pitchElement(pitchLayout),
+    // barElement(barLayout),
+    // durationElement(durationLayout),
+    // noteElement(noteLayout),
+    // restElement(restLayout),
+    // chordElement(chordLayout),
+    // cellElement(cellLayout),
+    headElement(headLayout)
   ])).create()
 
   return main

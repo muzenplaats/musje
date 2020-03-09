@@ -22,8 +22,8 @@ export default class Note {
     this.duration = new Duration(lexer, this.style)
   }
 
-  onplay() { this.pitch.onplay() }
-  onstop() { this.pitch.onstop() }
+  onplay() { this.pitch.onplay(); this.duration.onplay() }
+  onstop() { this.pitch.onstop(); this.duration.onstop() }
 
   toString() { return `${this.pitch}${this.duration}`}
   toJSON = makeToJSON('pitch', 'duration')

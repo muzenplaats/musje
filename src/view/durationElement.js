@@ -1,18 +1,39 @@
-import { el, Element } from '../utils/html'
+import { el } from '../utils/html'
 import box from './box'
 
 export default function durationElement(durationLayout) {
   const { linesLayout, beamsLayout, dotsLayout } = durationLayout
-  const { type, dots } = durationLayout.duration
+  const { duration } = durationLayout
+  const { type, dots } = duration
 
-  const main = new Element(el('g', [
+  const linesElements = type < 4 ? linesLayout.layouts.map(layout => {
+    return el.create('rect', layout.rect)
+  }) : []
+  const beamsElements = type > 4 ? beamsLayout.layouts.map(layout => {
+    return el.create('rect', layout.rect)
+  }) : []
+  const dotsElements = dots ? dotsLayout.layouts.map(layout => {
+    return el.create('circle', layout.circle)
+  }) : []
+
+  const setColor = color => {
+    if (type < 4) {
+      linesElements.forEach(element => { element.style.fill = color })
+    } else if (type > 4) {
+      beamsElements.forEach(element => { element.style.fill = color })
+    }
+    if (dots) dotsElements.forEach(element => {element.style.fill = color })
+  }
+
+  duration.onplay = () => setColor('#b5c')
+  duration.onstop = () => setColor('black')
+
+  return el.create('g', [
     // box(durationLayout, 'orange'),
     // beamsLayout ? box(beamsLayout, 'blue') : [],
     // dotsLayout ? box(dotsLayout) : [],
-    type < 4 ? linesLayout.layouts.map(layout => el('rect', layout.rect)) : [],
-    type > 4 ? beamsLayout.layouts.map(layout => el('rect', layout.rect)) : [],
-    dots ? dotsLayout.layouts.map(layout => el('circle', layout.circle)) : []
-  ])).create()
-
-  return main
+    linesElements,
+    beamsElements,
+    dotsElements
+  ])
 }

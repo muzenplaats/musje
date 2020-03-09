@@ -58,7 +58,7 @@ function component() {
       el('svg', { width: 500, height: 200 }, [
         el('rect', { x: 0, y: 0, width: 500, height: 200,
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
-        // testElement()
+        testElement()
       ])
     ])
   ])).create()
@@ -66,7 +66,7 @@ function component() {
   info = main.querySelector('pre')
   svg = main.querySelector('svg')
 
-  loadText('scores/001.musje', txt => { editor.value = txt; editorChange() })
+  // loadText('scores/002.musje', txt => { editor.value = txt; editorChange() })
 
   return main
 }
