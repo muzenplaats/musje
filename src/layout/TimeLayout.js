@@ -1,13 +1,14 @@
 import { getSize } from '../utils/html'
 import AbstractLayout from './AbstractLayout'
+import TextLayout from './TextLayout'
 
 export default class TimeLayout extends AbstractLayout {
   constructor(time, style) {
     super()
     this.time = time
     this.style = style
-    this.beatsLayout = new BeatsLayout(time.beats, style)
-    this.beatTypeLayout = new BeatTypeLayout(time.beatType, style)
+    this.beatsLayout = new TextLayout(time.beats, style.timeFont)
+    this.beatTypeLayout = new TextLayout(time.beatType, style.timeFont)
     this.lineLayout = new LineLayout(this.beatsLayout,
                                      this.beatTypeLayout, style)
     this.width = this.lineLayout.width
@@ -21,7 +22,7 @@ export default class TimeLayout extends AbstractLayout {
   }
 
   set position(pos) {
-    Object.assign(this, pos)
+    super.position = pos
     const { cx, y, cy, y2 } = this
     this.beatsLayout.position = { cx, y }
     this.lineLayout.position = { cx, cy }
@@ -31,22 +32,6 @@ export default class TimeLayout extends AbstractLayout {
   toJSON() {
     const { beatsLayout, lineLayout, beatTypeLayout } = this
     return { ...super.toJSON(), beatsLayout, lineLayout, beatTypeLayout }
-  }
-}
-
-class BeatsLayout extends AbstractLayout {
-  constructor(beats, style) {
-    super()
-    Object.assign(this, style.timeFont)
-    this.width = getSize(style.timeFont, beats).width
-  }
-}
-
-class BeatTypeLayout extends AbstractLayout {
-  constructor(beatType, style) {
-    super()
-    Object.assign(this, style.timeFont)
-    this.width = getSize(style.timeFont, beatType).width
   }
 }
 

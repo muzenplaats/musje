@@ -12,11 +12,26 @@ import Style from './utils/Style'
 import defaultStyle from './layout/default.style'
 const style = new Style(defaultStyle).value
 
+import Score from './model/Score'
+// import ScoreLayout from './layout/ScoreLayout'
+// import scoreElement from './view/scoreElement'
+// const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
+// const score = new Score(`
+// title: the title
+// subtitle: the subtitle
+// composer: the composer
+// 1 2. 3.. 4_ 5_. 6_.. 7= 0=
+// 1'- #1'-. b1'-.. #2--- n2---.
+// `)
+// const scoreLayout = new ScoreLayout(score, style)
+// scoreLayout.position = { x: 0, y: 0 }
+// logJSON(scoreLayout)
+
 import CellLayout from './layout/CellLayout'
 import cellElement from './view/cellElement'
 
 function component() {
-  let editor, info, svg, staff, cell
+  let editor, info, svg, score, staff, cell
   const cellElements = []
 
   const renderCell = (cell, i, y2) => {
@@ -30,16 +45,17 @@ function component() {
   }
 
   const editorChange = () => {
-    try {
+    // try {
+      score = new Score(editor.value)
       staff = new Staff(editor.value)
-      info.textContent = staff + '\n' + JSON.stringify(staff, null, 2)
+      info.textContent = score + '\n' + JSON.stringify(score, null, 2)
       cell = staff.cells[0]
-      renderCell(cell, 0, 70)
-      renderCell(staff.cells[1], 1, 110)
-      renderCell(staff.cells[2], 2, 150)
-    } catch (e) {
-      info.textContent = e
-    }
+      // renderCell(cell, 0, 70)
+      // renderCell(staff.cells[1], 1, 110)
+      // renderCell(staff.cells[2], 2, 150)
+    // } catch (e) {
+    //   info.textContent = e
+    // }
   }
 
   const main = new Element(el('div', { style: 'width: 90%; margin: 15px' }, [
@@ -55,6 +71,7 @@ function component() {
       el('pre', { style: 'width: 100%; white-space: pre-wrap' }),
     ]),
     el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
+      // scoreElement(scoreLayout),
       el('svg', { width: 500, height: 200 }, [
         el('rect', { x: 0, y: 0, width: 500, height: 200,
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
@@ -66,7 +83,7 @@ function component() {
   info = main.querySelector('pre')
   svg = main.querySelector('svg')
 
-  // loadText('scores/002.musje', txt => { editor.value = txt; editorChange() })
+  loadText('scores/002.musje', txt => { editor.value = txt; editorChange() })
 
   return main
 }

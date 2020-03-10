@@ -10,7 +10,7 @@ const TYPE_TO_STR = swapObject(STR_TO_TYPE)
 const DOTS_MULTIPLIERS = [1, 1.5, 1.75]
 
 export default class Duration {
-  constructor(duration, style) {
+  constructor(duration) {
     this.name = 'duration'
     if (duration.name === 'lexer') {
       this.parse(duration)

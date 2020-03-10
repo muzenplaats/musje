@@ -18,8 +18,10 @@ export default class AbstractLayout {
 
   set position(pos) { Object.assign(this, pos) }
 
+  get wh() { return { width: this.width, height: this.height }}
   get xy() { return { x: this.x, y: this.y } }
   get cxby() { return { x: this.cx, y: this.by }}
+  get x2by() { return { x: this.x2, y: this.by }}
   get rect() {
     const { x, y, width, height } = this
     return { x, y, width, height }

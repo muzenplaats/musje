@@ -60,7 +60,7 @@ export default class HeadLayout extends AbstractLayout {
       this.composerLayout.position = {
         x2, y: currY > y ? currY + titleCreatorSep : y
       }
-      currY = this.composerPosition.y2
+      currY = this.composerLayout.y2
     }
     if (lyricist) {
       this.lyricistLayout.position = {

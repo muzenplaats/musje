@@ -4,9 +4,8 @@ import { Q } from './constants'
 import Cell from './Cell'
 
 export default class Staff {
-  constructor(staff, style) {
+  constructor(staff) {
     this.name = 'staff'
-    this.style = style
     if (staff.name === 'lexer') {
       this.parse(staff)
     } else if (typeof staff === 'string') {

@@ -1,6 +1,10 @@
 const { concat } = []
 
 export const flatten = arr => concat.apply([], arr)
+export const repeat = (rep, num) => new Array(num + 1).join(rep)
+export const lastItem = arr => arr[arr.length - 1]
+export const max = arr => Math.max.apply(null, arr)
+export const sum = arr => arr.reduce((a, b) => a + b)
 
 export const range = num => {
   const result = []
@@ -13,8 +17,6 @@ export const arrayToSet = arr => {
   arr.forEach(name => { result[name] = true })
   return result
 }
-
-export const repeat = (rep, num) => new Array(num + 1).join(rep)
 
 export const swapObject = obj => {
   const result = {}

@@ -92,7 +92,7 @@ class OctavesLayout extends AbstractLayout {
   }
 
   set position(pos) {
-    Object.assign(this, pos)
+    super.position = pos
     const { octaveSize, octavesSep } = this.style.pitch
     this.layouts = []
     let { cx, y, width, r } = this

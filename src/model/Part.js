@@ -21,7 +21,6 @@ export default class Part {
   }
 
   parse(lexer) {
-    if (lexer.is('part-head')) {
     this.head = lexer.is('part-head') ? new PartHead(lexer) : new PartHead()
     this.staves = []
     lexer.skipWhite()

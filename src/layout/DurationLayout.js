@@ -59,7 +59,7 @@ export default class DurationLayout extends AbstractLayout {
   }
 
   set position(pos) {
-    Object.assign(this, pos)
+    super.position = pos
     const { type, dots } = this.duration
     const { durationLE2, durationGE4 } = this.style
     const { x, x2, y, cy, y2 } = this

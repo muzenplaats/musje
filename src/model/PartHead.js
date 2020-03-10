@@ -2,12 +2,12 @@ import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
 export default class PartHead {
-  constructor(partHead) {
+  constructor(head = {}) {
     this.name = 'part-head'
-    if (partHead.name === 'lexer') {
-      this.parse(partHead)
-    } else if (typeof partHead === 'string') {
-      this.parse(new Lexer(partHead))
+    if (head.name === 'lexer') {
+      this.parse(head)
+    } else if (typeof head === 'string') {
+      this.parse(new Lexer(head))
     } else {
       this.partName = head.partName
       this.abbreviation = head.abbreviation

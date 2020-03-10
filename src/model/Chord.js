@@ -4,16 +4,15 @@ import Pitch from './Pitch'
 import Duration from './Duration'
 
 export default class Chord {
-  constructor(chord, style) {
+  constructor(chord) {
     this.name = 'chord'
-    this.style = style
     if (chord.name === 'lexer') {
       this.parse(chord)
     } else if (typeof chord === 'string') {
       this.parse(new Lexer(chord))
     } else {
       this.pitches = chord.pitches.map(pitch => new Pitch(pitch))
-      this.duration = new Duration(chord.duration, style)
+      this.duration = new Duration(chord.duration)
     }
   }
 

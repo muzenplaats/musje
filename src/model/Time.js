@@ -2,9 +2,8 @@ import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
 export default class Time {
-  constructor(time, style) {
+  constructor(time) {
     this.name = 'time'
-    this.style = style
     if (time.name === 'lexer') {
       this.parse(time)
     } else if (typeof time === 'string') {

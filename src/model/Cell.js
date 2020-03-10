@@ -11,9 +11,8 @@ import Bar from './Bar'
 const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
 
 export default class Cell {
-  constructor(cell, style) {
+  constructor(cell = { data: [] }) {
     this.name = 'cell'
-    this.style = style
     if (cell.name === 'lexer') {
       this.parse(cell)
     } else if (typeof cell === 'string') {

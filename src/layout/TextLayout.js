@@ -4,7 +4,7 @@ import { getSize } from '../utils/html'
 export default class TextLayout extends AbstractLayout {
   constructor(text, fontStyle) {
     super()
-    const width = getSize(fontStyle, text).width
-    Object.assign(this, fontStyle, { width })
+    Object.assign(this, fontStyle)
+    this.width = getSize(fontStyle, text).width
   }
 }

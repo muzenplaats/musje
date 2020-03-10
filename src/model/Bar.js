@@ -2,9 +2,8 @@ import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
 export default class Bar {
-  constructor(bar, style) {
+  constructor(bar) {
     this.name = 'bar'
-    this.style = style
     if (bar.name === 'lexer') {
       this.parse(bar)
     } else if (typeof bar === 'string') {

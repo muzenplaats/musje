@@ -34,7 +34,7 @@ export default class BarLayout extends AbstractLayout {
   }
 
   set position(pos) {
-    Object.assign(this, pos)
+    super.position = pos
     const { value } = this.bar
     const s = this.style.bar
 

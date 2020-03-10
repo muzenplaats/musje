@@ -25,24 +25,24 @@ export default class ScoreLayout extends AbstractLayout {
   set position(pos) {
     super.position = pos
     const { marginLeft: x, marginTop: y, headBodySep } = this.style.score
-    const hh = this.head.size.height
-    const bh = this.body.size.height
+    const hh = this.headLayout.height
+    const bh = this.bodyLayout.height
     if (hh) this.headLayout.position = { x, y }
     if (bh) this.bodyLayout.position = { x, y: y + hh + (hh ? headBodySep : 0) }
     this.innerLayout.position = { x, y }
+  }
+
+  toJSON() {
+    const { innerLayout, headLayout, bodyLayout } = this
+    return { ...super.toJSON(), innerLayout, headLayout, bodyLayout }
   }
 }
 
 class InnerLayout extends AbstractLayout {
   constructor(scoreLayoutHeight, style) {
     super()
-    this.style = style
-    this.setSize()
-  }
-
-  setSize() {
     const { width, marginLeft, marginRight, marginTop, marginBottom } =
-          this.style.score
+          style.score
     this.width = width - marginLeft - marginRight
     this.height = scoreLayoutHeight - marginTop - marginBottom
   }

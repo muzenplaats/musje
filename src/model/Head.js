@@ -2,9 +2,8 @@ import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
 export default class Head {
-  constructor(head, style) {
+  constructor(head = {}) {
     this.name = 'head'
-    this.style = style
     if (head.name === 'lexer'){
       this.parse(head)
     } else if (typeof head === 'string') {

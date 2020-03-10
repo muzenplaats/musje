@@ -4,6 +4,8 @@ import RestLayout from './RestLayout'
 import ChordLayout from './ChordLayout'
 import MultipartLayout from './MultipartLayout'
 import TimeLayout from './TimeLayout'
+import BarLayout from './BarLayout'
+import { max } from '../utils/helpers'
 
 export default class CellLayout extends AbstractLayout {
   constructor(cell, style) {
@@ -11,22 +13,39 @@ export default class CellLayout extends AbstractLayout {
     this.cell = cell
     this.style = style
     this.dataLayout = new DataLayout(cell.data, style)
-    const { paddingLeft, paddingRight } = style.cell
-    this.minWidth = this.dataLayout.minWidth + paddingLeft + paddingRight
-    this.width = this.minWidth   // tmp
+
+    const { leftBar, rightBar } = cell
+    if (leftBar) this.leftBarLayout = new BarLayout(cell.leftBar, style)
+    if (rightBar) this.rightBarLayout = new BarLayout(cell.rightBar, style)
+
+    this.setMinWidth()
+
+    // Tmp
+    this.width = this.minWidth
     this.height = this.dataLayout.height
+  }
+
+  setMinWidth() {
+    const { paddingLeft, paddingRight } = this.style.cell
+    const { leftBar, rightBar } = this.cell
+    this.minWidth = this.dataLayout.minWidth + paddingLeft + paddingRight +
+                    (leftBar ? this.leftBarLayout.width / 2 : 0) +
+                    (rightBar ? this.rightBarLayout.width / 2 : 0)
   }
 
   set position(pos) {
     super.position = pos
-    const { x, y2 } = this
+    const { x, x2, y2 } = this
     const { paddingLeft } = this.style.cell
+    const { leftBar, rightBar } = this.cell
+    if (leftBar) this.leftBarLayout.position = { x, y2 }
     this.dataLayout.position = { x: x + paddingLeft, y2 }
+    if (rightBar) this.rightBarLayout.position = { x2, y2 }
   }
 
   toJSON() {
-    const { dataLayout } = this
-    return { ...super.toJSON(), dataLayout }
+    const { dataLayout, leftBarLayout, rightBarLayout } = this
+    return { ...super.toJSON(), dataLayout, leftBarLayout, rightBarLayout }
   }
 }
 
@@ -37,7 +56,9 @@ class DataLayout extends AbstractLayout {
     this.style = style
     this.setLayouts()
     this.setMinWidth()
-    this.width = this.minWidth   // tmp
+
+    // Tmp
+    this.width = this.minWidth
     this.setHeight()
   }
 
@@ -71,10 +92,8 @@ class DataLayout extends AbstractLayout {
   }
 
   setHeight() {
-    this.height = 0
-    this.layouts.forEach(layout => {
-      this.height = Math.max(this.height, layout.height)
-    })
+    this.height = max(this.layouts.map(layout => layout.height))
+    this.height = max([0, this.height])
   }
 
   set position(pos) {

@@ -7,9 +7,8 @@ const ACCIDENTAL_TO_ALTER = {
 }
 
 export default class Pitch {
-  constructor(pitch, style) {
+  constructor(pitch) {
     this.name = 'pitch'
-    this.style = style
     if (pitch.name === 'lexer') {
       this.parse(pitch)
     } else if (typeof pitch === 'string') {

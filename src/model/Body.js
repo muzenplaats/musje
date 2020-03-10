@@ -1,13 +1,11 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
+import { makeToJSON, range } from '../utils/helpers'
 import Part from './Part'
+import Measure from './Measure'
 
-export default Body
-
-class Body {
-  constructor(body, style) {
+export default class Body {
+  constructor(body = { parts: [] }) {
     this.name = 'body'
-    this.style = style
     if (body.name === 'lexer') {
       this.parse(body)
     } else if (typeof body === 'string') {
@@ -15,6 +13,8 @@ class Body {
     } else {
       this.parts = body.parts.map(part => new Part(part))
     }
+    this.fillStaves()
+    this.makeMeasures()
   }
 
   parse(lexer) {
@@ -26,6 +26,44 @@ class Body {
     } while (lexer.is('part-head'))
   }
 
-  toString() {}
+  eachStaff(cb) {
+    this.parts.forEach((part, p) => {
+      part.staves.forEach((staff, s) => cb(staff, s, p))
+    })
+  }
+
+  mapStaff(cb) {
+    const result = []
+    this.eachStaff((staff, s, p) => result.push(cb(staff, s, p)))
+    return result
+  }
+
+  fillStaves() {
+    const maxLen = Math.max.apply(null,
+                   this.mapStaff(staff => staff.cells.length))
+    if (maxLen <= 0) return
+    this.eachStaff(staff => {
+      if (staff.cells.length === maxLen) return
+      const m = maxLen - staff.cells.length
+      staff.cells = staff.cells.concat(range(m).map(() => new Cell()))
+    })
+  }
+
+  makeMeasures() {
+    if (!this.parts.length) { this.measures = []; return }
+    const m = this.parts[0].staves[0].cells.length
+    const measures = range(m).map(() => ({ parts: [] }))
+    this.eachStaff((staff, s, p) => {
+      measures.forEach((measure, m) => {
+        measure.parts[p] = measure.parts[p] || {}
+        const mpart = measure.parts[p]
+        mpart.staves = mpart.staves || []
+        mpart.staves[s] = staff.cells[m]
+      })
+    })
+    this.measures = measures.map(measure => new Measure(measure))
+  }
+
+  toString() { return this.parts.join('\n\n') }
   toJSON = makeToJSON('parts')
 }
