@@ -30,8 +30,10 @@ import Score from './model/Score'
 import CellLayout from './layout/CellLayout'
 import cellElement from './view/cellElement'
 
+import jsonElement from './utils/jsonElement'
+
 function component() {
-  let editor, info, svg, score, staff, cell
+  let editor, info, svg, json, score, staff, cell
   const cellElements = []
 
   const renderCell = (cell, i, y2) => {
@@ -50,6 +52,7 @@ function component() {
       staff = new Staff(editor.value)
       info.textContent = score + '\n' + JSON.stringify(score, null, 2)
       cell = staff.cells[0]
+      json.appendChild(jsonElement('score', score))
       // renderCell(cell, 0, 70)
       // renderCell(staff.cells[1], 1, 110)
       // renderCell(staff.cells[2], 2, 150)
@@ -76,12 +79,15 @@ function component() {
         el('rect', { x: 0, y: 0, width: 500, height: 200,
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
         testElement()
-      ])
+      ]),
+      el('div', { id: 'json' })
     ])
   ])).create()
+
   editor = main.querySelector('textarea')
   info = main.querySelector('pre')
   svg = main.querySelector('svg')
+  json = main.querySelector('#json')
 
   loadText('scores/002.musje', txt => { editor.value = txt; editorChange() })
 
