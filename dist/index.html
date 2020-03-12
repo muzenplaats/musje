@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Musje 2</title>
-    <link rel="shortcut icon" type="image/jpg" href="/assets/musje123-64x64.jpg"/>
+    <link rel="icon" type="image/jpg" href="/assets/musje123-64x64.jpg"/>
   </head>
   <body>
     <style>
@@ -12,6 +12,43 @@
         src: url('fonts/cadence-26.woff') format('woff');
         font-weight: normal;
         font-style: normal;
+      }
+
+      ul {
+        list-style-type: none;
+        border-left: 1px solid #ccc;
+        padding-left: 0;
+      }
+      li {
+        padding-left: 15px;
+      }
+      .json-viewer, .json-viewer > li {
+        border: 0;
+        padding: 0;
+        font: 14px Consolas;
+      }
+      .json-name {
+        border: 1px solid #dde;
+        border-radius: 3px;
+        padding: 0 5px 0 5px;
+        display: inline-block;
+        color: #77e;
+        background-color: #eef;
+        margin-right: 7px;
+      }
+      .json-name.json-array-name {
+        border-color: #edd;
+        color: #e77;
+        background-color: #fee;
+      }
+      .json-null {
+        color: purple;
+      }
+      .json-number {
+        color: #c51;
+      }
+      .json-string {
+        color: #261;
       }
     </style>
     <script src="main.js"></script>

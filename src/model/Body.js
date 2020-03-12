@@ -65,5 +65,6 @@ export default class Body {
   }
 
   toString() { return this.parts.join('\n\n') }
-  toJSON = makeToJSON('parts')
+
+  toJSON = makeToJSON('parts', 'measures')
 }
