@@ -6,6 +6,7 @@ module.exports = {
   module: {
     rules: [
       { test: /\.style$/, use: 'raw-loader' },
+      { test: /\.css$/, use: ['style-loader', 'css-loader'] },
       {
         test: /\.js$/, exclude: /node_modules/,
         use: {

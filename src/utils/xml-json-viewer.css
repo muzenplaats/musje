@@ -1,0 +1,77 @@
+ul {
+  list-style-type: none;
+  border-left: 1px solid #ccc;
+  padding-left: 0;
+}
+li {
+  padding-left: 15px;
+}
+.json-viewer, .json-viewer > li {
+  border: 0;
+  padding: 0;
+  font: 14px Consolas;
+}
+.json-name, .xml-el-name, .xml-attr-name {
+  border: 1px solid #dde;
+  border-radius: 3px;
+  padding: 0 5px 0 5px;
+  display: inline-block;
+  color: #77e;
+  background-color: #eef;
+  margin-right: 7px;
+}
+.json-name.json-array-name {
+  border-color: #edd;
+  color: #e77;
+  background-color: #fee;
+}
+.json-null {
+  color: purple;
+}
+.json-boolean, .xml-boolean {
+  color: #93d;
+}
+.json-number, .xml-number {
+  color: #c51;
+}
+.json-string, .xml-string, .xml-doctype-value {
+  color: #261;
+}
+
+.xml-viewer {
+  width: 500px;
+}
+.xml-decl, .xml-doctype {
+  padding-left: 0;
+}
+.xml-name-attrs, .xml-el-name, .xml-el-value, .xml-attrs, .xml-attr, .xml-attr-name, .xml-attr-value, .xml-decl-name, .xml-doctype-name, .xml-doctype-value {
+  display: inline-block;
+}
+.xml-attr {
+  border: 1px solid #edd;
+  border-radius: 3px;
+  background-color: #fff3f3;
+  padding-right: 5px;
+}
+.xml-attr-name {
+  padding: 0 5px 0 5px;
+  color: #e77;
+  background-color: #fee;
+  margin-right: 7px;
+}
+.xml-decl-name {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 0 5px 0 5px;
+  color: #777;
+  background-color: #eee;
+  margin-right: 7px;
+}
+.xml-doctype-name {
+  border: 1px solid #ddc;
+  border-radius: 3px;
+  padding: 0 5px 0 5px;
+  color: #cc6;
+  background-color: #ffc;
+  margin-right: 7px;
+}

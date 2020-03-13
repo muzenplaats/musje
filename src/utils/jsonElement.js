@@ -1,4 +1,5 @@
 import { el } from './html'
+import './xml-json-viewer.css'
 
 export default function jsonElement(name, value) {
   if (!value) { value = name; name = '*' }

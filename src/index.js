@@ -93,7 +93,14 @@ function component() {
   json = main.querySelector('#json')
 
   loadText('scores/002.musje', txt => { editor.value = txt; editorChange() })
-  loadText('scores/musicXml/reve.musicxml', txt => {
+
+  const mxlfnames = [
+    'reve.musicxml',
+    'helloworld.musicxml',
+    'Reunion.musicxml'
+  ]
+
+  loadText('scores/musicXml/' + mxlfnames[2], txt => {
     xml.appendChild(xmlElement(txt))
   })
 

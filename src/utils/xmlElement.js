@@ -1,18 +1,21 @@
 import { el } from './html'
 import Document from './XmlDocument'
+import './xml-json-viewer.css'
 
 export default function xmlElement(str) {
   const doc = new Document(str)
   const { xmlDecl, doctype, root } = doc
-  const rootEl = elementEl(root)
 
   return el.create('ul', { class: 'xml-viewer' }, [
     xmlDecl ? el('li', { class: 'xml-decl' }, [
-      el('div', { class: 'xml-delc-name' }, 'xml'),
+      el('div', { class: 'xml-decl-name' }, 'xml'),
       attrsEl(xmlDecl.attrs)
     ]) : [],
-    doctype ? el('li', doctype.value) : [],
-    rootEl
+    doctype ? el('li', { class: 'xml-doctype' }, [
+      el('div', { class: 'xml-doctype-name'}, 'Doctype'),
+      el('div', { class: 'xml-doctype-value'}, doctype.value)
+    ]) : [],
+    elementEl(root)
   ])
 }
 
@@ -24,7 +27,7 @@ const elementEl = element => {
     ]),
     element.mapChild(child => {
       if (typeof child === 'string') {
-        return el('li', { class: valueClass(child)}, child)
+        return el('div', { class: `xml-el-value ${valueClass(child)}` }, child)
       }
       return el('li', [elementEl(child)])
     })
@@ -35,7 +38,7 @@ const attrsEl = attrs => {
   return el('div', { class: 'xml-attrs' }, attrs.map((value, name) => {
     return el('div', { class: 'xml-attr' }, [
       el('div', { class: 'xml-attr-name' }, name),
-      el('div', { class: valueClass(value) }, value)
+      el('div', { class: `xml-attr-value ${valueClass(value)}` }, value)
     ])
   }))
 }
