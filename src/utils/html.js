@@ -45,6 +45,7 @@ export class Element {
     this.attrs = new Attrs(element.attrs)
     this.content = []
     element.content.forEach(child => {
+      if (typeof child === 'undefined') return
       if (child.name === 'element') {
         this.content.push(new Element(child, level + 1, indent))
       } else {

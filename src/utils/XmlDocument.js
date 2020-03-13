@@ -162,11 +162,21 @@ export class Element {
   eachChild(cb) {
     const { content } = this
     if (!Array.isArray(content)) {
-      return cb(content, )
+      return cb(content, 0)
     } else {
       content.forEach(cb)
     }
   }
+
+  mapChild(cb) {
+    const result = []
+    this.eachChild((child, i) => result.push(cb(child, i)))
+    return result
+  }
+
+  get hasAttr() { return this.attrs.hasAttr }
+  eachAttr(cb) { return this.attrs.each(cb) }
+  mapAttr(cb) { return this.attrs.map(cb) }
 
   toString() {
     const { level, indent, elName, attrs, content } = this
@@ -219,6 +229,17 @@ export class Attrs {
   }
 
   get hasAttr() { return Object.keys(this.value).length > 0 }
+
+  each(cb) {
+    const { value } = this
+    Object.keys(value).forEach((name, i) => cb(value[name], name, i))
+  }
+
+  map(cb) {
+    const result = []
+    this.each((val, name) => result.push(cb(val, name)))
+    return result
+  }
 
   toString() {
     const strs = []

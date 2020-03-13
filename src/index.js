@@ -1,7 +1,7 @@
 import Cell from './model/Cell'
 import Staff from './model/Staff'
 import player from './player/player'
-import { el, Element } from './utils/html'
+import { el } from './utils/html'
 import { loadText } from './utils/html'
 
 // import './test/testModel'
@@ -31,9 +31,10 @@ import CellLayout from './layout/CellLayout'
 import cellElement from './view/cellElement'
 
 import jsonElement from './utils/jsonElement'
+import xmlElement from './utils/xmlElement'
 
 function component() {
-  let editor, info, svg, json, score, staff, cell
+  let editor, info, svg, xml, json, score, staff, cell
   const cellElements = []
 
   const renderCell = (cell, i, y2) => {
@@ -61,7 +62,7 @@ function component() {
     // }
   }
 
-  const main = new Element(el('div', { style: 'width: 90%; margin: 15px' }, [
+  const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
@@ -80,16 +81,21 @@ function component() {
                      style: 'fill: none; stroke-width: 1; stroke: black' }),
         testElement()
       ]),
+      el('div', { id: 'xml' }),
       el('div', { id: 'json' })
     ])
-  ])).create()
+  ])
 
   editor = main.querySelector('textarea')
   info = main.querySelector('pre')
   svg = main.querySelector('svg')
+  xml = main.querySelector('#xml')
   json = main.querySelector('#json')
 
   loadText('scores/002.musje', txt => { editor.value = txt; editorChange() })
+  loadText('scores/musicXml/reve.musicxml', txt => {
+    xml.appendChild(xmlElement(txt))
+  })
 
   return main
 }

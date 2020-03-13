@@ -43,14 +43,14 @@ const array = (name, value) => {
   ])
 }
 
-const objType = obj => {
+const getObjType = obj => {
   const t = obj.name
   return t ? t[0].toUpperCase() + t.substr(1) : ''
 }
 
 const object = (name, value) => {
   return el('li', [
-    nameEl(`${name}: ${objType(value)} {}`),
+    nameEl(`${name}: ${getObjType(value)} {}`),
     el('ul', Object.keys(value).map(key => compond(key, value[key])))
   ])
 }
