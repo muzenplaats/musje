@@ -6,6 +6,12 @@ ul {
 li {
   padding-left: 15px;
 }
+
+.json-viewer {
+  height: 500px;
+  overflow: scroll;
+}
+
 .json-viewer, .json-viewer > li {
   border: 0;
   padding: 0;

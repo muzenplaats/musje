@@ -45,7 +45,11 @@ export class Element {
     this.attrs = new Attrs(element.attrs)
     this.content = []
     element.content.forEach(child => {
-      if (typeof child === 'undefined') return
+      if (typeof child === 'undefined') {
+        child = 'undefined'
+      } else if (child === null) {
+        child = 'null'
+      }
       if (child.name === 'element') {
         this.content.push(new Element(child, level + 1, indent))
       } else {
@@ -139,6 +143,18 @@ export const el = (elName, attrs = {}, content = []) => {
 }
 el.create = (elName, attrs, content) => {
   return new Element(el(elName, attrs, content)).create()
+}
+const cacheElements = []
+let _id = 0
+const getId = () => _id++
+el.makeUpdate = (pel, selector) => {
+  if (selector) pel = pel.querySelector(selector)
+  const id = getId()
+  return cel => {
+    if (cacheElements[id]) pel.removeChild(cacheElements[id])
+    cacheElements[id] = cel
+    pel.appendChild(cel)
+  }
 }
 
 let txt

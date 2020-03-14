@@ -1,31 +1,17 @@
-import Cell from './model/Cell'
-import Staff from './model/Staff'
+import Score from './model/Score'
+import ScoreLayout from './layout/ScoreLayout'
+import scoreElement from './view/scoreElement'
 import player from './player/player'
 import { el } from './utils/html'
 import { loadText } from './utils/html'
-
-// import './test/testModel'
-// import './test/testXml'
-import testElement from './test/testElement'
-
 import Style from './utils/Style'
 import defaultStyle from './layout/default.style'
 const style = new Style(defaultStyle).value
+import box from './view/box'
 
-import Score from './model/Score'
-// import ScoreLayout from './layout/ScoreLayout'
-// import scoreElement from './view/scoreElement'
-// const logJSON = obj => console.log(JSON.parse(JSON.stringify(obj, null, 2)))
-// const score = new Score(`
-// title: the title
-// subtitle: the subtitle
-// composer: the composer
-// 1 2. 3.. 4_ 5_. 6_.. 7= 0=
-// 1'- #1'-. b1'-.. #2--- n2---.
-// `)
-// const scoreLayout = new ScoreLayout(score, style)
-// scoreLayout.position = { x: 0, y: 0 }
-// logJSON(scoreLayout)
+// import './test/testModel'
+// import './test/testXml'
+// import testElement from './test/testElement'
 
 import CellLayout from './layout/CellLayout'
 import cellElement from './view/cellElement'
@@ -34,32 +20,35 @@ import jsonElement from './utils/jsonElement'
 import xmlElement from './utils/xmlElement'
 
 function component() {
-  let editor, info, svg, xml, json, score, staff, cell
+  let editor, info, svg, cell
   const cellElements = []
 
   const renderCell = (cell, i, y2) => {
     const cellLayout = new CellLayout(cell, style)
     cellLayout.position = { x: 50, y2 }
-    if (cellElements[i] && cellElements[i].parentNode) {
-      cellElements[i].parentNode.removeChild(cellElements[i])
-    }
-    cellElements[i] = cellElement(cellLayout, style)
-    svg.appendChild(cellElements[i])
+    updateCells[i](cellElement(cellLayout, style))
   }
 
   const editorChange = () => {
-    // try {
-      score = new Score(editor.value)
-      staff = new Staff(editor.value)
-      info.textContent = score + '\n' + JSON.stringify(score, null, 2)
+    try {
+      const score = new Score(editor.value)
+      info.textContent = score
+
+      const scoreLayout = new ScoreLayout(score, style)
+      scoreLayout.position = { x: 0, y: 0 }
+      // updateScore(scoreElement(scoreLayout))
+
+      const staff = score.body.parts[0].staves[0]
       cell = staff.cells[0]
-      json.appendChild(jsonElement('score', score))
-      // renderCell(cell, 0, 70)
+      // updateJson(jsonElement('score', score))
+      updateJson1(jsonElement('score', score))
+      updateJson2(jsonElement('scoreLayout', scoreLayout))
+      renderCell(cell, 0, 70)
       // renderCell(staff.cells[1], 1, 110)
       // renderCell(staff.cells[2], 2, 150)
-    // } catch (e) {
-    //   info.textContent = e
-    // }
+    } catch (e) {
+      info.textContent = e
+    }
   }
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
@@ -73,26 +62,34 @@ function component() {
       el('button', { click: () => player.pause() }, '||'),
       el('button', { click: () => player.stop() }, '[]'),
       el('pre', { style: 'width: 100%; white-space: pre-wrap' }),
+      el('div', { id: 'json1' })
     ]),
     el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
-      // scoreElement(scoreLayout),
+      el('div', { id: 'score' }),
       el('svg', { width: 500, height: 200 }, [
-        el('rect', { x: 0, y: 0, width: 500, height: 200,
-                     style: 'fill: none; stroke-width: 1; stroke: black' }),
-        testElement()
+        box({ rect: { x: 0, y: 0, width: 500, height: 200 } }, 'black'),
+        // testElement()
       ]),
       el('div', { id: 'xml' }),
-      el('div', { id: 'json' })
+      el('div', { id: 'json2' })
     ])
   ])
 
   editor = main.querySelector('textarea')
   info = main.querySelector('pre')
   svg = main.querySelector('svg')
-  xml = main.querySelector('#xml')
-  json = main.querySelector('#json')
+  const updateJson1 = el.makeUpdate(main, '#json1')
+  const updateJson2 = el.makeUpdate(main, '#json2')
+  const updateXml = el.makeUpdate(main, '#xml')
+  const updateScore = el.makeUpdate(main, '#score')
 
-  loadText('scores/002.musje', txt => { editor.value = txt; editorChange() })
+  const updateCells = [
+    el.makeUpdate(svg), el.makeUpdate(svg), el.makeUpdate(svg)
+  ]
+
+  loadText('scores/002.musje', txt => {
+    editor.value = txt; editorChange()
+  })
 
   const mxlfnames = [
     'reve.musicxml',
@@ -101,7 +98,7 @@ function component() {
   ]
 
   loadText('scores/musicXml/' + mxlfnames[2], txt => {
-    xml.appendChild(xmlElement(txt))
+    // updateXml(xmlElement(txt))
   })
 
   return main
