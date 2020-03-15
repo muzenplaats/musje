@@ -19,9 +19,14 @@ import cellElement from './view/cellElement'
 import jsonElement from './utils/jsonElement'
 import xmlElement from './utils/xmlElement'
 
+
 function component() {
-  let editor, info, svg, cell
+  let editor, svg, cell
   const cellElements = []
+
+  const data = el.setData({
+    info: ''
+  })
 
   const renderCell = (cell, i, y2) => {
     const cellLayout = new CellLayout(cell, style)
@@ -32,7 +37,7 @@ function component() {
   const editorChange = () => {
     try {
       const score = new Score(editor.value)
-      info.textContent = score
+      data.info = score
 
       const scoreLayout = new ScoreLayout(score, style)
       scoreLayout.position = { x: 0, y: 0 }
@@ -47,7 +52,7 @@ function component() {
       // renderCell(staff.cells[1], 1, 110)
       // renderCell(staff.cells[2], 2, 150)
     } catch (e) {
-      info.textContent = e
+      data.info = e
     }
   }
 
@@ -61,7 +66,7 @@ function component() {
       el('button', { click: () => player.play(cell) }, '>'),
       el('button', { click: () => player.pause() }, '||'),
       el('button', { click: () => player.stop() }, '[]'),
-      el('pre', { style: 'width: 100%; white-space: pre-wrap' }),
+      el('pre', { style: 'width: 100%; white-space: pre-wrap' }, data.$info),
       el('div', { id: 'json1' })
     ]),
     el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
@@ -76,7 +81,6 @@ function component() {
   ])
 
   editor = main.querySelector('textarea')
-  info = main.querySelector('pre')
   svg = main.querySelector('svg')
   const updateJson1 = el.makeUpdate(main, '#json1')
   const updateJson2 = el.makeUpdate(main, '#json2')

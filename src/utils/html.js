@@ -49,8 +49,7 @@ export class Element {
         child = 'undefined'
       } else if (child === null) {
         child = 'null'
-      }
-      if (child.name === 'element') {
+      } else if (child.name === 'element') {
         this.content.push(new Element(child, level + 1, indent))
       } else {
         this.content.push(child)
@@ -85,6 +84,8 @@ export class Element {
         element.appendChild(child.create())
       } else if (typeof child === 'object') {
         element.appendChild(child)   // DOM Element
+      } else if (typeof child === 'function') {
+        child(element)
       } else {
         element.textContent = child
       }
@@ -141,9 +142,11 @@ export const el = (elName, attrs = {}, content = []) => {
   content = flatten(content)
   return { name: 'element', elName, attrs, content }
 }
+
 el.create = (elName, attrs, content) => {
   return new Element(el(elName, attrs, content)).create()
 }
+
 const cacheElements = []
 let _id = 0
 const getId = () => _id++
@@ -156,6 +159,37 @@ el.makeUpdate = (pel, selector) => {
     pel.appendChild(cel)
   }
 }
+
+class Data {
+  constructor(data) {
+    Object.assign(this, data)
+    this.makeConnectors()
+  }
+
+  makeConnectors() {
+    Object.keys(this).forEach(name => {
+      if (this.hasOwnProperty(name)) {
+        this[`$${name}`] = this.makeConnector(name)
+      }
+    })
+  }
+
+  makeConnector(name) {
+    const _name = `_${name}`
+    return element => {
+      const defaultVal = this[name]
+      Object.defineProperty(this, name, {
+        get() { return this[_name] },
+        set(value) {
+          this[_name] = element.textContent = value
+        }
+      })
+      this[name] = defaultVal
+    }
+  }
+}
+el.setData = data => new Data(data)
+
 
 let txt
 const cache = {}
