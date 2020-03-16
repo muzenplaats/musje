@@ -21,20 +21,32 @@ import xmlElement from './utils/xmlElement'
 
 
 function component() {
-  let editor, svg, cell
+  let svg, cell
   const cellElements = []
 
   const data = el.setData({
-    info: '',
-    a: 1,
-    b: 2,
-    c: { get() { return this.a + 111 }, dep: 'a' }
+    scoreStr: '',
+    score: {
+      get() {
+        let score
+        try {
+          score = new Score(this.scoreStr)
+          this.error = ''
+        } catch (e) {
+          score = new Score()
+          this.error = e
+        }
+        return score
+      },
+      dep: 'scoreStr'
+    },
+    scoreLayout: {
+      get() { return new ScoreLayout(this.score, style) },
+      dep: 'score'
+    },
+    info: { get() { return this.score }, dep: 'score' },
+    error: ''
   })
-
-  setTimeout(() => {
-    data.a += 10
-    data.b += 20
-  }, 3000)
 
   const renderCell = (cell, i, y2) => {
     const cellLayout = new CellLayout(cell, style)
@@ -42,45 +54,36 @@ function component() {
     updateCells[i](cellElement(cellLayout, style))
   }
 
-  const editorChange = () => {
-    try {
-      const score = new Score(editor.value)
-      data.info = score
+  const editorInput = () => {
+    const score = data.score
+    const scoreLayout = data.scoreLayout
+    scoreLayout.position = { x: 0, y: 0 }
+    // updateScore(scoreElement(scoreLayout))
+    updateJson1(jsonElement('score', score))
+    updateJson2(jsonElement('scoreLayout', scoreLayout))
 
-      const scoreLayout = new ScoreLayout(score, style)
-      scoreLayout.position = { x: 0, y: 0 }
-      // updateScore(scoreElement(scoreLayout))
-
-      const staff = score.body.parts[0].staves[0]
-      cell = staff.cells[0]
-      // updateJson(jsonElement('score', score))
-      updateJson1(jsonElement('score', score))
-      updateJson2(jsonElement('scoreLayout', scoreLayout))
-      renderCell(cell, 0, 70)
-      // renderCell(staff.cells[1], 1, 110)
-      // renderCell(staff.cells[2], 2, 150)
-    } catch (e) {
-      data.info = e
-    }
+    const staff = score.body.parts[0].staves[0]
+    cell = staff.cells[0]
+    // updateJson(jsonElement('score', score))
+    renderCell(cell, 0, 70)
+    // renderCell(staff.cells[1], 1, 110)
+    // renderCell(staff.cells[2], 2, 150)
   }
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
-
-    el('div', data.$a),
-    el('div', data.$b),
-    el('div', data.$a),
-    el('div', data.$c),
-
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
         style: 'width: 100%; height: 100px',
-        keyup: editorChange
+        value: data.$scoreStr,
+        input: editorInput
       }),
       el('button', { click: () => player.play(cell) }, '>'),
       el('button', { click: () => player.pause() }, '||'),
       el('button', { click: () => player.stop() }, '[]'),
-      el('pre', { style: 'width: 100%; white-space: pre-wrap' }, data.$info),
+      el('pre', { style: 'color: #d53' }, data.$error),
+      el('pre', { style: 'width: 100%; white-space: pre-wrap' },
+                data.$info),
       el('div', { id: 'json1' })
     ]),
     el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
@@ -94,7 +97,6 @@ function component() {
     ])
   ])
 
-  editor = main.querySelector('textarea')
   svg = main.querySelector('svg')
   const updateJson1 = el.makeUpdate(main, '#json1')
   const updateJson2 = el.makeUpdate(main, '#json2')
@@ -106,7 +108,8 @@ function component() {
   ]
 
   loadText('scores/002.musje', txt => {
-    editor.value = txt; editorChange()
+    data.scoreStr = txt
+    editorInput()
   })
 
   const mxlfnames = [

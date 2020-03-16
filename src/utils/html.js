@@ -6,7 +6,8 @@ const EVENT_TYPES = arrayToSet([
   /* touch */ 'touchstart', 'touchmove', 'touchend', 'touchcancel',
   /* keyboard */ 'keydown', 'keypress', 'keyup',
   /* form */ 'focus', 'blur', 'change', 'submit',
-  /* window */ 'scroll', 'resize', 'hashchange', 'load', 'unload'
+  /* window */ 'scroll', 'resize', 'hashchange', 'load', 'unload',
+  'input'
 ])
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 const SVG_ELEMENT_NAMES = arrayToSet([
@@ -46,9 +47,9 @@ export class Element {
     this.content = []
     element.content.forEach(child => {
       if (typeof child === 'undefined') {
-        child = 'undefined'
+        this.content.push('undefined')
       } else if (child === null) {
-        child = 'null'
+        this.content.push('null')
       } else if (child.name === 'element') {
         this.content.push(new Element(child, level + 1, indent))
       } else {
@@ -69,6 +70,11 @@ export class Element {
     this.eachAttr((value, name) => {
       if (EVENT_TYPES[name]) {
         element.addEventListener(name, value)
+      } else if (name === 'value') {
+        value(element)
+        element.addEventListener('input', () => {
+          value.data[value.dname] = element.value
+        })
       } else if (name === 'style') {
         if (/\n/.test(value)) {
           value = value.trim().replace(/ *\n */g, ';')
@@ -181,15 +187,22 @@ class Data {
 
   makeConnector(name) {
     const that = this
-    return element => {
+    const funct = element => {
       that.cacheElements[name].push(element)
       that[name] = that[name]   // duplicate calls
     }
+    funct.data = this
+    funct.dname = name
+    return funct
   }
 
   runSetter(name, value) {
     this.cacheElements[name].forEach(element => {
-      element.textContent = value
+      if ('value' in element) {
+        element.value = value
+      } else {
+        element.textContent = value
+      }
     })
     if (this.depGetters[name]) {
       this.depGetters[name].forEach(depName => {
