@@ -25,8 +25,16 @@ function component() {
   const cellElements = []
 
   const data = el.setData({
-    info: ''
+    info: '',
+    a: 1,
+    b: 2,
+    c: { get() { return this.a + 111 }, dep: 'a' }
   })
+
+  setTimeout(() => {
+    data.a += 10
+    data.b += 20
+  }, 3000)
 
   const renderCell = (cell, i, y2) => {
     const cellLayout = new CellLayout(cell, style)
@@ -58,6 +66,12 @@ function component() {
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
+
+    el('div', data.$a),
+    el('div', data.$b),
+    el('div', data.$a),
+    el('div', data.$c),
+
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
         style: 'width: 100%; height: 100px',

@@ -163,29 +163,66 @@ el.makeUpdate = (pel, selector) => {
 class Data {
   constructor(data) {
     Object.assign(this, data)
+    this.cacheElements = {}
+    this.depGetters = {}
     this.makeConnectors()
   }
 
   makeConnectors() {
     Object.keys(this).forEach(name => {
+      if (name === 'cacheElements' || name === 'depGetters') return
       if (this.hasOwnProperty(name)) {
+        this.cacheElements[name] = []
         this[`$${name}`] = this.makeConnector(name)
+        this.makeAccessor(name)
       }
     })
   }
 
   makeConnector(name) {
-    const _name = `_${name}`
+    const that = this
     return element => {
-      const defaultVal = this[name]
-      Object.defineProperty(this, name, {
-        get() { return this[_name] },
-        set(value) {
-          this[_name] = element.textContent = value
-        }
-      })
-      this[name] = defaultVal
+      that.cacheElements[name].push(element)
+      that[name] = that[name]   // duplicate calls
     }
+  }
+
+  runSetter(name, value) {
+    this.cacheElements[name].forEach(element => {
+      element.textContent = value
+    })
+    if (this.depGetters[name]) {
+      this.depGetters[name].forEach(depName => {
+        this[depName] = this[depName]
+      })
+    }
+  }
+
+  makeAccessor(name) {
+    const _name = `_${name}`
+    const defaultVal = this[name]
+
+    let { dep, get } = defaultVal
+    if (dep && get) {
+      if (!Array.isArray(dep)) dep = [dep]
+      Object.defineProperty(this, name, {
+        get, set() { this.runSetter(name, this[name]) }
+      })
+      dep.forEach(depName => {
+        this.depGetters[depName] = this.depGetters[depName] || []
+        this.depGetters[depName].push(name)
+      })
+      return
+    }
+
+    Object.defineProperty(this, name, {
+      get() { return this[_name] },
+      set(value) {
+        this[_name] = value
+        this.runSetter(name, value)
+      }
+    })
+    this[name] = defaultVal
   }
 }
 el.setData = data => new Data(data)
