@@ -21,8 +21,13 @@ import xmlElement from './utils/xmlElement'
 
 
 function component() {
-  let svg, cell
-  const cellElements = []
+
+  const getCellElement = (cell, x, y2) => {
+    if (!cell) return el.create('g')
+    const cellLayout = new CellLayout(cell, style)
+    cellLayout.position = { x, y2 }
+    return cellElement(cellLayout)
+  }
 
   const data = el.setData({
     scoreStr: '',
@@ -45,38 +50,65 @@ function component() {
       dep: 'score'
     },
     info: { get() { return this.score }, dep: 'score' },
-    error: ''
+    error: '',
+    scoreElement: {
+      el() { return el.create('div'); return scoreElement(this.scoreLayout) },
+      dep: 'scoreLayout'
+    },
+
+    staff: {
+      get() {
+        const { parts } = this.score.body
+        return parts.length ? parts[0].staves[0] : null
+      },
+      dep: 'score'
+    },
+    cellElement1: {
+      el() {
+        if (!this.staff || !this.staff.cells[0]) return el.create('g')
+        return getCellElement(this.staff.cells[0], 50, 70)
+      },
+      dep: 'staff'
+    },
+    cellElement2: {
+      el() {
+        if (!this.staff || !this.staff.cells[1]) return el.create('g')
+        return getCellElement(this.staff.cells[1], 50, 90)
+      },
+      dep: 'staff'
+    },
+    cellElement3: {
+      el() {
+        if (!this.staff || !this.staff.cells[2]) return el.create('g')
+        return getCellElement(this.staff.cells[2], 50, 110)
+      },
+      dep: 'staff'
+    },
+
+    scoreJsonElement: {
+      el() { return jsonElement('score', this.score) }, dep: 'score'
+    },
+    scoreLayoutJsonElement: {
+      el() {
+        return jsonElement('scoreLayout', this.scoreLayout)
+      },
+      dep: 'scoreLayout'
+    },
+    musicXmlStr: '<wait/>',
+    musicXmlElement: {
+      el() {
+        return xmlElement(this.musicXmlStr)
+      },
+      dep: 'musicXmlStr'
+    }
   })
-
-  const renderCell = (cell, i, y2) => {
-    const cellLayout = new CellLayout(cell, style)
-    cellLayout.position = { x: 50, y2 }
-    updateCells[i](cellElement(cellLayout, style))
-  }
-
-  const editorInput = () => {
-    const score = data.score
-    const scoreLayout = data.scoreLayout
-    scoreLayout.position = { x: 0, y: 0 }
-    // updateScore(scoreElement(scoreLayout))
-    updateJson1(jsonElement('score', score))
-    updateJson2(jsonElement('scoreLayout', scoreLayout))
-
-    const staff = score.body.parts[0].staves[0]
-    cell = staff.cells[0]
-    // updateJson(jsonElement('score', score))
-    renderCell(cell, 0, 70)
-    // renderCell(staff.cells[1], 1, 110)
-    // renderCell(staff.cells[2], 2, 150)
-  }
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
         style: 'width: 100%; height: 100px',
-        value: data.$scoreStr,
-        input: editorInput
+        value: data.$scoreStr
       }),
       el('button', { click: () => player.play(cell) }, '>'),
       el('button', { click: () => player.pause() }, '||'),
@@ -84,33 +116,23 @@ function component() {
       el('pre', { style: 'color: #d53' }, data.$error),
       el('pre', { style: 'width: 100%; white-space: pre-wrap' },
                 data.$info),
-      el('div', { id: 'json1' })
+      el('div', data.$scoreJsonElement)
     ]),
     el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
-      el('div', { id: 'score' }),
-      el('svg', { width: 500, height: 200 }, [
+      el('div', data.$scoreElement),
+      el('svg', { id: 'svg', width: 500, height: 200 }, [
         box({ rect: { x: 0, y: 0, width: 500, height: 200 } }, 'black'),
+        el('g', data.$cellElement1),
+        el('g', data.$cellElement2),
+        el('g', data.$cellElement3),
         // testElement()
       ]),
-      el('div', { id: 'xml' }),
-      el('div', { id: 'json2' })
+      el('div', data.$musicXmlElement),
+      el('div', data.$scoreLayoutJsonElement)
     ])
   ])
 
-  svg = main.querySelector('svg')
-  const updateJson1 = el.makeUpdate(main, '#json1')
-  const updateJson2 = el.makeUpdate(main, '#json2')
-  const updateXml = el.makeUpdate(main, '#xml')
-  const updateScore = el.makeUpdate(main, '#score')
-
-  const updateCells = [
-    el.makeUpdate(svg), el.makeUpdate(svg), el.makeUpdate(svg)
-  ]
-
-  loadText('scores/002.musje', txt => {
-    data.scoreStr = txt
-    editorInput()
-  })
+  loadText('scores/001.musje', txt => { data.scoreStr = txt })
 
   const mxlfnames = [
     'reve.musicxml',
@@ -119,7 +141,7 @@ function component() {
   ]
 
   loadText('scores/musicXml/' + mxlfnames[2], txt => {
-    // updateXml(xmlElement(txt))
+    data.musicXmlStr = txt
   })
 
   return main

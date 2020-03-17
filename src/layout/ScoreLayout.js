@@ -11,6 +11,7 @@ export default class ScoreLayout extends AbstractLayout {
     this.bodyLayout = new BodyLayout(score.body, style)
     this.setSize()
     this.innerLayout = new InnerLayout(this.height, style)
+    this.position = { x: 0, y: 0 }
   }
 
   setSize() {

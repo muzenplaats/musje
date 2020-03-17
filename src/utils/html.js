@@ -153,19 +153,6 @@ el.create = (elName, attrs, content) => {
   return new Element(el(elName, attrs, content)).create()
 }
 
-const cacheElements = []
-let _id = 0
-const getId = () => _id++
-el.makeUpdate = (pel, selector) => {
-  if (selector) pel = pel.querySelector(selector)
-  const id = getId()
-  return cel => {
-    if (cacheElements[id]) pel.removeChild(cacheElements[id])
-    cacheElements[id] = cel
-    pel.appendChild(cel)
-  }
-}
-
 class Data {
   constructor(data) {
     Object.assign(this, data)
@@ -186,6 +173,8 @@ class Data {
   }
 
   makeConnector(name) {
+    if (this[name].el) return this.makeElConnector(name)
+
     const that = this
     const funct = element => {
       that.cacheElements[name].push(element)
@@ -196,6 +185,22 @@ class Data {
     return funct
   }
 
+  makeElConnector(name) {
+    const that = this
+    return parent => {
+      that.cacheElements[name].push({ parent })
+      that[name] = that[name]   // duplicate calls
+    }
+  }
+
+  setDepProp(name) {
+    if (this.depGetters[name]) {
+      this.depGetters[name].forEach(depName => {
+        this[depName] = this[depName]
+      })
+    }
+  }
+
   runSetter(name, value) {
     this.cacheElements[name].forEach(element => {
       if ('value' in element) {
@@ -204,38 +209,55 @@ class Data {
         element.textContent = value
       }
     })
-    if (this.depGetters[name]) {
-      this.depGetters[name].forEach(depName => {
-        this[depName] = this[depName]
-      })
-    }
+    this.setDepProp(name)
+  }
+
+  runElSetter(name, child) {
+    this.cacheElements[name].forEach(elPair => {
+      if (elPair.child) elPair.parent.removeChild(elPair.child)
+      elPair.child = child
+      elPair.parent.appendChild(child)
+    })
+    this.setDepProp(name)
   }
 
   makeAccessor(name) {
     const _name = `_${name}`
     const defaultVal = this[name]
 
-    let { dep, get } = defaultVal
-    if (dep && get) {
+    let { get, el, dep } = defaultVal
+
+    if (dep) {
       if (!Array.isArray(dep)) dep = [dep]
-      Object.defineProperty(this, name, {
-        get, set() { this.runSetter(name, this[name]) }
-      })
       dep.forEach(depName => {
         this.depGetters[depName] = this.depGetters[depName] || []
         this.depGetters[depName].push(name)
       })
-      return
     }
 
-    Object.defineProperty(this, name, {
-      get() { return this[_name] },
-      set(value) {
-        this[_name] = value
-        this.runSetter(name, value)
-      }
-    })
-    this[name] = defaultVal
+    // Getter property
+    if (get && dep) {
+      Object.defineProperty(this, name, {
+        get, set() { this.runSetter(name, this[name]) }
+      })
+
+    // Element property
+    } else if (el && dep) {
+        Object.defineProperty(this, name, {
+          get: el, set() { this.runElSetter(name, this[name]) }
+        })
+
+    // Normal property
+    } else {
+      Object.defineProperty(this, name, {
+        get() { return this[_name] },
+        set(value) {
+          this[_name] = value
+          this.runSetter(name, value)
+        }
+      })
+      this[name] = defaultVal
+    }
   }
 }
 el.setData = data => new Data(data)
