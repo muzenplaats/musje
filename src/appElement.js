@@ -2,8 +2,7 @@ import Score from './model/Score'
 import ScoreLayout from './layout/ScoreLayout'
 import scoreElement from './view/scoreElement'
 import player from './player/player'
-import { el } from './utils/html'
-import { loadText } from './utils/html'
+import { el, loadText } from './utils/html'
 import Style from './utils/Style'
 import defaultStyle from './layout/default.style'
 const style = new Style(defaultStyle).value
@@ -35,7 +34,6 @@ export default function appElement() {
     score: {
       get() {
         let score
-        // console.log('scoreStr', this.scoreStr)
         try {
           score = new Score(this.scoreStr)
           this.error = ''
@@ -67,13 +65,12 @@ export default function appElement() {
       dep: 'score'
     },
     cell: {
-      get() {console.log('cell'); return this.staff ? this.staff.cells[0] : null },
+      get() { return this.staff ? this.staff.cells[0] : null },
       dep: 'staff'
     },
     cellElement1: {
       el() {
         if (!this.staff || !this.staff.cells[0]) return el.create('g')
-        console.log('test', this.staff.cells[0] === this.cell)
         const cell = this.score.body.parts[0].staves[0].cells[0]
         return getCellElement(cell, 50, 70)
       },
@@ -99,16 +96,12 @@ export default function appElement() {
       el() { return jsonElement('score', this.score) }, dep: 'score'
     },
     scoreLayoutJsonElement: {
-      el() {
-        return jsonElement('scoreLayout', this.scoreLayout)
-      },
+      el() { return jsonElement('scoreLayout', this.scoreLayout) },
       dep: 'scoreLayout'
     },
     musicXmlStr: '<wait/>',
     musicXmlElement: {
-      el() {
-        return xmlElement(this.musicXmlStr)
-      },
+      el() { return xmlElement(this.musicXmlStr) },
       dep: 'musicXmlStr'
     }
   })

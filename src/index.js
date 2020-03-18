@@ -1,5 +1,5 @@
-// import appElement from './appElement'
-// document.body.appendChild(appElement())
+import appElement from './appElement'
+document.body.appendChild(appElement())
 
-import converterAppElement from './converterAppElement'
-document.body.appendChild(converterAppElement())
+// import converterAppElement from './converterAppElement'
+// document.body.appendChild(converterAppElement())

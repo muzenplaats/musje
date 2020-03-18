@@ -182,7 +182,7 @@ class Data {
     const that = this
     const funct = element => {
       that.cacheElements[name].push(element)
-      that[name] = that[name]   // duplicate calls
+      // that[name] = null   // duplicate calls
     }
     funct.data = this
     funct.dname = name
@@ -192,37 +192,9 @@ class Data {
   makeElConnector(name) {
     const that = this
     return parent => {
-      that.cacheElements[name].push({ parent })
-      that[name] = that[name]   // duplicate calls
+      that.cacheElements[name].push({ parent, child: null })
+      // that[name] = that[name]   // duplicate calls
     }
-  }
-
-  setDepProp(name) {
-    if (this.depGetters[name]) {
-      this.depGetters[name].forEach(depName => {
-        this[depName] = this[depName]
-      })
-    }
-  }
-
-  runSetter(name, value) {
-    this.cacheElements[name].forEach(element => {
-      if ('value' in element) {
-        element.value = value
-      } else {
-        element.textContent = value
-      }
-    })
-    this.setDepProp(name)
-  }
-
-  runElSetter(name, child) {
-    this.cacheElements[name].forEach(elPair => {
-      if (elPair.child) elPair.parent.removeChild(elPair.child)
-      elPair.child = child
-      elPair.parent.appendChild(child)
-    })
-    this.setDepProp(name)
   }
 
   makeAccessor(name) {
@@ -242,26 +214,62 @@ class Data {
     // Getter property
     if (get && dep) {
       Object.defineProperty(this, name, {
-        get, set() { this.runSetter(name, this[name]) }
+        get() { return this[_name] },
+        set() {
+          this[_name] = get.apply(this)
+          this.runSetter(name, this[name])
+        }
       })
 
     // Element property
     } else if (el && dep) {
-        Object.defineProperty(this, name, {
-          get: el, set() { this.runElSetter(name, this[name]) }
-        })
+      Object.defineProperty(this, name, {
+        get() { return this[_name] },
+        set() {
+          this[_name] = el.apply(this)
+          this.runElSetter(name, this[name])
+        }
+      })
 
     // Normal property
     } else {
       Object.defineProperty(this, name, {
         get() { return this[_name] },
         set(value) {
-          const changed = value === this[_name]
           this[_name] = value
-          if (changed) this.runSetter(name, value)
+          this.runSetter(name, value)
         }
       })
       this[name] = defaultVal
+    }
+  }
+
+  runSetter(name, value) {
+    this.cacheElements[name].forEach(element => {
+      if ('value' in element) {
+        element.value = value
+      } else {
+        element.textContent = value
+      }
+    })
+    this.setDepProp(name)
+  }
+
+  runElSetter(name, child) {
+    const arr = this.cacheElements[name]
+    this.cacheElements[name].forEach(elPair => {
+      if (elPair.child) elPair.parent.removeChild(elPair.child)
+      elPair.child = child
+      elPair.parent.appendChild(child)
+    })
+    this.setDepProp(name)
+  }
+
+  setDepProp(name) {
+    if (this.depGetters[name]) {
+      this.depGetters[name].forEach(depName => {
+        this[depName] = this[depName]
+      })
     }
   }
 }
@@ -272,8 +280,8 @@ let txt
 const cache = {}
 const prepareText = () => {
   if (txt) return
-  txt = new Element(el('text', { x: 0, y: 50 }, '')).create()
-  const svg = new Element(el('svg', { width: 0, height: 0 }, [txt])).create()
+  txt = el.create('text', { x: 0, y: 50 }, '')
+  const svg = el.create('svg', { width: 0, height: 0 }, [txt])
   document.body.appendChild(svg)
 }
 export const getSize = (font, content) => {
