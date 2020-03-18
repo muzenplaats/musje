@@ -8,6 +8,27 @@ module.exports = {
       { test: /\.style$/, use: 'raw-loader' },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
       {
+        test: /\.(woff2?|ttf|eot|svg)$/,
+        use: {
+          loader: "url-loader",
+          options: {
+            limit: 60000,
+          }
+        }
+      },
+      // {
+      //   test: /\.(woff2?|ttf|eot|svg)$/,
+      //   use: [
+      //     {
+      //       loader: 'file-loader',
+      //       options: {
+      //         name: '[name].[ext]',
+      //         outputPath: 'fonts/'
+      //       }
+      //     }
+      //   ]
+      // },
+      {
         test: /\.js$/, exclude: /node_modules/,
         use: {
           loader: 'babel-loader',

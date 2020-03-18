@@ -71,10 +71,14 @@ export class Element {
       if (EVENT_TYPES[name]) {
         element.addEventListener(name, value)
       } else if (name === 'value') {
-        value(element)
-        element.addEventListener('input', () => {
-          value.data[value.dname] = element.value
-        })
+        if (typeof value === 'function') {
+          value(element)
+          element.addEventListener('input', () => {
+            value.data[value.dname] = element.value
+          })
+        } else {
+          element.value = value
+        }
       } else if (name === 'style') {
         if (/\n/.test(value)) {
           value = value.trim().replace(/ *\n */g, ';')
@@ -252,8 +256,9 @@ class Data {
       Object.defineProperty(this, name, {
         get() { return this[_name] },
         set(value) {
+          const changed = value === this[_name]
           this[_name] = value
-          this.runSetter(name, value)
+          if (changed) this.runSetter(name, value)
         }
       })
       this[name] = defaultVal
