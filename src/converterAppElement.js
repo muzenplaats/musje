@@ -2,30 +2,50 @@ import { el } from './utils/html'
 
 export default function converterAppElement() {
   const data = el.setData({
-    test: '123'
+    wavenumber: 1,
+    wn: {
+      get() { return (+this.wavenumber).toPrecision(6) },
+      set(val) { this.wavenumber = val },
+      dep: 'wavenumber'
+    },
+    erg: {
+      get() { return (this.wavenumber * 5.0358e15).toPrecision(6) },
+      set(val) { this.wavenumber = val / 5.0358e15 },
+      dep: 'wavenumber'
+    },
+    cal: {
+      get() { return (this.wavenumber * 0.34996).toPrecision(6) },
+      set(val) { this.wavenumber = val / 0.34996 },
+      dep: 'wavenumber'
+    },
+    ev: {
+      get() { return (this.wavenumber * 8067.5).toPrecision(6) },
+      set(val) { this.wavenumber = val / 8067.5 },
+      dep: 'wavenumber'
+    },
   })
 
+  const table = [
+    ['Wavenumber:', data.$wn, ' cm<sup>-1</sup>'],
+    ['Erg:', data.$erg, ' erg/molecule'],
+    ['Cal:', data.$cal, ' cal/molecule'],
+    ['Electron-volt:', data.$ev, ' eV']
+  ]
+
   return el.create('div', [
-    el('h2', 'Text input fields'),
-    el('form', [
-      el('label', { for: 'fname' }, 'First name: '),
-      // el('br'),
-      el('input', {
-        type: 'text', id: 'fname', name: 'fname', value: 'John'
-      }),
-      el('br'),
-      el('label', { for: 'lname' }, 'Last name: '),
-      // el('br'),
-      el('input', {
-        type: 'text', id: 'lname', name: 'lname', value: 'Doe'
-      }),
-      el('p', 'Note that the form itself is not visible.'),
-      el('p', 'Also note that the default width of text input fields is 20 characters.')
-    ]),
-    el.html('div', 'Test&nbsp;test<br>test.'),
-    el('input', { value: data.$test }),
-    el('div', data.$test),
-    el.html('div', data.$test)
+    el('h1', { style: 'font-size: 22px' }, 'Energy Converter'),
+    el('form', table.map(row => {
+      return el('div', [
+        el('label', { for: row[0] }, [
+          el('div', { style: 'width: 100px; display: inline-block; padding-right: 10px; text-align: right' }, row[0])
+        ]),
+        el('input', {
+          type: 'number', id: row[0], name: row[0], value: row[1],
+          style: 'width: 120px'
+        }),
+        el.html('label', { for: row[0] }, row[2])
+      ])
+    })),
   ])
 }
 

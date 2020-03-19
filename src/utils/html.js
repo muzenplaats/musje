@@ -218,7 +218,7 @@ class Data {
     const _name = `_${name}`
     const defaultVal = this[name]
 
-    let { get, el, dep } = defaultVal
+    let { get, set, el, dep } = defaultVal
 
     if (dep) {
       if (!Array.isArray(dep)) dep = [dep]
@@ -232,8 +232,9 @@ class Data {
     if (get && dep) {
       Object.defineProperty(this, name, {
         get() { return this[_name] },
-        set() {
+        set(val) {
           this[_name] = get.apply(this)
+          if (set && val !== undefined) set.call(this, val)
           this.runSetter(name, this[name])
         }
       })
@@ -285,7 +286,7 @@ class Data {
   setDepProp(name) {
     if (this.depGetters[name]) {
       this.depGetters[name].forEach(depName => {
-        this[depName] = this[depName]
+        this[depName] = undefined   // this[depName]
       })
     }
   }
