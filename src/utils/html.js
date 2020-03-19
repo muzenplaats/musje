@@ -94,7 +94,11 @@ export class Element {
         element.appendChild(child.create())
       } else if (typeof child === 'object') {
         if ('html' in child) {
-          element.innerHTML = child.html
+          if (typeof child.html === 'function') {
+            child.html(element, 'html')
+          } else {
+            element.innerHTML = child.html
+          }
         } else {
           element.appendChild(child)   // DOM Element
         }
@@ -187,9 +191,15 @@ class Data {
     if (this[name].el) return this.makeElConnector(name)
 
     const that = this
-    const funct = element => {
+    const funct = (element, type) => {
+      const index = that.cacheElements[name].length
       that.cacheElements[name].push(element)
-      // that[name] = null   // duplicate calls
+      if (type) {
+        const tname = `_${name}_html`
+        that [tname] = that[tname] || []
+        that[tname][index] = true
+      }
+      that[name] = that[name]   // duplicate calls
     }
     funct.data = this
     funct.dname = name
@@ -248,9 +258,12 @@ class Data {
   }
 
   runSetter(name, value) {
-    this.cacheElements[name].forEach(element => {
+    this.cacheElements[name].forEach((element, i) => {
+      const tname = `_${name}_html`
       if ('value' in element) {
         element.value = value
+      } else if (this[tname] && this[tname][i]) {
+        element.innerHTML = value
       } else {
         element.textContent = value
       }
