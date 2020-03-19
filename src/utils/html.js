@@ -262,7 +262,7 @@ class Data {
     this.cacheElements[name].forEach((element, i) => {
       const tname = `_${name}_html`
       if ('value' in element) {
-        element.value = value
+        if (element !== document.activeElement) element.value = value
       } else if (this[tname] && this[tname][i]) {
         element.innerHTML = value
       } else {
