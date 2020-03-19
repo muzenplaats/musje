@@ -41,8 +41,16 @@ export default class Duration {
 
   get quarters() { return this.quartersQ / Q }
 
-  onplay() {}
-  onstop() {}
+  get onplay() { return this._onplay || (() => {}) }
+  set onplay(newf) {
+    const oldf = this.onplay
+    this._onplay = () => { oldf(); newf() }
+  }
+  get onstop() { return this._onstop || (() => {}) }
+  set onstop(newf) {
+    const oldf = this.onstop
+    this._onstop = () => { oldf(); newf() }
+  }
 
   toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` }
   toJSON = makeToJSON('type', 'dots')

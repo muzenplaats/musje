@@ -72,21 +72,21 @@ export default function appElement() {
       el() {
         if (!this.staff || !this.staff.cells[0]) return el.create('g')
         const cell = this.score.body.parts[0].staves[0].cells[0]
-        return getCellElement(cell, 50, 70)
+        return getCellElement(cell, 20, 70)
       },
       dep: 'score'
     },
     cellElement2: {
       el() {
         if (!this.staff || !this.staff.cells[1]) return el.create('g')
-        return getCellElement(this.staff.cells[1], 50, 90)
+        return getCellElement(this.staff.cells[1], 20, 90)
       },
       dep: 'staff'
     },
     cellElement3: {
       el() {
         if (!this.staff || !this.staff.cells[2]) return el.create('g')
-        return getCellElement(this.staff.cells[2], 50, 110)
+        return getCellElement(this.staff.cells[2], 20, 110)
       },
       dep: 'staff'
     },
@@ -135,7 +135,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/001.musje', txt => { data.scoreStr = txt })
+  loadText('scores/002.musje', txt => { data.scoreStr = txt })
 
   const mxlfnames = [
     'reve.musicxml',

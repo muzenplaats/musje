@@ -41,8 +41,16 @@ export default class Pitch {
 
   get frequency() { return Math.pow(2, (this.midiNumber - 69) / 12) * 440 }
 
-  onplay() {}
-  onstop() {}
+  get onplay() { return this._onplay || (() => {}) }
+  set onplay(newf) {
+    const oldf = this.onplay
+    this._onplay = () => { oldf(); newf() }
+  }
+  get onstop() { return this._onstop || (() => {}) }
+  set onstop(newf) {
+    const oldf = this.onstop
+    this._onstop = () => { oldf(); newf() }
+  }
 
   toString() {
     const { step, accidental, octave } = this

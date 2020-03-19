@@ -93,7 +93,11 @@ export class Element {
       if (child instanceof Element) {
         element.appendChild(child.create())
       } else if (typeof child === 'object') {
-        element.appendChild(child)   // DOM Element
+        if ('html' in child) {
+          element.innerHTML = child.html
+        } else {
+          element.appendChild(child)   // DOM Element
+        }
       } else if (typeof child === 'function') {
         child(element)
       } else {
@@ -152,9 +156,12 @@ export const el = (elName, attrs = {}, content = []) => {
   content = flatten(content)
   return { name: 'element', elName, attrs, content }
 }
-
 el.create = (elName, attrs, content) => {
   return new Element(el(elName, attrs, content)).create()
+}
+el.html = (elName, attrs, content) => {
+  if (typeof content === 'undefined') { content = attrs; attrs = {} }
+  return el(elName, attrs, { html: content })
 }
 
 class Data {
@@ -224,11 +231,7 @@ class Data {
     // Element property
     } else if (el && dep) {
       Object.defineProperty(this, name, {
-        get() { return this[_name] },
-        set() {
-          this[_name] = el.apply(this)
-          this.runElSetter(name, this[name])
-        }
+        get: el, set() { this.runElSetter(name) }
       })
 
     // Normal property
@@ -255,10 +258,11 @@ class Data {
     this.setDepProp(name)
   }
 
-  runElSetter(name, child) {
+  runElSetter(name) {
     const arr = this.cacheElements[name]
     this.cacheElements[name].forEach(elPair => {
       if (elPair.child) elPair.parent.removeChild(elPair.child)
+      const child = this[name]
       elPair.child = child
       elPair.parent.appendChild(child)
     })
