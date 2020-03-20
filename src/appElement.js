@@ -42,18 +42,15 @@ export default function appElement() {
           this.error = e
         }
         return score
-      },
-      dep: 'scoreStr'
+      }
     },
     scoreLayout: {
-      get() { return new ScoreLayout(this.score, style) },
-      dep: 'score'
+      get() { return new ScoreLayout(this.score, style) }
     },
-    info: { get() { return this.score }, dep: 'score' },
+    info: { get() { return this.score } },
     error: '',
     scoreElement: {
-      el() { return el.create('div'); return scoreElement(this.scoreLayout) },
-      dep: 'scoreLayout'
+      el() { return el.create('div'); return scoreElement(this.scoreLayout) }
     },
 
     // tmp =======================================================
@@ -61,49 +58,38 @@ export default function appElement() {
       get() {
         const { parts } = this.score.body
         return parts.length ? parts[0].staves[0] : null
-      },
-      dep: 'score'
+      }
     },
     cell: {
-      get() { return this.staff ? this.staff.cells[0] : null },
-      dep: 'staff'
+      get() { return this.staff ? this.staff.cells[0] : null }
     },
     cellElement1: {
       el() {
         if (!this.staff || !this.staff.cells[0]) return el.create('g')
         const cell = this.score.body.parts[0].staves[0].cells[0]
         return getCellElement(cell, 20, 70)
-      },
-      dep: 'score'
+      }
     },
     cellElement2: {
       el() {
         if (!this.staff || !this.staff.cells[1]) return el.create('g')
         return getCellElement(this.staff.cells[1], 20, 90)
-      },
-      dep: 'staff'
+      }
     },
     cellElement3: {
       el() {
         if (!this.staff || !this.staff.cells[2]) return el.create('g')
         return getCellElement(this.staff.cells[2], 20, 110)
-      },
-      dep: 'staff'
+      }
     },
     // tmp =======================================================
 
-    scoreJsonElement: {
-      el() { return jsonElement('score', this.score) }, dep: 'score'
-    },
+    scoreJsonElement: { el() { return jsonElement('score', this.score) } },
     scoreLayoutJsonElement: {
-      el() { return jsonElement('scoreLayout', this.scoreLayout) },
-      dep: 'scoreLayout'
+      el() { return jsonElement('scoreLayout', this.scoreLayout) }
     },
     musicXmlStr: '<wait/>',
-    musicXmlElement: {
-      el() { return xmlElement(this.musicXmlStr) },
-      dep: 'musicXmlStr'
-    }
+    musicXmlElement: { el() { return xmlElement(this.musicXmlStr) } }
   })
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [

@@ -24,6 +24,14 @@ export const arrayToSet = arr => {
   return result
 }
 
+export const setToArray = set => {
+  const result = []
+  for (let name in set) result.push(name)
+  return result
+}
+
+export const unique = arr => setToArray(arrayToSet(arr))
+
 export const swapObject = obj => {
   const result = {}
   for (let key in obj) result[obj[key]] = key

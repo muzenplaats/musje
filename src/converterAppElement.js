@@ -6,24 +6,20 @@ export default function converterAppElement() {
     wavenumber: 1,
     wn: {
       get() { return precision(this.wavenumber, 6) },
-      set(val) { this.wavenumber = val },
-      dep: 'wavenumber'
+      set(val) { this.wavenumber = val }
     },
     erg: {
       get() { return precision(this.wavenumber * 5.0358e15, 6) },
-      set(val) { this.wavenumber = val / 5.0358e15 },
-      dep: 'wavenumber'
+      set(val) { this.wavenumber = val / 5.0358e15 }
     },
     cal: {
       get() { return precision(this.wavenumber * 0.34996, 6) },
-      set(val) { this.wavenumber = val / 0.34996 },
-      dep: 'wavenumber'
+      set(val) { this.wavenumber = val / 0.34996 }
     },
     ev: {
       get() { return precision(this.wavenumber * 8067.5, 6) },
-      set(val) { this.wavenumber = val / 8067.5 },
-      dep: 'wavenumber'
-    },
+      set(val) { this.wavenumber = val / 8067.5 }
+    }
   })
 
   const table = [

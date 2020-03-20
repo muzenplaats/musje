@@ -1,4 +1,4 @@
-import { arrayToSet, makeToJSON, repeat, flatten } from './helpers'
+import { arrayToSet, unique, makeToJSON, repeat, flatten } from './helpers'
 
 const EVENT_TYPES = arrayToSet([
   /* mouse */ 'mousedown', 'mouseup', 'click', 'dblclick', 'mousemove',
@@ -168,8 +168,50 @@ el.html = (elName, attrs, content) => {
   return el(elName, attrs, { html: content })
 }
 
+const configDeps = data => {
+  const tmpData = {}, defaultData = {}
+  const names = Object.keys(data)
+  names.forEach(name => {
+    const val = data[name]
+    const _name = `_${name}`
+    const { get, el } = val
+    if (get || el) {
+      Object.defineProperty(tmpData, name, {
+        get() {
+          return _name in this ? this[_name] :
+                                (this[_name] = (get || el).apply(this))
+        }
+      })
+    } else {
+      tmpData[name] = val
+    }
+  })
+  names.forEach(name => { defaultData[name] = tmpData[name] })
+
+  const detector = { $collector: [] }
+  names.forEach(name => {
+    const _name = `_${name}`
+    Object.defineProperty(detector, name, {
+      get() {
+        this.$collector.push(name)
+        return _name in this ? this[_name] : defaultData[name]
+      },
+      set(val) { this[_name] = val }
+    })
+  })
+  names.forEach(name => {
+    const { get, el } = data[name]
+    if (get || el) { (get || el).apply(detector) }
+    const dep = unique(detector.$collector)
+    detector.$collector.length = 0
+    if (dep.length) data[name].dep = dep
+    // console.log(name, dep)
+  })
+}
+
 class Data {
   constructor(data) {
+    configDeps(data)
     Object.assign(this, data)
     this.cacheElements = {}
     this.depGetters = {}
