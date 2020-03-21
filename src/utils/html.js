@@ -200,9 +200,9 @@ const configDeps = data => {
     })
   })
   names.forEach(name => {
-    const { get, el } = data[name]
-    if (get || el) { (get || el).apply(detector) }
-    const dep = unique(detector.$collector)
+    let { get, el, dep } = data[name]
+    if (get || el) (get || el).apply(detector)
+    dep = unique(detector.$collector.concat(dep || []))
     detector.$collector.length = 0
     if (dep.length) data[name].dep = dep
     // console.log(name, dep)
@@ -263,7 +263,6 @@ class Data {
     let { get, set, el, dep } = defaultVal
 
     if (dep) {
-      if (!Array.isArray(dep)) dep = [dep]
       dep.forEach(depName => {
         this.depGetters[depName] = this.depGetters[depName] || []
         this.depGetters[depName].push(name)
