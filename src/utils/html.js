@@ -1,5 +1,7 @@
 import { arrayToSet, unique, makeToJSON, repeat, flatten } from './helpers'
 
+const { push, pop, shift, unshift, splice } = []
+
 const EVENT_TYPES = arrayToSet([
   /* mouse */ 'mousedown', 'mouseup', 'click', 'dblclick', 'mousemove',
               'mouseover', 'mousewheel', 'mouseout', 'contextmenu',
@@ -230,6 +232,7 @@ class Data {
   }
 
   makeConnector(name) {
+    if (Array.isArray(this[name])) return this.makeArrayConnector(name)
     if (this[name].el) return this.makeElConnector(name)
 
     const that = this
@@ -245,6 +248,16 @@ class Data {
     }
     funct.data = this
     funct.dname = name
+    return funct
+  }
+
+  makeArrayConnector(name) {
+    const that = this
+    const funct = parent => {
+      that.cacheElements[name].push({ parent, children: [] })
+      that[name] = that[name]
+    }
+    funct.map = map => { funct._map = map; return funct }
     return funct
   }
 
@@ -288,15 +301,68 @@ class Data {
 
     // Normal property
     } else {
-      Object.defineProperty(this, name, {
-        get() { return this[_name] },
-        set(value) {
-          this[_name] = value
-          this.runSetter(name, value)
-        }
-      })
+      if (Array.isArray(defaultVal)) {
+        this.makeArrayAccessor(name, _name)
+      } else {
+        Object.defineProperty(this, name, {
+          get() { return this[_name] },
+          set(value) {
+            this[_name] = value
+            this.runSetter(name, value)
+          }
+        })
+      }
       this[name] = defaultVal
     }
+  }
+
+  alterArrayMethods(name, arr) {
+    const map = this[`$${name}`]._map
+    const cache = this.cacheElements[name]
+    const getChildren = () => this.cacheElements[name]
+    Object.assign(arr, {
+      push() {
+        const args = Array.from(arguments)
+        args.forEach(arg => {
+          cache.forEach(elPair => {
+            const cel = map(arg)
+            elPair.children.push(cel)
+            elPair.parent.appendChild(cel)
+          })
+        })
+        push.apply(this, args)
+      },
+      pop() {
+        cache.forEach(elPair => {
+          const last = elPair.children.pop()
+          if (last) elPair.parent.removeChild(last)
+        })
+        return pop.apply(this)
+      },
+      shift() {
+        return shift.apply(this)
+      },
+      unshift() {
+        const args = Array.from(arguments)
+        unshift.apply(this, args)
+      },
+      splice() {
+        const args = Array.from(arguments)
+        console.log(args)
+        splice.apply(this, args)
+      }
+    })
+    return arr
+  }
+
+  makeArrayAccessor(name, _name) {
+    Object.defineProperty(this, name, {
+      get() { return this[_name] },
+      set(value) {
+        this[_name] = this.alterArrayMethods(name, value)
+        this.runArraySetter(name, value)
+      }
+    })
   }
 
   runSetter(name, value) {
@@ -311,6 +377,19 @@ class Data {
       }
     })
     this.setDepProp(name)
+  }
+
+  runArraySetter(name, value) {
+    const map = this[`$${name}`]._map
+    this.cacheElements[name].forEach(elPair => {
+      elPair.parent.textContent = ''
+      elPair.children.length = 0
+      elPair.children = value.map((item, i) => {
+        const child = map(item, i)
+        elPair.parent.appendChild(child)
+        return child
+      })
+    })
   }
 
   runElSetter(name) {
