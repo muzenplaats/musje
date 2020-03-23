@@ -1,6 +1,6 @@
 import { arrayToSet, unique, makeToJSON, repeat, flatten } from './helpers'
 
-const { push, pop, shift, unshift, splice } = []
+const { push, pop, shift, unshift, splice, reverse } = []
 
 const EVENT_TYPES = arrayToSet([
   /* mouse */ 'mousedown', 'mouseup', 'click', 'dblclick', 'mousemove',
@@ -258,10 +258,13 @@ class Data {
   makeArrayConnector(name) {
     const that = this
     const funct = parent => {
-      that.cacheElements[name].push({ parent, children: [] })
+      that.cacheElements[name].push({
+        parent, children: [], map: funct._map.shift()
+      })
       that[name] = that[name]
     }
-    funct.map = map => { funct._map = map; return funct }
+    funct._map = []
+    funct.map = map => { funct._map.push(map); return funct }
     return funct
   }
 
@@ -325,7 +328,6 @@ class Data {
   }
 
   alterArrayMethods(name, arr) {
-    const map = this[`$${name}`]._map
     const cache = this.cacheElements[name]
     const getChildren = () => this.cacheElements[name]
     const that = this
@@ -334,7 +336,7 @@ class Data {
         const args = Array.from(arguments)
         args.forEach(arg => {
           cache.forEach(elPair => {
-            const cel = map(arg)
+            const cel = elPair.map(arg)
             elPair.children.push(cel)
             elPair.parent.appendChild(cel)
           })
@@ -365,7 +367,7 @@ class Data {
         const args = Array.from(arguments)
         args.slice().reverse().forEach(arg => {
           cache.forEach(elPair => {
-            const cel = map(arg)
+            const cel = elPair.map(arg)
             elPair.children.unshift(cel)
             elPair.parent.prepend(cel)
           })
@@ -377,6 +379,27 @@ class Data {
       splice() {
         const args = Array.from(arguments)
         const result = splice.apply(this, args)
+        cache.forEach(elPair => {
+          elPair.parent.textContent = ''
+          elPair.children.length = 0
+          elPair.children = this.map((item, i) => {
+            const child = elPair.map(item, i)
+            elPair.parent.appendChild(child)
+            return child
+          })
+        })
+        that.setDepProp(name)
+        return result
+      },
+      reverse() {
+        cache.forEach(elPair => {
+          elPair.parent.textContent = ''
+          elPair.children.reverse()
+          elPair.children.forEach(element => {
+            elPair.parent.appendChild(element)
+          })
+        })
+        const result = reverse.apply(this)
         that.setDepProp(name)
         return result
       }
@@ -421,12 +444,11 @@ class Data {
   }
 
   runArraySetter(name, value) {
-    const map = this[`$${name}`]._map
     this.cacheElements[name].forEach(elPair => {
       elPair.parent.textContent = ''
       elPair.children.length = 0
       elPair.children = value.map((item, i) => {
-        const child = map(item, i)
+        const child = elPair.map(item, i)
         elPair.parent.appendChild(child)
         return child
       })
