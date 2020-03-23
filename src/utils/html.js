@@ -209,11 +209,12 @@ const configDeps = data => {
     if (dep.length) data[name].dep = dep
     // console.log(name, dep)
   })
+  return { data, defaultData }
 }
 
 class Data {
   constructor(data) {
-    configDeps(data)
+    this.defaultData = configDeps(data).defaultData
     Object.assign(this, data)
     this.cacheElements = {}
     this.depGetters = {}
@@ -222,7 +223,7 @@ class Data {
 
   makeConnectors() {
     Object.keys(this).forEach(name => {
-      if (name === 'cacheElements' || name === 'depGetters') return
+      if (name === 'cacheElements' || name === 'depGetters' || name === 'defaultData') return
       if (this.hasOwnProperty(name)) {
         this.cacheElements[name] = []
         this[`$${name}`] = this.makeConnector(name)
@@ -232,7 +233,10 @@ class Data {
   }
 
   makeConnector(name) {
-    if (Array.isArray(this[name])) return this.makeArrayConnector(name)
+    const { get } = this[name]
+    if (Array.isArray(this.defaultData[name])) {
+      return this.makeArrayConnector(name)
+    }
     if (this[name].el) return this.makeElConnector(name)
 
     const that = this
@@ -284,14 +288,18 @@ class Data {
 
     // Getter property
     if (get && dep) {
-      Object.defineProperty(this, name, {
-        get() { return this[_name] },
-        set(val) {
-          this[_name] = get.apply(this)
-          if (set && val !== undefined) set.call(this, val)
-          this.runSetter(name, this[name])
-        }
-      })
+      if (Array.isArray(this.defaultData[name])) {
+        this.makeGetArrayAccessor(name, _name, get, set)
+      } else {
+        Object.defineProperty(this, name, {
+          get() { return this[_name] },
+          set(val) {
+            this[_name] = get.apply(this)
+            if (set && val !== undefined) set.call(this, val)
+            this.runSetter(name, this[name])
+          }
+        })
+      }
 
     // Element property
     } else if (el && dep) {
@@ -320,6 +328,7 @@ class Data {
     const map = this[`$${name}`]._map
     const cache = this.cacheElements[name]
     const getChildren = () => this.cacheElements[name]
+    const that = this
     Object.assign(arr, {
       push() {
         const args = Array.from(arguments)
@@ -330,26 +339,46 @@ class Data {
             elPair.parent.appendChild(cel)
           })
         })
-        push.apply(this, args)
+        const result = push.apply(this, args)
+        that.setDepProp(name)
+        return result
       },
       pop() {
         cache.forEach(elPair => {
           const last = elPair.children.pop()
           if (last) elPair.parent.removeChild(last)
         })
-        return pop.apply(this)
+        const result = pop.apply(this)
+        that.setDepProp(name)
+        return result
       },
       shift() {
-        return shift.apply(this)
+        cache.forEach(elPair => {
+          const first = elPair.children.shift()
+          if (first) elPair.parent.removeChild(first)
+        })
+        const result = shift.apply(this)
+        that.setDepProp(name)
+        return result
       },
       unshift() {
         const args = Array.from(arguments)
-        unshift.apply(this, args)
+        args.slice().reverse().forEach(arg => {
+          cache.forEach(elPair => {
+            const cel = map(arg)
+            elPair.children.unshift(cel)
+            elPair.parent.prepend(cel)
+          })
+        })
+        const result = unshift.apply(this, args)
+        that.setDepProp(name)
+        return result
       },
       splice() {
         const args = Array.from(arguments)
-        console.log(args)
-        splice.apply(this, args)
+        const result = splice.apply(this, args)
+        that.setDepProp(name)
+        return result
       }
     })
     return arr
@@ -359,6 +388,18 @@ class Data {
     Object.defineProperty(this, name, {
       get() { return this[_name] },
       set(value) {
+        this[_name] = this.alterArrayMethods(name, value)
+        this.runArraySetter(name, value)
+      }
+    })
+  }
+
+  makeGetArrayAccessor(name, _name, get, set) {
+    Object.defineProperty(this, name, {
+      get() { return this[_name] },
+      set(value) {
+        value = this[_name] = get.apply(this) || []
+        if (set && value !== undefined) set.call(this, value)
         this[_name] = this.alterArrayMethods(name, value)
         this.runArraySetter(name, value)
       }
@@ -390,6 +431,7 @@ class Data {
         return child
       })
     })
+    this.setDepProp(name)
   }
 
   runElSetter(name) {
