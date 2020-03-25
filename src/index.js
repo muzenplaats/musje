@@ -1,11 +1,7 @@
 // import appElement from './appElement'
-// document.body.appendChild(appElement())
+// import appElement from './converterAppElement'
+// import appElement from './math/plotElement'
+// import appElement from './arrayElement'
+import appElement from './todoAppElement'
 
-// import converterAppElement from './converterAppElement'
-// document.body.appendChild(converterAppElement())
-
-// import plotElement from './math/plotElement'
-// document.body.appendChild(plotElement())
-
-import todoAppElement from './todoAppElement'
-document.body.appendChild(todoAppElement())
+document.body.appendChild(appElement())

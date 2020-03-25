@@ -170,6 +170,18 @@ el.html = (elName, attrs, content) => {
   return el(elName, attrs, { html: content })
 }
 
+let _key = 0
+const makeKey = () => '' + _key++
+const setKey = (element, key) => { element.dataset.key = key; return element }
+const getKey = element => {
+  let key
+  while (element) {
+    key = element.dataset.key
+    if (key) return key
+    element = element.parentNode
+  }
+}
+
 const configDeps = data => {
   const tmpData = {}, defaultData = {}
   const names = Object.keys(data)
@@ -219,6 +231,11 @@ class Data {
     this.cacheElements = {}
     this.depGetters = {}
     this.makeConnectors()
+  }
+
+  set(name, func) {
+    func(this[name])
+    this[name] = this[name]
   }
 
   makeConnectors() {
@@ -335,8 +352,10 @@ class Data {
       push() {
         const args = Array.from(arguments)
         args.forEach(arg => {
+          const key = makeKey()
+          this.keys.push(key)
           cache.forEach(elPair => {
-            const cel = elPair.map(arg)
+            const cel = setKey(elPair.map(arg))
             elPair.children.push(cel)
             elPair.parent.appendChild(cel)
           })
@@ -350,6 +369,7 @@ class Data {
           const last = elPair.children.pop()
           if (last) elPair.parent.removeChild(last)
         })
+        this.keys.pop()
         const result = pop.apply(this)
         that.setDepProp(name)
         return result
@@ -359,6 +379,7 @@ class Data {
           const first = elPair.children.shift()
           if (first) elPair.parent.removeChild(first)
         })
+        this.keys.shift()
         const result = shift.apply(this)
         that.setDepProp(name)
         return result
@@ -366,8 +387,10 @@ class Data {
       unshift() {
         const args = Array.from(arguments)
         args.slice().reverse().forEach(arg => {
+          const key = makeKey()
+          this.keys.unshift(key)
           cache.forEach(elPair => {
-            const cel = elPair.map(arg)
+            const cel = setKey(elPair.map(arg), key)
             elPair.children.unshift(cel)
             elPair.parent.prepend(cel)
           })
@@ -379,16 +402,7 @@ class Data {
       splice() {
         const args = Array.from(arguments)
         const result = splice.apply(this, args)
-        cache.forEach(elPair => {
-          elPair.parent.textContent = ''
-          elPair.children.length = 0
-          elPair.children = this.map((item, i) => {
-            const child = elPair.map(item, i)
-            elPair.parent.appendChild(child)
-            return child
-          })
-        })
-        that.setDepProp(name)
+        that.runArraySetter(name, this)
         return result
       },
       reverse() {
@@ -399,9 +413,25 @@ class Data {
             elPair.parent.appendChild(element)
           })
         })
+        this.keys.reverse()
         const result = reverse.apply(this)
         that.setDepProp(name)
         return result
+      },
+      indexOfEl(element) {
+        const key = getKey(element)
+        return this.keys.indexOf(key)
+      },
+      itemOfEl(element) {
+        const index = this.indexOfEl(element)
+        return this[index]
+      },
+      removeAt(index) {
+        if (index > -1) return this.splice(index, 1)
+      },
+      remove(item) {
+        const index = this.findIndex(itm => itm === item)
+        return this.removeAt(index)
       }
     })
     return arr
@@ -447,9 +477,12 @@ class Data {
     this.cacheElements[name].forEach(elPair => {
       elPair.parent.textContent = ''
       elPair.children.length = 0
+      value.keys = []
       elPair.children = value.map((item, i) => {
-        const child = elPair.map(item, i)
+        const key = makeKey()
+        const child = setKey(elPair.map(item, i), key)
         elPair.parent.appendChild(child)
+        value.keys.push(key)
         return child
       })
     })
