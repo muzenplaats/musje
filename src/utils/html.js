@@ -1,6 +1,8 @@
 import { arrayToSet, unique, makeToJSON, repeat, flatten } from './helpers'
 
 const { push, pop, shift, unshift, splice, reverse } = []
+const isElement = el => el && 'appendChild' in el && 'removeChild' in el
+const isEl = el => el && el.name === 'element' && 'elName' in el
 
 const EVENT_TYPES = arrayToSet([
   /* mouse */ 'mousedown', 'mouseup', 'click', 'dblclick', 'mousemove',
@@ -157,14 +159,18 @@ export class Attrs {
 
 export const el = (elName, attrs = {}, content = []) => {
   if (!Array.isArray(content)) content = [content]
-  if (typeof attrs !== 'object') attrs = [attrs]
+  if (typeof attrs !== 'object' || isEl(attrs) || isElement(attrs)) {
+    attrs = [attrs]
+  }
   if (Array.isArray(attrs)) { content = attrs; attrs = {} }
   content = flatten(content)
   return { name: 'element', elName, attrs, content }
 }
+
 el.create = (elName, attrs, content) => {
   return new Element(el(elName, attrs, content)).create()
 }
+
 el.html = (elName, attrs, content) => {
   if (typeof content === 'undefined') { content = attrs; attrs = {} }
   return el(elName, attrs, { html: content })
@@ -172,7 +178,11 @@ el.html = (elName, attrs, content) => {
 
 let _key = 0
 const makeKey = () => '' + _key++
-const setKey = (element, key) => { element.dataset.key = key; return element }
+const setKey = (element, key) => {
+  if (isEl(element)) element = new Element(element).create()
+  element.dataset.key = key
+  return element
+}
 const getKey = element => {
   let key
   while (element) {
@@ -474,15 +484,13 @@ class Data {
   }
 
   runArraySetter(name, value) {
+    value.keys = value.map(makeKey)
     this.cacheElements[name].forEach(elPair => {
       elPair.parent.textContent = ''
       elPair.children.length = 0
-      value.keys = []
       elPair.children = value.map((item, i) => {
-        const key = makeKey()
-        const child = setKey(elPair.map(item, i), key)
+        const child = setKey(elPair.map(item, i), value.keys[i])
         elPair.parent.appendChild(child)
-        value.keys.push(key)
         return child
       })
     })
@@ -513,16 +521,17 @@ el.setData = data => new Data(data)
 
 let txt
 const cache = {}
-const prepareText = () => {
-  if (txt) return
+const getText = () => {
+  if (txt) return txt
   txt = el.create('text', { x: 0, y: 50 }, '')
-  const svg = el.create('svg', { width: 0, height: 0 }, [txt])
+  const svg = el.create('svg', { width: 0, height: 0 }, txt)
   document.body.appendChild(svg)
+  return txt
 }
 export const getSize = (font, content) => {
   const key = font + content
   if (cache[key]) return cache[key]
-  prepareText()
+  getText()
   const style = `font-family: ${font.family}; font-size: ${font.size}`
   txt.setAttribute('style', style)
   txt.textContent = content

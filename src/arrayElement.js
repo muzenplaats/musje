@@ -51,7 +51,9 @@ export default function arrayElement() {
         return el.create('li', [
           el('span', 'a: '), el('span', todo.a )
         ])
-      }))
+      })),
+      el('div', el('span', 'test el')),
+      el('div', el.create('span', 'test element'))
     ]),
 
     // Right panel

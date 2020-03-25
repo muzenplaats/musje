@@ -35,14 +35,14 @@ export default function todoAppElement() {
     el('div', { class: 'todo-list box' }, [
       el('h2', 'Incomplete Tasks'),
       el('ul', data.$incompletedTasks.map(task => {
-        return el.create('li', [
+        return el('li', [
           el('input', {
             type: 'checkbox',
             click: event => {
               const element = event.target
               if (element.value === 'on') {
                 const index = data.incompletedTasks.indexOfEl(element)
-                data.incompletedTasks[0].isCompleted = true
+                data.incompletedTasks[index].isCompleted = true
                 data.tasks = data.tasks
               }
             }
@@ -54,7 +54,7 @@ export default function todoAppElement() {
     el('div', { class: 'complete-list box' }, [
       el('h2', 'Completed Tasks'),
       el('ul', data.$completedTasks.map(task => {
-        return el.create('li', [
+        return el('li', [
           el('span', task.name),
           el('button', {
             class: 'delete',
