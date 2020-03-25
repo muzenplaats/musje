@@ -1,4 +1,4 @@
-import { el } from './utils/html'
+import el from './utils/el'
 
 export default function arrayElement() {
   let _id = 0

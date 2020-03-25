@@ -1,4 +1,4 @@
-import { el } from './utils/html'
+import el from './utils/el'
 import { precision } from './utils/helpers'
 
 export default function converterAppElement() {

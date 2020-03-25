@@ -1,4 +1,4 @@
-import { el } from './html'
+import el from './el'
 import Document from './XmlDocument'
 import './xml-json-viewer.css'
 

@@ -1,4 +1,4 @@
-import { el } from './html'
+import el from './el'
 import './xml-json-viewer.css'
 
 export default function jsonElement(name, value) {

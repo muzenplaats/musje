@@ -1,4 +1,4 @@
-import { getSize } from '../utils/html'
+import { getSize } from '../utils/helpers'
 import AbstractLayout from './AbstractLayout'
 import TextLayout from './TextLayout'
 

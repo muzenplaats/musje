@@ -1,5 +1,5 @@
 import { arrayToSet, unique, makeToJSON, repeat, flatten } from './helpers'
-
+console.log({ arrayToSet, unique, makeToJSON, repeat, flatten })
 const { push, pop, shift, unshift, splice, reverse } = []
 const isElement = el => el && 'appendChild' in el && 'removeChild' in el
 const isEl = el => el && el.name === 'element' && 'elName' in el
@@ -13,7 +13,9 @@ const EVENT_TYPES = arrayToSet([
   /* window */ 'scroll', 'resize', 'hashchange', 'load', 'unload',
   'input'
 ])
+
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
+
 const SVG_ELEMENT_NAMES = arrayToSet([
   'a', 'animate', 'animateMotion', 'animateTransform',
   'circle', 'clipPath', 'color-profile',
@@ -40,7 +42,7 @@ const SVG_ELEMENT_NAMES = arrayToSet([
   'view'
 ])
 
-export class Element {
+class Element {
   constructor(element, level = 0, indent = 2) {
     this.name = 'element'
     this.level = level
@@ -135,7 +137,7 @@ export class Element {
   toJSON = makeToJSON('elName', 'attrs', 'content')
 }
 
-export class Attrs {
+class Attrs {
   constructor(attrs = {}) {
     this.name = 'attrs'
     this.value = attrs
@@ -157,7 +159,7 @@ export class Attrs {
   toJSON = makeToJSON('value')
 }
 
-export const el = (elName, attrs = {}, content = []) => {
+export default function el(elName, attrs = {}, content = []) {
   if (!Array.isArray(content)) content = [content]
   if (typeof attrs !== 'object' || isEl(attrs) || isElement(attrs)) {
     attrs = [attrs]
@@ -516,38 +518,5 @@ class Data {
     }
   }
 }
+
 el.setData = data => new Data(data)
-
-
-let txt
-const cache = {}
-const getText = () => {
-  if (txt) return txt
-  txt = el.create('text', { x: 0, y: 50 }, '')
-  const svg = el.create('svg', { width: 0, height: 0 }, txt)
-  document.body.appendChild(svg)
-  return txt
-}
-export const getSize = (font, content) => {
-  const key = font + content
-  if (cache[key]) return cache[key]
-  getText()
-  const style = `font-family: ${font.family}; font-size: ${font.size}`
-  txt.setAttribute('style', style)
-  txt.textContent = content
-  const { width, height } = txt.getBBox()
-  const result = { width, height }
-  cache[key] = result
-  return result
-}
-
-export const loadText = (url, onsuccess) => {
-  const xhr = new XMLHttpRequest()
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) onsuccess(xhr.responseText)
-    }
-  }
-  xhr.open('GET', url, true)
-  xhr.send(null)
-}

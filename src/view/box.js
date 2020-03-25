@@ -1,4 +1,4 @@
-import { el } from '../utils/html'
+import el from '../utils/el'
 
 export default function box(layout, color) {
   const style = `

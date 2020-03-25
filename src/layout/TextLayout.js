@@ -1,5 +1,5 @@
 import AbstractLayout from './AbstractLayout'
-import { getSize } from '../utils/html'
+import { getSize } from '../utils/helpers'
 
 export default class TextLayout extends AbstractLayout {
   constructor(text, fontStyle) {

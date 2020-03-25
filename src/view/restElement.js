@@ -1,4 +1,4 @@
-import { el } from '../utils/html'
+import el from '../utils/el'
 import durationElement from './durationElement'
 import box from './box'
 

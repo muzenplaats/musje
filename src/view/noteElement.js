@@ -1,4 +1,4 @@
-import { el } from '../utils/html'
+import el from '../utils/el'
 import pitchElement from './pitchElement'
 import durationElement from './durationElement'
 import box from './box'

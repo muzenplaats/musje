@@ -24,11 +24,7 @@ export const arrayToSet = arr => {
   return result
 }
 
-export const setToArray = set => {
-  const result = []
-  for (let name in set) result.push(name)
-  return result
-}
+export const setToArray = set => Object.keys(set)
 
 export const unique = arr => setToArray(arrayToSet(arr))
 
@@ -46,4 +42,44 @@ export function makeToJSON() {
     list.forEach(key => { result[key] = this[key] })
     return result
   }
+}
+
+const el = (name, attrs, content) => {
+  const elm = document.createElementNS('http://www.w3.org/2000/svg', name)
+  for (let aname in attrs) elm.setAttribute(aname, attrs[aname])
+  if (content.appendChild) { elm.appendChild(content) }
+  else { elm.textContent = content }
+  return elm
+}
+let txt
+const cache = {}
+const getText = () => {
+  if (txt) return txt
+  txt = el('text', { x: 0, y: 50 }, '')
+  const svg = el('svg', { width: 0, height: 0 }, txt)
+  document.body.appendChild(svg)
+  return txt
+}
+export const getSize = (font, content) => {
+  const key = font + content
+  if (cache[key]) return cache[key]
+  getText()
+  const style = `font-family: ${font.family}; font-size: ${font.size}`
+  txt.setAttribute('style', style)
+  txt.textContent = content
+  const { width, height } = txt.getBBox()
+  const result = { width, height }
+  cache[key] = result
+  return result
+}
+
+export const loadText = (url, onsuccess) => {
+  const xhr = new XMLHttpRequest()
+  xhr.onreadystatechange = () => {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) onsuccess(xhr.responseText)
+    }
+  }
+  xhr.open('GET', url, true)
+  xhr.send(null)
 }

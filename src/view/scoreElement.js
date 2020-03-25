@@ -1,4 +1,4 @@
-import { el } from '../utils/html'
+import el from '../utils/el'
 import box from './box'
 import headElement from './headElement'
 import bodyElement from './bodyElement'

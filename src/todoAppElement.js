@@ -1,4 +1,4 @@
-import { el } from './utils/html'
+import el from './utils/el'
 import './todoAppElement.css'
 
 // Ref: https://codepen.io/barkins/pen/aEriL

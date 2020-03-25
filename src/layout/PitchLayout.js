@@ -1,6 +1,6 @@
 import AbstractLayout from './AbstractLayout'
 import Layout from './Layout'
-import { getSize } from '../utils/html'
+import { getSize } from '../utils/helpers'
 import { range } from '../utils/helpers'
 
 const ACCIDENTAL_FONT_MAP = {

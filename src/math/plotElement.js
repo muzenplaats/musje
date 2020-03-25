@@ -1,4 +1,4 @@
-import { el } from '../utils/html'
+import el from '../utils/el'
 import box from '../view/box'
 import M from './M'
 import Rect from './Rect'

@@ -1,4 +1,4 @@
-import { el } from '../utils/html'
+import el from '../utils/el'
 import noteElement from './noteElement'
 import restElement from './restElement'
 import chordElement from './chordElement'
