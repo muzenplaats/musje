@@ -516,10 +516,27 @@ class Data {
   setDepProp(name) {
     if (this.depGetters[name]) {
       this.depGetters[name].forEach(depName => {
-        this[depName] = undefined   // this[depName]
+        if (/^__link_/.test(depName)) {
+          this[depName]()
+        } else {
+          this[depName] = undefined   // this[depName]
+        }
       })
     }
   }
 }
 
 el.setData = data => new Data(data)
+
+let _linkDepProp = 0
+const getLinkDepProp = () => '__link_' + _linkDepProp++
+el.linkData = function linkData() {
+  const deps = Array.from(arguments)
+  const data = deps.shift()
+  const func = deps.pop()
+  const linkDepProp = getLinkDepProp()
+  deps.forEach(dep => {
+    data.depGetters[dep].push(linkDepProp)
+    data[linkDepProp] = func
+  })
+}

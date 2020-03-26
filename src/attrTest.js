@@ -6,13 +6,6 @@ export default function attrTest() {
     width: 200,
     height: 100,
     area: { get() { return this.width * this.height } },
-
-    // hack
-    nomArea: {
-      get() { if (area) area.width = this.area * 0.01 },
-      dep: 'area'
-    },
-
     rotate: { get() { return `rotate(${this.angle}, 250, 150)` }},
     display: { get() {
       return `Angle: ${this.angle}<sup>o</sup>,
@@ -21,12 +14,15 @@ export default function attrTest() {
               area: ${this.area.toFixed(2)}<sup>test</sup>`
     }}
   })
+
   const area = el.setData({
     x: 20,
     y: 300,
     width: 0,
     height: 10
   })
+
+  el.linkData(data, 'area', () => { area.width = data.area * 0.01 })
 
   setInterval(() => { data.angle++ }, 50)
   setInterval(() => {
