@@ -1,5 +1,4 @@
 import { arrayToSet, unique, makeToJSON, repeat, flatten } from './helpers'
-console.log({ arrayToSet, unique, makeToJSON, repeat, flatten })
 const { push, pop, shift, unshift, splice, reverse } = []
 const isElement = el => el && 'appendChild' in el && 'removeChild' in el
 const isEl = el => el && el.name === 'element' && 'elName' in el
@@ -85,6 +84,8 @@ class Element {
         } else {
           element.value = value
         }
+      } else if (typeof value === 'function') {
+        value({ element, attrName: name })
       } else if (name === 'style') {
         if (/\n/.test(value)) {
           value = value.trim().replace(/ *\n */g, ';')
@@ -476,6 +477,8 @@ class Data {
       const tname = `_${name}_html`
       if ('value' in element) {
         if (element !== document.activeElement) element.value = value
+      } else if ('attrName' in element) {
+        element.element.setAttribute(element.attrName, value)
       } else if (this[tname] && this[tname][i]) {
         element.innerHTML = value
       } else {
