@@ -64,6 +64,10 @@ export default function attrTest() {
     }
   })
 
+  const input = el.setData({
+    cb: true
+  })
+
   return el.create('div', { class: 'test' }, [
     el('h1', { style: 'font-size: 20' }, 'What is this?'),
     el.html('div', data.$width),
@@ -75,6 +79,12 @@ export default function attrTest() {
         x: area.$x, y: area.$y, width: area.$width, height: area.$height
       }),
       el('text', { x: 20, y: 350 }, data.$display)
+    ]),
+
+    el('div', [
+      el('input', { type: 'text', value: input.$cb }),
+      el('input', { type: 'checkbox', checked: '', checked: input.$cb }),
+      el('span', input.$cb)
     ]),
 
     el('style', `

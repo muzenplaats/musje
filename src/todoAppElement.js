@@ -22,6 +22,7 @@ export default function todoAppElement() {
 
   return el.create('section', [
     el('h1', 'To-Do App'),
+
     el('div', { class: 'new-task-container box' }, [
       el('label', { for: 'new-task' }, 'Add New Task '),
       el('input', { type: 'text', value: data.$newTaskName }),
@@ -32,6 +33,7 @@ export default function todoAppElement() {
         }
       }, 'Add Task')
     ]),
+
     el('div', { class: 'todo-list box' }, [
       el('h2', 'Incomplete Tasks'),
       el('ul', data.$incompletedTasks.map(task => {
@@ -51,6 +53,7 @@ export default function todoAppElement() {
         ])
       }))
     ]),
+
     el('div', { class: 'complete-list box' }, [
       el('h2', 'Completed Tasks'),
       el('ul', data.$completedTasks.map(task => {

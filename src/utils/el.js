@@ -77,10 +77,33 @@ class Element {
         element.addEventListener(name, value)
       } else if (name === 'value') {
         if (typeof value === 'function') {
-          value(element)
-          element.addEventListener('input', () => {
-            value.data[value.dname] = element.value
-          })
+          value({ element, attrName: name })
+          switch (element.type) {
+            case 'text':  // fall through
+            case 'number':
+              element.addEventListener('input', () => {
+                value.data[value.dname] = element.value
+              })
+              break
+            default:
+              throw new Error(`Value for ${element.type} not supported.`)
+          }
+        } else {
+          element.value = value
+        }
+      } else if (name === 'checked') {
+        if (typeof value === 'function') {
+          value({ element, attrName: name })
+          switch (element.type) {
+            case 'checkbox': // fall through
+            case 'radio':
+              element.addEventListener('click', () => {
+                value.data[value.dname] = element.checked
+              })
+              break
+            default:
+              throw new Error(`Checked for ${element.type} not supported.`)
+          }
         } else {
           element.value = value
         }
@@ -475,10 +498,17 @@ class Data {
   runSetter(name, value) {
     this.cacheElements[name].forEach((element, i) => {
       const tname = `_${name}_html`
-      if ('value' in element) {
+      let attrName
+      if (element.attrName) {
+        attrName = element.attrName
+        element = element.element
+      }
+      if (attrName === 'value') {
         if (element !== document.activeElement) element.value = value
-      } else if ('attrName' in element) {
-        element.element.setAttribute(element.attrName, value)
+      } else if (attrName === 'checked') {
+        element.checked = value
+      } else if (attrName) {
+        element.setAttribute(attrName, value)
       } else if (this[tname] && this[tname][i]) {
         element.innerHTML = value
       } else {
