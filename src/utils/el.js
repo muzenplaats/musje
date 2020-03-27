@@ -528,15 +528,48 @@ class Data {
 
 el.setData = data => new Data(data)
 
-let _linkDepProp = 0
-const getLinkDepProp = () => '__link_' + _linkDepProp++
+let _linkedDepProp = 0
+const getLinkedDepProp = () => '__link_' + _linkedDepProp++
 el.linkData = function linkData() {
   const deps = Array.from(arguments)
   const data = deps.shift()
   const func = deps.pop()
-  const linkDepProp = getLinkDepProp()
+  const linkedDepProp = getLinkedDepProp()
   deps.forEach(dep => {
-    data.depGetters[dep].push(linkDepProp)
-    data[linkDepProp] = func
+    data.depGetters[dep].push(linkedDepProp)
+    data[linkedDepProp] = func
   })
+}
+
+el.linkData = function linkData() {
+  const args = Array.from(arguments)
+  const func = args.pop()
+  const dataset = splitDataset(args)
+  dataset.forEach(data => {
+    const depObj = data.shift()
+    const deps = data
+    const linkedDepProp = getLinkedDepProp()
+    deps.forEach(dep => {
+      depObj.depGetters[dep] = depObj.depGetters[dep] || []
+      depObj.depGetters[dep].push(linkedDepProp)
+      depObj[linkedDepProp] = func
+    })
+  })
+  func()
+}
+const splitDataset = args => {
+  const dataset = []
+  let data = []
+  args.forEach(arg => {
+    switch (typeof arg) {
+      case 'object':
+        if (data.length >= 2) dataset.push(data)
+        data = [arg]
+        break
+      case 'string': data.push(arg); break
+      default: throw new TypeError(`Incorrect el.linkData parameter ${arg}.`)
+    }
+  })
+  dataset.push(data)
+  return dataset
 }

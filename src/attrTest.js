@@ -24,6 +24,27 @@ export default function attrTest() {
 
   el.linkData(data, 'area', () => { area.width = data.area * 0.01 })
 
+  const objA = el.setData({
+    propA: 'a '
+  })
+  const objB = el.setData({
+    propB: 'b ',
+    propB1: 'b1 '
+  })
+  const objC = el.setData({
+    propC: 'c '
+  })
+  el.linkData(objA, 'propA', objB, 'propB', 'propB1', () => {
+    objC.propC = objA.propA + objB.propB + objB.propB1
+  })
+  console.log(objC.propC)   // a b b1
+  objA.propA = 'aa '
+  console.log(objC.propC)   // aa b b1
+  objB.propB = 'bb '
+  console.log(objC.propC)   // aa bb b1
+  objB.propB1 = 'b1b1 '
+  console.log(objC.propC)   // aa bb b1b1
+
   setInterval(() => { data.angle++ }, 50)
   setInterval(() => {
     const dw = (Math.random() - 0.5) * 20
