@@ -13,6 +13,12 @@ const EVENT_TYPES = arrayToSet([
   'input'
 ])
 
+const INPUT_VALUE_TYPE = arrayToSet([
+  'text', 'number', 'password', 'textarea', 'color', 'range',
+  'date', 'datetime-local', 'month', 'week', 'time', 'email', 'file',
+  'search', 'tel', 'url', 'select-multiple', 'select-one'
+])
+
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 
 const SVG_ELEMENT_NAMES = arrayToSet([
@@ -78,35 +84,42 @@ class Element {
       } else if (name === 'value') {
         if (typeof value === 'function') {
           value({ element, attrName: name })
-          switch (element.type) {
-            case 'text':  // fall through
-            case 'number':
-              element.addEventListener('input', () => {
-                value.data[value.dname] = element.value
-              })
-              break
-            default:
-              throw new Error(`Value for ${element.type} not supported.`)
+          if (INPUT_VALUE_TYPE[element.type]) {
+            element.addEventListener('input', () => {
+              value.data[value.dname] = element.value
+            })
           }
         } else {
           element.value = value
         }
-      } else if (name === 'checked') {
+      } else if (name === 'checked' && element.type === 'checkbox') {
         if (typeof value === 'function') {
           value({ element, attrName: name })
-          switch (element.type) {
-            case 'checkbox': // fall through
-            case 'radio':
-              element.addEventListener('click', () => {
-                value.data[value.dname] = element.checked
-              })
-              break
-            default:
-              throw new Error(`Checked for ${element.type} not supported.`)
-          }
+          element.addEventListener('input', () => {
+            value.data[value.dname] = element.checked
+          })
         } else {
-          element.value = value
+          element.checked = value
         }
+      } else if (name === 'checkedValue' && element.type === 'radio') {
+        value({ element, attrName: name })
+        element.addEventListener('input', () => {
+          value.data[value.dname] = element.value
+        })
+      } else if (name === 'selectedIndex') {
+        value({ element, attrName: name })
+        element.addEventListener('input', () => {
+          value.data[value.dname] = element.selectedIndex
+        })
+      } else if (name === 'selectedOptions') {
+        value({ element, attrName: name })
+        element.addEventListener('input', () => {
+          value.data[value.dname] = Array.from(element.selectedOptions)
+            .map(option => {
+              const { label, value, text } = option
+              return { label, value, text }
+            })
+        })
       } else if (typeof value === 'function') {
         value({ element, attrName: name })
       } else if (name === 'style') {
@@ -312,12 +325,15 @@ class Data {
     const that = this
     const funct = parent => {
       that.cacheElements[name].push({
-        parent, children: [], map: funct._map.shift()
+        parent, children: [], map: parent.attrName ? '' : funct._map.shift()
       })
       that[name] = that[name]
     }
+    funct.data = this
+    funct.dname = name
     funct._map = []
-    funct.map = map => { funct._map.push(map); return funct }
+    const defaultMap = a => el('pre', JSON.stringify(a))
+    funct.map = map => { funct._map.push(map || defaultMap); return funct }
     return funct
   }
 
@@ -507,6 +523,10 @@ class Data {
         if (element !== document.activeElement) element.value = value
       } else if (attrName === 'checked') {
         element.checked = value
+      } else if (attrName === 'checkedValue') {
+        if (element.value === value) element.checked = true
+      } else if (attrName === 'selectedIndex') {
+        // element.selectedIndex = checkedValue
       } else if (attrName) {
         element.setAttribute(attrName, value)
       } else if (this[tname] && this[tname][i]) {
@@ -521,6 +541,7 @@ class Data {
   runArraySetter(name, value) {
     value.keys = value.map(makeKey)
     this.cacheElements[name].forEach(elPair => {
+      if (elPair.parent.attrName) return
       elPair.parent.textContent = ''
       elPair.children.length = 0
       elPair.children = value.map((item, i) => {
