@@ -148,7 +148,9 @@ class Element {
       } else if (typeof child === 'function') {
         child(element)
       } else {
-        element.textContent = child
+        // element.textContent = child
+        const tnode = document.createTextNode(child)
+        element.appendChild(tnode)
       }
     })
     return element
@@ -214,6 +216,8 @@ el.html = (elName, attrs, content) => {
   if (typeof content === 'undefined') { content = attrs; attrs = {} }
   return el(elName, attrs, { html: content })
 }
+
+el.nbsp = num => repeat('\u00a0', num)
 
 let _key = 0
 const makeKey = () => '' + _key++

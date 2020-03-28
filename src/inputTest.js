@@ -4,7 +4,7 @@ export default function () {
   const data = el.setData({
     text: 'abc',
     number: 12345,
-    password: '',
+    password: '111',
     textarea: '123\n456',
     color: '#ffaaff',
     date: '2020-03-27',
@@ -14,11 +14,11 @@ export default function () {
     datetimeLocal: '2018-06-12T19:30',
     email: 'a@b.c',
     file: '',
-    url: '',
+    url: 'www',
     image: 'test',
     range: 90,
-    search: '',
-    tel: '',
+    search: 'hello',
+    tel: '012',
     checkbox: true,
     radio: 'radBV',
     selectedIndex: 2,
@@ -27,100 +27,90 @@ export default function () {
   })
 
   return el.create('div', [
-    el('h3', 'Input Test'),
+    el('h1', { style: 'font-size: 20' }, 'Input Test'),
     el('div', [
-      el('span', 'text: '),
-      el('input', { type: 'text', value: data.$text }),
-      el('span', data.$text)
+      'text: ', el('input', { type: 'text', value: data.$text }),
+      ' ', el('span', data.$text)
     ]),
     el('div', [
-      el('span', 'number: '),
-      el('input', { type: 'number', value: data.$number }),
-      el('span', data.$number)
+      'number: ', el('input', { type: 'number', value: data.$number }),
+      ' ', el('span', data.$number)
     ]),
     el('div', [
-      el('span', 'password: '),
-      el('input', { type: 'password', value: data.$password }),
-      el('span', data.$password)
+      'password: ', el('input', { type: 'password', value: data.$password }),
+      ' ', el('span', data.$password)
     ]),
     el('div', [
-      el('span', 'textarea: '),
-      el('textarea', { value: data.$textarea }),
-      el('span', data.$textarea)
+      'textarea: ', el('textarea', { value: data.$textarea }),
+      ' ', el('span', data.$textarea)
     ]),
     el('div', [
-      el('span', 'color: '),
-      el('input', { type: 'color', value: data.$color }),
-      el('span', data.$color)
+      'color: ', el('input', { type: 'color', value: data.$color }),
+      ' ', el('span', data.$color)
     ]),
     el('div', [
-      el('span', 'date: '),
+      'date: ',
       el('input', { type: 'date', value: data.$date }),
-      el('span', data.$date)
+      ' ', el('span', data.$date)
     ]),
     el('div', [
-      el('span', 'month: '),
+      'month: ',
       el('input', { type: 'month', value: data.$month }),
-      el('span', data.$month)
+      ' ', el('span', data.$month)
     ]),
     el('div', [
-      el('span', 'week: '),
+      'week: ',
       el('input', { type: 'week', value: data.$week }),
-      el('span', data.$week)
+      ' ', el('span', data.$week)
     ]),
     el('div', [
-      el('span', 'time: '),
-      el('input', { type: 'time', value: data.$time }),
-      el('span', data.$time)
+      'time: ', el('input', { type: 'time', value: data.$time }),
+      ' ', el('span', data.$time)
     ]),
     el('div', [
-      el('span', 'datetime-local: '),
+      'datetime-local: ',
       el('input', { type: 'datetime-local', value: data.$datetimeLocal }),
-      el('span', data.$datetimeLocal)
+      ' ', el('span', data.$datetimeLocal)
     ]),
     el('div', [
-      el('span', 'email: '),
-      el('input', { type: 'email', value: data.$email }),
-      el('span', data.$email)
+      'email: ', el('input', { type: 'email', value: data.$email }),
+      ' ', el('span', data.$email)
     ]),
     el('div', [
-      el('span', 'file: '),
-      el('input', { type: 'file', value: data.$file }),
-      el('span', data.$file)
+      'file: ', el('input', { type: 'file', value: data.$file }),
+      ' ', el('span', data.$file)
     ]),
     el('div', [
-      el('span', 'url: '),
-      el('input', { type: 'url', value: data.$url }),
-      el('span', data.$url)
+      'url: ', el('input', { type: 'url', value: data.$url }),
+      ' ', el('span', data.$url)
     ]),
     el('div', [
-      el('span', 'image: '),
-      el('input', { type: 'image', src: data.$image }),
-      el('span', data.$image)
+      'image: ', el('input', { type: 'image', src: data.$image }),
+      ' ', el('span', data.$image)
     ]),
     el('div', [
-      el('span', 'range: '),
+      'range: ',
       el('input', { type: 'range', min: 10, max: 200, value: data.$range }),
-      el('span', data.$range)
+      ' ', el('span', data.$range)
     ]),
     el('div', [
-      el('span', 'search: '),
+      'search: ',
       el('input', { type: 'search', min: 10, max: 200, value: data.$search }),
-      el('span', data.$search)
+      ' ', el('span', data.$search)
     ]),
     el('div', [
-      el('span', 'tel: '),
+      'tel: ',
       el('input', { type: 'tel', min: 10, max: 200, value: data.$tel }),
-      el('span', data.$tel)
+      ' ', el('span', data.$tel)
     ]),
     el('div', [
-      el('span', 'checkbox: '),
+      'checkbox: ',
       el('input', { type: 'checkbox', checked: data.$checkbox }),
-      el('span', data.$checkbox)
+      ' ', el('span', data.$checkbox)
     ]),
 
     el('div', [
-      el('span', 'radio: '),
+      'radio: ',
       el('span', [
         el('input', { type: 'radio', id: 'aa', name: 'rad1',
                       value: 'radAV', checkedValue: data.$radio }),
@@ -136,8 +126,7 @@ export default function () {
                       value: 'radCV', checkedValue: data.$radio }),
         el('label', { for: 'cc'}, 'c')
       ]),
-      el('span', ', '),
-      el('span', data.$radio)
+      ',', el.nbsp(5), el('span', data.$radio)
     ]),
 
     // Ref: https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select
@@ -160,10 +149,8 @@ export default function () {
         el('option', { value: 'goldfish' }, 'Goldfish')
       ]),
       el('div', [
-        el('span', 'selectedIndex: '),
-        el('span', data.$selectedIndex),
-        el('span', ', selectedValue: '),
-        el('span', data.$selectedValue)
+        'selectedIndex: ', el('span', data.$selectedIndex),
+        ', selectedValue: ', el('span', data.$selectedValue)
       ])
     ]),
 
