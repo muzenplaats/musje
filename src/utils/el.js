@@ -272,7 +272,6 @@ const configDeps = data => {
     dep = unique(detector.$collector.concat(dep || []))
     detector.$collector.length = 0
     if (dep.length) data[name].dep = dep
-    // console.log(name, dep)
   })
   return { data, defaultData }
 }
@@ -284,6 +283,9 @@ class Data {
     this.cacheElements = {}
     this.depGetters = {}
     this.makeConnectors()
+    Object.keys(this.defaultData).forEach(name => {
+      this[`_${name}`] = this.defaultData[name]
+    })
   }
 
   set(name, func) {
@@ -345,7 +347,7 @@ class Data {
     const that = this
     return parent => {
       that.cacheElements[name].push({ parent, child: null })
-      // that[name] = that[name]   // duplicate calls
+      that[name] = that[name]   // duplicate calls
     }
   }
 
@@ -508,7 +510,8 @@ class Data {
       get() { return this[_name] },
       set(value) {
         value = this[_name] = get.apply(this) || []
-        if (set && value !== undefined) set.call(this, value)
+        // if (set && value !== undefined) set.call(this, value)
+        if (set) set.call(this, value)
         this[_name] = this.alterArrayMethods(name, value)
         this.runArraySetter(name, value)
       }
@@ -561,7 +564,8 @@ class Data {
     const arr = this.cacheElements[name]
     this.cacheElements[name].forEach(elPair => {
       if (elPair.child) elPair.parent.removeChild(elPair.child)
-      const child = this[name]
+      let child = this[name]
+      if (isEl(child)) child = new Element(child).create()
       elPair.child = child
       elPair.parent.appendChild(child)
     })
@@ -575,6 +579,7 @@ class Data {
           this[depName]()
         } else {
           this[depName] = undefined   // this[depName]
+          // this[depName] = this[depName]
         }
       })
     }
