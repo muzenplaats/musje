@@ -14,7 +14,17 @@ Same as above but create an dom element:
 el.create()
 ```
 
-Same as above but create the content in html:
+Assign created element to a property `name` of object `obj`:
+```
+el.assign(obj, name).create()
+```
+
+Push created element to a property `name` of object `obj`:
+```
+el.push(obj, name).create()
+```
+
+Same as `el()` but create the content in html:
 ```
 el.html()
 ```

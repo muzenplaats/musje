@@ -212,6 +212,33 @@ el.create = (elName, attrs, content) => {
   return new Element(el(elName, attrs, content)).create()
 }
 
+class ElementAssign {
+  constructor(obj, name) {
+    this.obj = obj
+    this.name = name
+  }
+  create(elName, attrName, content) {
+    const element = el.create(elName, attrName, content)
+    this.obj[this.name] = element
+    return element
+  }
+}
+el.assign = (obj, name) => new ElementAssign(obj, name)
+
+class ElementPush {
+  constructor(obj, name) {
+    this.obj = obj
+    this.name = name
+  }
+  create(elName, attrName, content) {
+    const element = el.create(elName, attrName, content)
+    this.obj[this.name] = this.obj[this.name] || []
+    this.obj[this.name].push(element)
+    return element
+  }
+}
+el.push = (obj, name) => new ElementPush(obj, name)
+
 el.html = (elName, attrs, content) => {
   if (typeof content === 'undefined') { content = attrs; attrs = {} }
   return el(elName, attrs, { html: content })

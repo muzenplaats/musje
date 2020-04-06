@@ -14,23 +14,13 @@ export default function pitchElement(pitchLayout) {
     text-anchor: middle
   `
 
-  const stepElement = el.create('text', {
-    ...stepLayout.cxby, style: sty1
-  }, pitch.step)
-
-  const accidentalElement = pitch.accidental ? el.create('text', {
-    ...accidentalLayout.cxby, style: sty2
-  }, accidentalLayout.char) : []
-
-  const octaveElements = pitch.octave ? octavesLayout.layouts.map(layout => {
-    return el.create('circle', layout.circle)
-  }) : []
+  const elements = {}
 
   const setColor = color => {
-    stepElement.style.fill = color
-    if (pitch.accidental) accidentalElement.style.fill = color
+    elements.step.style.fill = color
+    if (pitch.accidental) elements.accidental.style.fill = color
     if (pitch.octave) {
-      octaveElements.forEach(element => { element.style.fill = color })
+      elements.octaves.forEach(element => { element.style.fill = color })
     }
   }
 
@@ -39,8 +29,14 @@ export default function pitchElement(pitchLayout) {
 
   return el.create('g', [
     // box(stepLayout, 'magenta'),
-    stepElement,
-    accidentalElement,
-    octaveElements
+    el.assign(elements, 'step')
+      .create('text', { ...stepLayout.cxby, style: sty1 }, pitch.step),
+    pitch.accidental ?
+      el.assign(elements, 'accidental')
+        .create('text', { ...accidentalLayout.cxby, style: sty2 }, accidentalLayout.char) : [],
+    pitch.octave ? octavesLayout.layouts.map(layout => {
+      return el.push(elements, 'octaves')
+               .create('circle', layout.circle)
+    }) : []
   ])
 }
