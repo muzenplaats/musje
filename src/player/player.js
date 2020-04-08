@@ -1,5 +1,6 @@
 import { play, stop } from './play'
 
+const AudioContext = window.AudioContext || window.webkitAudioContext
 var _ctx
 
 class Player {
