@@ -7,6 +7,16 @@ li {
   padding-left: 15px;
 }
 
+.json-xml-switch {
+  display: inline-block;
+  border: 1px solid gray;
+  border-radius: 7px 3px 3px 7px;
+  margin-left: -13px;
+  width: 11px;
+  cursor: pointer;
+  text-align: center;
+}
+
 .json-viewer {
   height: 500px;
   overflow: scroll;

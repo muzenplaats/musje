@@ -20,8 +20,25 @@ export default function xmlElement(str) {
 }
 
 const elementEl = element => {
+  const { content } = element
+  const isSimple = content.length === 0 || typeof content[0] === 'string'
+  const elements = {}
+
   return el('ul', { class: 'xml-element' }, [
     el('div', { class: 'xml-name-attrs' }, [
+      isSimple ? [] : el('div', {
+        class: 'json-xml-switch',
+        click: event => {
+          const { target } = event
+          if (target.textContent === '-') {
+            target.textContent = '+'
+            elements.lis.forEach(li => { li.style.display = 'none' })
+          } else {
+            target.textContent = '-'
+            elements.lis.forEach(li => { li.style.display = 'block' })
+          }
+        }
+      }, '-'),
       el('div', { class: 'xml-el-name' }, element.elName),
       attrsEl(element.attrs)
     ]),
@@ -29,7 +46,7 @@ const elementEl = element => {
       if (typeof child === 'string') {
         return el('div', { class: `xml-el-value ${valueClass(child)}` }, child)
       }
-      return el('li', [elementEl(child)])
+      return el.push(elements, 'lis').create('li', [elementEl(child)])
     })
   ])
 }

@@ -37,10 +37,28 @@ const nullel = (name, value) => {
   ])
 }
 
+const makeSwitchHandler = elements => {
+  return event => {
+    const { target } = event
+    if (target.textContent === '-') {
+      target.textContent = '+'
+      elements.ul.style.display = 'none'
+    } else {
+      target.textContent = '-'
+      elements.ul.style.display = 'block'
+    }
+  }
+}
+
 const array = (name, value) => {
+  const elements = {}
   return el('li', [
+    el('div', {
+      class: 'json-xml-switch', click: makeSwitchHandler(elements)
+    }, '-'),
     nameEl(name + ': Array []'),
-    el('ul', value.map((val, i) => compond(`[${i}]`, val)))
+    el.assign(elements, 'ul')
+      .create('ul', value.map((val, i) => compond(`[${i}]`, val)))
   ])
 }
 
@@ -50,9 +68,14 @@ const getObjType = obj => {
 }
 
 const object = (name, value) => {
+  const elements = {}
   return el('li', [
+    el('div', {
+      class: 'json-xml-switch', click: makeSwitchHandler(elements)
+    }, '-'),
     nameEl(`${name}: ${getObjType(value)} {}`),
-    el('ul', Object.keys(value).map(key => compond(key, value[key])))
+    el.assign(elements, 'ul')
+      .create('ul', Object.keys(value).map(key => compond(key, value[key])))
   ])
 }
 
