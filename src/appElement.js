@@ -122,7 +122,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/002.musje', txt => { data.scoreStr = txt })
+  loadText('scores/001.musje', txt => { data.scoreStr = txt })
 
   const mxlfnames = [
     'reve.musicxml',

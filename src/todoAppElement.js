@@ -42,7 +42,7 @@ export default function todoAppElement() {
             type: 'checkbox',
             click: event => {
               const element = event.target
-              if (element.value === 'on') {
+              if (element.checked) {
                 const index = data.incompletedTasks.indexOfEl(element)
                 data.incompletedTasks[index].isCompleted = true
                 data.tasks = data.tasks
