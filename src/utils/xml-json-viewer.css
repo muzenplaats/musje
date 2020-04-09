@@ -16,6 +16,14 @@ li {
   cursor: pointer;
   text-align: center;
 }
+.json-xml-switch:hover {
+  color: #55e;
+  background-color: #eef;
+}
+.json-xml-switch:active {
+  color: #dad;
+  cursor: pointer;
+}
 
 .json-viewer {
   height: 500px;
@@ -87,7 +95,7 @@ li {
   border: 1px solid #ddc;
   border-radius: 3px;
   padding: 0 5px 0 5px;
-  color: #cc6;
-  background-color: #ffc;
+  color: #973;
+  background-color: #eeb;
   margin-right: 7px;
 }
