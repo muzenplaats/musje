@@ -22,7 +22,9 @@ const INPUT_VALUE_TYPE = arrayToSet([
 const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 
 const SVG_ELEMENT_NAMES = arrayToSet([
-  'a', 'animate', 'animateMotion', 'animateTransform',
+  // 'a',
+  'svg:a',
+  'animate', 'animateMotion', 'animateTransform',
   'circle', 'clipPath', 'color-profile',
   'defs', 'desc', 'discard',
   'ellipse',
@@ -73,10 +75,14 @@ class Element {
   eachAttr(cb) { this.attrs.each(cb) }
 
   create() {
-    const { elName, content } = this
-    const element = SVG_ELEMENT_NAMES[elName] ?
-                    document.createElementNS(SVG_NAMESPACE, elName) :
-                    document.createElement(elName)
+    let  { elName, content } = this
+    let  element
+    if (SVG_ELEMENT_NAMES[elName]) {
+      if (elName === 'svg:a') elName = 'a'
+      element = document.createElementNS(SVG_NAMESPACE, elName)
+    } else {
+      element = document.createElement(elName)
+    }
 
     this.eachAttr((value, name) => {
       if (EVENT_TYPES[name]) {

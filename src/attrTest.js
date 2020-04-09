@@ -74,7 +74,16 @@ export default function attrTest() {
       el('rect', {
         x: area.$x, y: area.$y, width: area.$width, height: area.$height
       }),
-      el('text', { x: 20, y: 350 }, data.$display)
+      el('text', { x: 20, y: 350 }, data.$display),
+      el('svg:a', { href: 'https://github.com/malcomwu/musje' }, [
+        el('circle', { cx: 200, cy: 100, r: 10})
+      ])
+    ]),
+
+    el('div', [
+      'a link',
+      el('a', { href: 'https://github.com/malcomwu/musje  ' }, 'test link'),
+      'is it.'
     ]),
 
     el('style', `
