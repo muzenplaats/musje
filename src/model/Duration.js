@@ -17,8 +17,8 @@ export default class Duration {
     } else if (typeof duration === 'string') {
       this.parse(new Lexer(duration))
     } else {
-      this.type = duration.type
-      this.dots = duration.dots
+      this.type = duration.type || 4
+      this.dots = duration.dots || 0
     }
     if (this.type > 4) this.initBeams()
   }

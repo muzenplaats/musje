@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/index.js',
   module: {
     rules: [
-      { test: /\.style$/, use: 'raw-loader' },
+      { test: /\.(style|mxl|musicxml)$/, use: 'raw-loader' },
       { test: /\.css$/, use: ['style-loader', 'css-loader'] },
       {
         test: /\.(woff2?|ttf|eot|svg)$/,

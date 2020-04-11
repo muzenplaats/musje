@@ -14,9 +14,9 @@ export default class Pitch {
     } else if (typeof pitch === 'string') {
       this.parse(new Lexer(pitch))
     } else {
-      this.step = pitch.step
-      this.accidental = pitch.accidental
-      this.octave = pitch.octave
+      this.step = pitch.step || 1
+      this.accidental = pitch.accidental || ''
+      this.octave = pitch.octave || 0
     }
   }
 

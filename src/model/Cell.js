@@ -7,6 +7,8 @@ import Chord from './Chord'
 import Multipart from './Multipart'
 import Direction from './Direction'
 import Bar from './Bar'
+import Clef from './Clef'
+import Key from './Key'
 
 const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
 
@@ -27,6 +29,8 @@ export default class Cell {
           case 'multipart': return new Multipart(dt)
           case 'direction': return new Direction(dt)
           case 'bar': return new Bar(dt)
+          case 'clef': return new Clef(dt)
+          case 'key': return new Key(dt)
           default: throw new Error(`Music data: ${dt}`)
         }
       })

@@ -1,5 +1,5 @@
 import makeLexerClass from './makeLexerClass'
-import { makeToJSON, repeat } from './helpers'
+import { makeToJSON, repeat, flatten } from './helpers'
 
 const Lexer = makeLexerClass({
   '<': '<',
@@ -174,9 +174,21 @@ export class Element {
     return result
   }
 
+  actContent(actions) {
+    if (typeof this.content === 'undefined') return
+    if (typeof this.content === 'string') return actions(this.content)
+    this.content.forEach(child => {
+      if (child.name !== 'element' || !actions[child.elName]) return
+      actions[child.elName](child)
+    })
+  }
+
   get hasAttr() { return this.attrs.hasAttr }
   eachAttr(cb) { return this.attrs.each(cb) }
   mapAttr(cb) { return this.attrs.map(cb) }
+
+  getAttr(name) { if (this.attrs) return this.attrs.getAttr(name) }
+  actAttrs(actions) { if (this.attrs) this.attrs.act(actions) }
 
   toString() {
     const { level, indent, elName, attrs, content } = this
@@ -230,6 +242,15 @@ export class Attrs {
 
   get hasAttr() { return Object.keys(this.value).length > 0 }
 
+  getAttr(name) { return this.value[name] }
+  setAttr(name, values) { this.value[name] = value }
+
+  act(actions) {
+    for (let name in this.value) {
+      if (actions[name]) actions[name](this.value[name])
+    }
+  }
+
   each(cb) {
     const { value } = this
     Object.keys(value).forEach((name, i) => cb(value[name], name, i))
@@ -278,6 +299,6 @@ export const el = (elName, attrs, content) => {
     content = attrs
     attrs = {}
   }
-
+  if (Array.isArray(content)) content = flatten(content)
   return { name: 'element', elName, attrs, content }
 }

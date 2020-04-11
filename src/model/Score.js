@@ -2,6 +2,8 @@ import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 import Head from './Head'
 import Body from './Body'
+import fromMxl from './fromMxl'
+import toMxl from './toMxl'
 
 export default class Score {
   constructor(score = {}) {
@@ -22,4 +24,8 @@ export default class Score {
 
   toString() { return [this.head, this.body].join('\n') }
   toJSON = makeToJSON('head', 'body')
+
+  toMxl = toMxl
+
+  static fromMxl = fromMxl
 }
