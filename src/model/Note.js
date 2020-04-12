@@ -2,6 +2,7 @@ import { makeToJSON } from '../utils/helpers'
 import Lexer from './Lexer'
 import Pitch from './Pitch'
 import Duration from './Duration'
+import Lyric from './Lyric'
 
 export default class Note {
   constructor(note) {
@@ -11,8 +12,10 @@ export default class Note {
     } else if (typeof note === 'string') {
       this.parse(new Lexer(note))
     } else {
-      this.pitch = new Pitch(note.pitch)
-      this.duration = new Duration(note.duration)
+      const { pitch, duration, lyric } = note
+      this.pitch = new Pitch(pitch)
+      this.duration = new Duration(duration)
+      if (lyric) this.lyric = new Lyric(lyric)
     }
   }
 
@@ -25,5 +28,5 @@ export default class Note {
   onstop() { this.pitch.onstop(); this.duration.onstop() }
 
   toString() { return `${this.pitch}${this.duration}` }
-  toJSON = makeToJSON('pitch', 'duration')
+  toJSON = makeToJSON('pitch', 'duration', 'lyric')
 }

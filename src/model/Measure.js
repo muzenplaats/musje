@@ -1,7 +1,7 @@
 import Bar from'./Bar'
 import { lastItem, makeToJSON } from '../utils/helpers'
 
-export default class {
+export default class Measure {
   constructor(measure = { parts: [] }) {
     this.name = 'measure'
     this.parts = measure.parts

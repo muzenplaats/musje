@@ -18,6 +18,6 @@ export default class Clef {
 
   }
 
-  toString() { return this.sign + this.line }
+  toString() { return `clef(${this.sign}${this.line})` }
   toJSON = makeToJSON('sign', 'line')
 }

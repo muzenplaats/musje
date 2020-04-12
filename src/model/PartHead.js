@@ -24,12 +24,13 @@ export default class PartHead {
     const strs = ['==']
     if (partName) strs.push(partName)
     if (abbreviation) strs.push(`(${abbreviation})`)
+    if (strs.length > 1) strs[strs.length - 1] += ':'
     if (midi) {
       const { channel, program, pan }  = midi
       const midiStrs = []
-      if (typeof channel === 'number') midiStrs.push(`channel:${channel}`)
-      if (typeof program === 'number') midiStrs.push(`program:${program}`)
-      if (typeof pan === 'number') midiStrs.push(`pan:${pan}`)
+      if (typeof channel === 'number') midiStrs.push(`channel: ${channel}`)
+      if (typeof program === 'number') midiStrs.push(`program: ${program}`)
+      if (typeof pan === 'number') midiStrs.push(`pan: ${pan}`)
       strs.push(`midi(${midiStrs.join(', ')})`)
     }
     return strs.join(' ')

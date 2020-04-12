@@ -86,6 +86,7 @@ const makePart = (el, part) => {
 
   let attrs
   part.staves = [makeStaff()]
+  let prevPlacement
 
   el.actContent({
     measure: cel => {
@@ -107,8 +108,15 @@ const makePart = (el, part) => {
           if (attrs.time) measureCells.forEach(cell => cell.data.push(attrs.time))
         },
         direction: gcel => {
-          const placement = gcel.getAttr('placement')
-          const makeDirection = dt => Object.assign({ name: 'direction', placement }, dt)
+          let placement = gcel.getAttr('placement')
+          if (placement) {
+            prevPlacement = placement
+          } else {
+            placement = prevPlacement
+          }
+          const makeDirection = dt => Object.assign({
+            name: 'direction', placement },
+          dt)
           gcel.actContent({
             'direction-type': ggcel => ggcel.actContent({
               words: gggcel => {

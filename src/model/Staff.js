@@ -40,6 +40,19 @@ export default class Staff {
     })
   }
 
-  toString() { return this.cells.join(' ') }
+  toString() {
+    const cellsStr = this.cells.join(' ')
+    let lyrics = []
+    this.cells.forEach(cell => {
+      cell.data.forEach(dt => {
+        if (dt.lyric) lyrics.push(dt.lyric)
+      })
+    })
+    const lyricsStr = lyrics.join(' ')
+    const strs = [cellsStr]
+    if (lyricsStr) strs.push('lyrics: ' + lyricsStr)
+    return strs.join('\n\n')
+  }
+
   toJSON = makeToJSON('cells')
 }

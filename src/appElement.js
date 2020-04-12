@@ -90,11 +90,13 @@ export default function appElement() {
       el() { return jsonElement('scoreLayout', this.scoreLayout) }
     },
     musicXmlStr: '<wait/>',
+    info1: { get() { return Score.fromMxl(this.musicXmlStr) } },
     musicXmlElement: { el() { return xmlElement(this.musicXmlStr) } }
   })
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
+
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
         style: 'width: 100%; height: 100px',
@@ -106,8 +108,11 @@ export default function appElement() {
       el('pre', { style: 'color: #d53' }, data.$error),
       el('pre', { style: 'width: 100%; white-space: pre-wrap' },
                 data.$info),
+      el('pre', { style: 'width: 100%; white-space: pre-wrap' },
+                data.$info1),
       el('div', data.$scoreJsonElement)
     ]),
+
     el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
       el('div', data.$scoreElement),
       el('svg', { id: 'svg', width: 500, height: 200 }, [
@@ -130,7 +135,7 @@ export default function appElement() {
     'Reunion.musicxml'
   ]
 
-  loadText('scores/musicXml/' + mxlfnames[2], txt => {
+  loadText('scores/musicXml/' + mxlfnames[0], txt => {
     data.musicXmlStr = txt
   })
 

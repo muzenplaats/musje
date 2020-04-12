@@ -22,7 +22,7 @@ export default class Score {
     this.body = new Body(lexer)
   }
 
-  toString() { return [this.head, this.body].join('\n') }
+  toString() { return [this.head, this.body].join('\n\n') }
   toJSON = makeToJSON('head', 'body')
 
   toMxl = toMxl

@@ -10,7 +10,10 @@ export default class Direction {
       this.parse(new Lexer(direction))
     } else {
       this.placement = direction.placement
-      this.words = direction.words
+      const { words, wedge, dynamics } = direction
+      if (words) this.words = words
+      if (wedge) this.wedge = wedge
+      if (dynamics) this.dynamics = dynamics
     }
   }
 
@@ -23,10 +26,13 @@ export default class Direction {
 
   toString() {
     const strs = []
-    strs.push(this.placement === 'above' ? '/' : '\\')
-    strs.push(this.words)
+    const { placement, words, wedge, dynamics } = this
+    strs.push(placement === 'above' ? '/' : '\\')
+    if (words) strs.push(words)
+    if (wedge) strs.push(`wedge(${wedge})`)
+    if (dynamics) strs.push(`dynamics(${dynamics})`)
     return strs.join('')
   }
 
-  toJSON = makeToJSON('placement', 'words')
+  toJSON = makeToJSON('placement', 'words', 'wedge', 'dynamics')
 }

@@ -18,6 +18,6 @@ export default class Key {
 
   }
 
-  toString() { return this.fifths + this.mode }
+  toString() { return `key(${this.fifths}${this.mode})` }
   toJSON = makeToJSON('fifths', 'mode')
 }

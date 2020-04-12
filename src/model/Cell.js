@@ -101,7 +101,7 @@ export default class Cell {
     //     beamed.length = 0
     //   }
     // })
-    return this.data.join(' ')
+    return this.data.join(' ') + ' |'
   }
 
   toJSON = makeToJSON('data')

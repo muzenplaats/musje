@@ -11,6 +11,7 @@ export default class Body {
     } else if (typeof body === 'string') {
       this.parse(new Lexer (body))
     } else {
+      if (!body.parts) body.parts = []
       this.parts = body.parts.map(part => new Part(part))
     }
     this.fillStaves()
