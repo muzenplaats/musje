@@ -9,7 +9,8 @@
 // console.log('' + reveScore)
 // console.log(reveScore.toMxl())
 
-import appElement from './appElement'
+// import appElement from './appElement'
+import appElement from './fromMxlElement'
 // import appElement from './converterAppElement'
 // import appElement from './math/plotElement'
 // import appElement from './arrayElement'

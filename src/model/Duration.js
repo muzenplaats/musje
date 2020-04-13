@@ -19,6 +19,7 @@ export default class Duration {
     } else {
       this.type = duration.type || 4
       this.dots = duration.dots || 0
+      this.modification = duration.modification
     }
     if (this.type > 4) this.initBeams()
   }
@@ -53,5 +54,5 @@ export default class Duration {
   }
 
   toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` }
-  toJSON = makeToJSON('type', 'dots')
+  toJSON = makeToJSON('type', 'dots', 'modification')
 }

@@ -33,6 +33,7 @@ export default function fromMxl(src) {
       partIndex++
     }
   })
+  console.log(score)
   // return score
   return new Score(score)
 }
