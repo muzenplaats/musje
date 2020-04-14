@@ -4,6 +4,7 @@ import TextLayout from './TextLayout'
 export default class HeadLayout extends AbstractLayout {
   constructor(head, style) {
     super()
+    this.name = 'head-layout'
     this.head = head
     this.style = style
     const { title, subtitle, composer, arranger, lyricist } = head

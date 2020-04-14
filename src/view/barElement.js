@@ -1,4 +1,5 @@
 import el from '../utils/el'
+import box from './box'
 
 export default function barElement(barLayout) {
   const { bar, linesLayouts, dotsLayouts } = barLayout

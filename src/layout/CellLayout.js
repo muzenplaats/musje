@@ -10,6 +10,7 @@ import { max } from '../utils/helpers'
 export default class CellLayout extends AbstractLayout {
   constructor(cell, style) {
     super()
+    this.name = 'cell-layout'
     this.cell = cell
     this.style = style
     this.dataLayout = new DataLayout(cell.data, style)
@@ -52,6 +53,7 @@ export default class CellLayout extends AbstractLayout {
 class DataLayout extends AbstractLayout {
   constructor(data, style) {
     super()
+    this.name = 'data-layout'
     this.data = data
     this.style = style
     this.setLayouts()

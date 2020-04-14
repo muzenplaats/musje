@@ -5,6 +5,7 @@ import { range } from '../utils/helpers'
 export default class DurationLayout extends AbstractLayout {
   constructor(duration, style) {
     super()
+    this.name = 'duration-layout'
     this.duration = duration
     this.style = style
     const { type, dots } = duration
@@ -83,6 +84,7 @@ export default class DurationLayout extends AbstractLayout {
 class LinesLayout extends AbstractLayout {
   constructor(duration, style) {
     super()
+    this.name = 'lines-layout'
     this.duration = duration
     this.style = style
     this.setLineSize()
@@ -114,6 +116,7 @@ class LinesLayout extends AbstractLayout {
 class BeamsLayout extends AbstractLayout {
   constructor(duration, dotsLayout, style) {
     super()
+    this.name = 'beams-layout'
     this.duration = duration
     this.dotsLayout = dotsLayout
     this.style = style
@@ -153,6 +156,7 @@ class BeamsLayout extends AbstractLayout {
 class BeamedLayout extends Layout {
   constructor(pos, size) {
     super(pos, size)
+    this.name = 'beamed-layout'
   }
   get beamedWidth() {
     return this.beam.endBeam.layout.x2 - this.x
@@ -162,6 +166,7 @@ class BeamedLayout extends Layout {
 class DotsLayout extends AbstractLayout {
   constructor(duration, style) {
     super()
+    this.name = 'dots-layout'
     this.duration = duration
     this.style = style
     this.setDotSize(duration.type)

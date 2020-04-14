@@ -1,4 +1,5 @@
 import el from './el'
+import { toCapitalCamel } from './helpers'
 import './xml-json-viewer.css'
 
 export default function jsonElement(name, value) {
@@ -64,7 +65,7 @@ const array = (name, value) => {
 
 const getObjType = obj => {
   const t = obj.name
-  return t ? t[0].toUpperCase() + t.substr(1) : ''
+  return t ? toCapitalCamel(t) : ''
 }
 
 const object = (name, value) => {

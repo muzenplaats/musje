@@ -5,6 +5,7 @@ import DurationLayout from './DurationLayout'
 export default class NoteLayout extends AbstractLayout {
   constructor(note, style) {
     super()
+    this.name = 'note-layout'
     this.note = note
     this.style = style
     this.pitchLayout = new PitchLayout(note.pitch, style)

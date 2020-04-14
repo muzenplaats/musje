@@ -32,7 +32,7 @@ export default class AbstractLayout {
   }
 
   toJSON() {
-    const { x, y, width, height, x2, y2, cx, cy, bx, by, dx, dy } = this
-    return { x, y, width, height, x2, y2, cx, cy, bx, by, dx, dy }
+    const { name, x, y, width, height, x2, y2, cx, cy, bx, by, dx, dy } = this
+    return { name, x, y, width, height, x2, y2, cx, cy, bx, by, dx, dy }
   }
 }

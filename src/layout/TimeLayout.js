@@ -5,6 +5,7 @@ import TextLayout from './TextLayout'
 export default class TimeLayout extends AbstractLayout {
   constructor(time, style) {
     super()
+    this.name = 'time-layout'
     this.time = time
     this.style = style
     this.beatsLayout = new TextLayout(time.beats, style.timeFont)

@@ -5,48 +5,27 @@ import { lastItem, sum } from '../utils/helpers'
 export default class BodyLayout extends AbstractLayout {
   constructor(body, style) {
     super()
-    this.body = body
+    this.name = 'body-layout'
+    this.measures = body.measures
     this.style = style
-    this.systemsLayout = new SystemsLayout(body.measures, style)
-    this.width = this.systemsLayout.width
-    this.height = this.systemsLayout.height
-  }
-
-  set position(pos) {
-    super.position = pos
-    this.systemsLayout.position = pos
-  }
-}
-
-class SystemsLayout extends AbstractLayout {
-  constructor(measures, style) {
-    super()
-    this.measures = measures
-    this.style = style
-    const { width, marginLeft, marginRight } = style.score
-    this.width = width - marginLeft - marginRight
-    this.makeLayouts()
+    this.setWidth()
+    this.makeSystemsLayouts()
     this.setHeight()
   }
 
+  setWidth() {
+    const { width, marginLeft, marginRight } = this.style.score
+    this.width = width - marginLeft - marginRight
+  }
+
   setHeight() {
-    const { layouts } = this
-    this.height = layouts.length ?
-            (sum(layouts.map(layout => layout.height)) +
-            (layouts.length - 1) * this.style.body.systemsSep) : 0
+    const { systemsLayouts } = this
+    this.height = systemsLayouts.length ?
+            (sum(systemsLayouts.map(layout => layout.height)) +
+            (systemsLayouts.length - 1) * this.style.body.systemsSep) : 0
   }
 
-  set position(pos) {
-    super.position = pos
-    const { systemsSep } = this.style.body
-    let { x, y } = this
-    this.layouts.forEach(layout => {
-      layout.position = { x, y }
-      y += layout.height + systemsSep
-    })
-  }
-
-  makeLayouts() {
+  makeSystemsLayouts() {
     const { width } = this
     const minWidths = this.measures.map(measure => measure.minWidth)
     const lengths = []
@@ -67,13 +46,28 @@ class SystemsLayout extends AbstractLayout {
     }
     const{log}=console;log(lengths)
 
-    this.layouts = []
+    this.systemsLayouts = []
     let begin = 0, end
     lengths.forEach(len => {
       end = begin + len
       const measures = this.measures.slice(begin, end)
-      this.layouts.push(new SystemLayout({ measures }, this.style))
+      this.systemsLayouts.push(new SystemLayout(measures, this.style))
       begin = end
     })
+  }
+
+  set position(pos) {
+    super.position = pos
+    const { systemsSep } = this.style.body
+    let { x, y } = this
+    this.systemsLayouts.forEach(layout => {
+      layout.position = { x, y }
+      y += layout.height + systemsSep
+    })
+  }
+
+  toJSON() {
+    const { systemsLayouts } = this
+    return { ...super.toJSON(), systemsLayouts }
   }
 }

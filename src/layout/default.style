@@ -4,13 +4,13 @@ base {
 
 title-font {
   family: Times New Roman
-  size: 150%
+  size: 130%
   height-ratio: 0.9
   dy-ratio: 0.75
 }
 subtitle-font {
   family: Times New Roman
-  size: 130%
+  size: 120%
   width-ratio: 0.45
   height-ratio: 0.9
   dy-ratio: 0.8

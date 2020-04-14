@@ -4,6 +4,7 @@ import Layout from './Layout'
 export default class BarLayout extends AbstractLayout {
   constructor(bar, style) {
     super()
+    this.name = 'bar-layout'
     this.bar = bar
     this.style = style
     const { lightWidth, heavyWidth, lineHeight: height, dotSize,

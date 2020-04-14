@@ -10,6 +10,7 @@ const ACCIDENTAL_FONT_MAP = {
 export default class PitchLayout extends AbstractLayout {
   constructor(pitch, style) {
     super()
+    this.name = 'pitch-layout'
     this.pitch = pitch
     this.style = style
     this.stepLayout = new StepLayout(pitch.step, style)
@@ -66,6 +67,7 @@ export default class PitchLayout extends AbstractLayout {
 class StepLayout extends AbstractLayout {
   constructor(step, style) {
     super()
+    this.name = 'step-layout'
     Object.assign(this, style.stepFont)
   }
 }
@@ -73,6 +75,7 @@ class StepLayout extends AbstractLayout {
 class AccidentalLayout extends AbstractLayout {
   constructor(accidental, style) {
     super()
+    this.name = 'accidental-layout'
     Object.assign(this, style.accidentalFont)
     this.char = ACCIDENTAL_FONT_MAP[accidental]
     if (this.accidental === 'bb') this.dx = style.accidentalFont.dx * 0.66
@@ -82,6 +85,7 @@ class AccidentalLayout extends AbstractLayout {
 class OctavesLayout extends AbstractLayout {
   constructor(octave, style) {
     super()
+    this.name = 'octaves-layout'
     const oct = Math.abs(octave)
     const { octaveSize, octavesSep } = style.pitch
     this.octave = octave

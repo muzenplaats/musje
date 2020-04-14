@@ -8,6 +8,7 @@ const { setSize, setTypeLt4Size, setType4Size, setTypeGt4Size } =
 export default class ChordLayout extends AbstractLayout {
   constructor(chord, style) {
     super()
+    this.name = 'chord-layout'
     this.chord = chord
     this.style = style
     this.pitchesLayout = new PitchesLayout(chord.pitches, style)

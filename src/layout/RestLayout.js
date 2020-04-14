@@ -7,6 +7,7 @@ const { setSize, setTypeLt4Size, setType4Size, setTypeGt4Size } =
 export default class RestLayout extends AbstractLayout {
   constructor(rest, style) {
     super()
+    this.name = 'rest-layout'
     this.rest = rest
     this.style = style
     this.zeroLayout = new ZeroLayout(style)

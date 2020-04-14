@@ -6,6 +6,18 @@ export const lastItem = arr => arr[arr.length - 1]
 export const max = arr => Math.max.apply(null, arr)
 export const sum = arr => arr.reduce((a, b) => a + b)
 
+export const toCamel = hyphenedName => {
+  const words = hyphenedName.split('-')
+  const first = words.shift()
+  return [first]
+    .concat(words.map(word => word[0].toUpperCase() + word.substr(1))).join('')
+}
+
+export const toCapitalCamel = hyphenedName => {
+  const words = hyphenedName.split('-')
+  return words.map(word => word[0].toUpperCase() + word.substr(1)).join('')
+}
+
 export const precision = (val, digits) => {
   val = +val
   const prec = val.toPrecision(digits)
