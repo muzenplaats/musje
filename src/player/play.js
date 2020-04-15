@@ -3,8 +3,11 @@ const tos = []
 export function play(obj) {
   const { context } = this
   switch (obj.name) {
-    case 'note': playNote(0, obj, context); break
-    case 'cell': playCell(0, obj, context); break
+    case 'score': playScore(obj, context); break
+    case 'part': playPart(obj, context); break
+    case 'staff': playStaff(obj, context); break
+    case 'cell': playCell(obj, context); break
+    case 'note': playNote(obj, context); break
   }
 }
 
@@ -31,53 +34,53 @@ const oscPlay = (t, freq, dur, onended, context) => {
   if (onended) { osc.onended = onended }
 }
 
-const getDur = dt => dt.duration.quarters * 60 / 120
+const getDur = dt => dt.duration.seconds
 
-// export const playStaff = staff => {
-//   staff.cells.forEach(cell => {
-//     cell.data.forEach(dt => {
-//       switch (dt.name) {
-//         case 'note': return playNote(dt)
-//         case 'chord': return playChord(dt)
-//       }
-//     })
-//   })
-// }
+const playScore = (score, context) => {
+  score.body.parts.forEach(part => playPart(part, context))
+}
 
-const playCell = (t, cell, context) => {
-  const tempo = 60 / 90
+const playPart = (part, context) => {
+  part.staves.forEach(staff => playStaff(staff, context))
+}
+
+const playStaff = (staff, context) => {
+  staff.cells.forEach(cell => {
+    cell.data.forEach(dt => {
+      switch (dt.name) {
+        case 'note': return playNote(dt, context)
+        case 'chord': return playChord(dt, context)
+      }
+    })
+  })
+}
+
+const playCell = (cell, context) => {
   cell.data.forEach(dt => {
     switch (dt.name) {
-      case 'note':
-        playNote(t, dt, context)
-        t += getDur(dt)
-        break
-      case 'rest':
-        t += getDur(dt)
-        break
-      case 'chord':
-        playChord(t, dt, context)
-        t += getDur(dt)
+      case 'note': playNote(dt, context); break
+      case 'rest': break
+      case 'chord': playChord(dt, context); break
     }
   })
 }
 
-const playNote = (t, note, context) => {
+const playNote = (note, context) => {
   const { pitch, duration } = note
   const dur = getDur(note)
   tos.push(setTimeout(() => {
     // console.log(`play: ${note}`, pitch.frequency)
     note.onplay()
     oscPlay(0, pitch.frequency, dur, () => note.onstop(), context)
-  }, t * 1000))
+  }, note.t * 1000))
 }
 
-const playChord = (t, chord, context) => {
+const playChord = (chord, context) => {
   const dur = getDur(chord)
   tos.push(setTimeout(() => {
     console.log(`play: ${chord}`)
     chord.pitches.forEach(pitch => {
       oscPlay(0, pitch.frequency, dur, () =>console.log('stop'), context)
     })
-  }, t * 1000))
+  }, chord.t * 1000))
 }

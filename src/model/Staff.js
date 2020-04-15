@@ -91,18 +91,18 @@ export default class Staff {
   }
 
   setT() {
-    const tempo = 150
+    const tempo = 60 / 150
     let t = 0, tQ = 0
     this.cells.forEach(cell => {
       cell.data.forEach(dt => {
         dt.t = t
         dt.tQ = tQ
-        if (dt.duration) {
-          const dur = dt.duration.quarter * 60 / tempo
-          dt.duration.second = dur
-          t += dur
-          tQ += dt.duration.quartersQ
-        }
+        const { duration } = dt
+        if (!duration) return
+        const dur = duration.quarters * tempo
+        duration.seconds = dur
+        t += dur
+        tQ += duration.quartersQ
       })
     })
   }

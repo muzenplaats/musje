@@ -45,7 +45,7 @@ export default function appElement() {
         style: 'width: 100%; height: 100px',
         value: data.$scoreStr
       }),
-      el('button', { click: () => player.play(data.cell) }, '>'),
+      el('button', { click: () => player.play(data.score) }, '>'),
       el('button', { click: () => player.pause() }, '||'),
       el('button', { click: () => player.stop() }, '[]'),
       el('pre', { style: 'color: #d53' }, data.$error),

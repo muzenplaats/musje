@@ -11,7 +11,7 @@ export default function durationElement(durationLayout) {
   const setColor = color => {
     if (type < 4) {
       elements.lines.forEach(element => { element.style.fill = color })
-    } else if (type > 4) {
+    } else if (elements.beams) {
       elements.beams.forEach(element => { element.style.fill = color })
     }
     if (dots) elements.dots.forEach(element => {element.style.fill = color })
