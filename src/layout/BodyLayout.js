@@ -1,5 +1,6 @@
 import AbstractLayout from './AbstractLayout'
 import SystemLayout from './SystemLayout'
+import MeasureLayout from './MeasureLayout'
 import { lastItem, sum } from '../utils/helpers'
 
 export default class BodyLayout extends AbstractLayout {
@@ -27,7 +28,9 @@ export default class BodyLayout extends AbstractLayout {
 
   makeSystemsLayouts() {
     const { width } = this
-    const minWidths = this.measures.map(measure => measure.minWidth)
+    const minWidths = this.measures
+          .map(measure => new MeasureLayout(measure, this.style))
+          .map(measure => measure.minWidth)
     const lengths = []
     let currW = 0
     minWidths.forEach((minW, m) => {
@@ -44,7 +47,7 @@ export default class BodyLayout extends AbstractLayout {
     for (let i = lengths.length - 1; i > 0; i--) {
       lengths[i] = lengths[i] - lengths[i - 1]
     }
-    const{log}=console;log(lengths)
+    console.log(lengths)
 
     this.systemsLayouts = []
     let begin = 0, end
