@@ -3,6 +3,12 @@ import { makeToJSON } from '../utils/helpers'
 import { Q } from './constants'
 import Cell from './Cell'
 
+const timeToDurQ = time => {
+  const { beats, beatType } = time
+  if (beatType === 8) return beats % 3 === 0 ? 1.5 * Q : 0.5 * Q
+  return Q / beatType * 4
+}
+
 export default class Staff {
   constructor(staff) {
     this.name = 'staff'
@@ -13,6 +19,7 @@ export default class Staff {
     } else {
       this.cells = staff.cells.map(cell => new Cell(cell))
     }
+    this.setBeams()
     this.setT()
   }
 
@@ -21,6 +28,66 @@ export default class Staff {
     while (lexer.is('cell')) {
       this.cells.push(new Cell(lexer))
     }
+  }
+
+  setBeams() {
+    this.makeBeamGroups().forEach(group => {
+      group.forEach((dt, i) => {
+        dt.duration.beams.forEach((beam, j) => {
+          const prev = group[i - 1] && group[i - 1].duration.beams[j]
+          const next = group[i + 1] && group[i + 1].duration.beams[j]
+          if (prev && next) {
+            beam.type = 'continue'
+          } else if (prev) {
+            beam.type = 'end'
+          } else if (next) {
+            beam.type = 'begin'
+          }
+        })
+      })
+      group.forEach((dt, i) => {
+        dt.duration.beams.forEach((beam, j) => {
+          if (beam.type !== 'begin') return
+          for (let n = i + 1; n < group.length; n++) {
+            let theBeam = group[n].duration.beams[j]
+            if (theBeam && theBeam.type === 'end') beam.endBeam = theBeam
+          }
+        })
+      })
+    })
+  }
+
+  makeBeamGroups() {
+    let gDurQ = 0
+    const groups = []
+    this.cells.forEach(cell => {
+      const dumpGroup = () => {
+        if (group.length) { groups.push(group); group = [] }
+      }
+      let currQ = 0
+      let group = []
+      cell.data.forEach(dt => {
+        if (dt.name === 'time') {
+          gDurQ = timeToDurQ(dt)
+          currQ = 0
+          dumpGroup()
+          return
+        }
+        if (!gDurQ) return
+        if (!dt.duration) return
+        const { type, quartersQ } = dt.duration
+        currQ += quartersQ
+        if (type < 8) {
+          dumpGroup()
+          currQ %= gDurQ
+        } else {
+          if (currQ <= gDurQ) group.push(dt)
+          if (currQ >= gDurQ) { currQ = 0; dumpGroup() }
+        }
+      })
+      dumpGroup()
+    })
+    return groups
   }
 
   setT() {
@@ -34,7 +101,7 @@ export default class Staff {
           const dur = dt.duration.quarter * 60 / tempo
           dt.duration.second = dur
           t += dur
-          tQ += dt.duration.quarterQ
+          tQ += dt.duration.quartersQ
         }
       })
     })

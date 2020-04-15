@@ -1,5 +1,6 @@
 import el from '../utils/el'
 import box from './box'
+import { flatten } from '../utils/helpers'
 
 export default function durationElement(durationLayout) {
   const { linesLayout, beamsLayout, dotsLayout } = durationLayout
@@ -26,9 +27,15 @@ export default function durationElement(durationLayout) {
     type < 4 ? linesLayout.layouts.map(layout => {
       return el.push(elements, 'lines').create('rect', layout.rect)
     }) : [],
-    type > 4 ? beamsLayout.layouts.map(layout => {
-      return el.push(elements, 'beams').create('rect', layout.rect)
-    }) : [],
+    type > 4 ? flatten(beamsLayout.layouts.map(layout => {
+      const { type } = layout.beam
+      if (type === 'single' || type === 'begin') {
+        const rect = Object.assign({}, layout)
+        if (type === 'begin') rect.width = layout.beamedWidth
+        return el.push(elements, 'beams').create('rect', rect)
+      }
+      return []
+    })) : [],
     dots ? dotsLayout.layouts.map(layout => {
       return el.push(elements, 'dots').create('circle', layout.circle)
     }) : []

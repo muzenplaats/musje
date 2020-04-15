@@ -80,28 +80,28 @@ export default class Cell {
   }
 
   toString() {
-    // const data = []
-    // const beamed = []
-    // let bardata = this.leftBar.value === '|' ? [] : [this.leftBar]
-    // bardata = bardata.concat(this.data, this.rightBar)
-    // bardata.forEach(dt => {
-    //   const { duration } = dt
-    //   if (!duration || duration.type < 8) return data.push(dt)
-    //   const { beams } = duration
-    //   const isEnd = () => {
-    //     return !beams.some(b => b.type === 'begin' || b.type === 'continue')
-    //   }
-    //   if (beams.some(beam => beam.type !== 'single')) {
-    //     beamed.push(dt)
-    //   } else {
-    //     data.push(dt)
-    //   }
-    //   if (beamed.length > 0 && isEnd()) {
-    //     data.push(beamed.join(''))
-    //     beamed.length = 0
-    //   }
-    // })
-    return this.data.join(' ') + ' |'
+    const data = []
+    const beamed = []
+    let bardata = this.leftBar.value === '|' ? [] : [this.leftBar]
+    bardata = bardata.concat(this.data, this.rightBar)
+    bardata.forEach(dt => {
+      const { duration } = dt
+      if (!duration || duration.type < 8) return data.push(dt)
+      const { beams } = duration
+      const isEnd = () => {
+        return !beams.some(b => b.type === 'begin' || b.type === 'continue')
+      }
+      if (beams.some(beam => beam.type !== 'single')) {
+        beamed.push(dt)
+      } else {
+        data.push(dt)
+      }
+      if (beamed.length > 0 && isEnd()) {
+        data.push(beamed.join(''))
+        beamed.length = 0
+      }
+    })
+    return data.join(' ')
   }
 
   toJSON = makeToJSON('data')

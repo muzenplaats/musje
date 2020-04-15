@@ -1,5 +1,6 @@
 import AbstractLayout from './AbstractLayout'
 import Layout from './Layout'
+import BeamLayout from './BeamLayout'
 import { range } from '../utils/helpers'
 
 export default class DurationLayout extends AbstractLayout {
@@ -74,10 +75,8 @@ export default class DurationLayout extends AbstractLayout {
   }
 
   toJSON() {
-    const { beamsLayout, beamsLayouts, linesLayout, linesLayouts,
-            dotsLayout, dotsLayouts } = this
-    return { ...super.toJSON(), beamsLayout, beamsLayouts, linesLayout,
-            linesLayouts, dotsLayout, dotsLayouts }
+    const { beamsLayout, linesLayout, dotsLayout } = this
+    return { ...super.toJSON(), beamsLayout, linesLayout, dotsLayout }
   }
 }
 
@@ -120,46 +119,30 @@ class BeamsLayout extends AbstractLayout {
     this.duration = duration
     this.dotsLayout = dotsLayout
     this.style = style
-    this.setBeamSize()
+    this.layouts = duration.beams.map(beam =>
+                        new BeamLayout(beam, duration, dotsLayout, style))
     this.setSize()
-  }
-
-  setBeamSize() {
-    this.beamSize = {
-      width: this.style.stepFont.width + (this.duration.dots ?
-             this.dotsLayout.width + this.style.note.pitchDotSep : 0),
-      height: this.style.durationGE4.beamHeight
-    }
   }
 
   setSize() {
     const { numBeams } = this.duration
     const { beamHeight, beamsSep } = this.style.durationGE4
-    this.width = this.beamSize.width
+    this.width = this.layouts[0].width
     this.height = numBeams * beamHeight + (numBeams - 1) * beamsSep
   }
 
   set position(pos) {
-    const { beamHeight, beamsSep } = this.style.durationGE4
     super.position = pos
-    const { x, y2 } = this
-    this.layouts = this.duration.beams.map((beam, n) => {
-      const layout = new BeamedLayout({
-        beam, x, y2: y2 - n * (beamHeight + beamsSep)
-      }, this.beamSize)
-      beam.layout = layout
-      return layout
+    let { x, y2 } = this
+    const { beamHeight, beamsSep } = this.style.durationGE4
+    this.layouts.forEach((layout, n) => {
+      y2 -= n * (beamHeight + beamsSep)
+      layout.position = { x, y2 }
     })
   }
-}
 
-class BeamedLayout extends Layout {
-  constructor(pos, size) {
-    super(pos, size)
-    this.name = 'beamed-layout'
-  }
-  get beamedWidth() {
-    return this.beam.endBeam.layout.x2 - this.x
+  toJSON() {
+    return { ...super.toJSON(), layouts: this.layouts }
   }
 }
 

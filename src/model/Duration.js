@@ -21,6 +21,7 @@ export default class Duration {
       this.dots = duration.dots || 0
       this.modification = duration.modification
     }
+
     if (this.type > 4) this.initBeams()
   }
 
