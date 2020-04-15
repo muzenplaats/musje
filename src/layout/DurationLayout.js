@@ -136,8 +136,8 @@ class BeamsLayout extends AbstractLayout {
     let { x, y2 } = this
     const { beamHeight, beamsSep } = this.style.durationGE4
     this.layouts.forEach((layout, n) => {
-      y2 -= n * (beamHeight + beamsSep)
       layout.position = { x, y2 }
+      y2 -= beamHeight + beamsSep
     })
   }
 
