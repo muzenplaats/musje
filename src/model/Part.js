@@ -30,6 +30,13 @@ export default class Part {
     lexer.skipWhite()
   }
 
-  toString() { return this.head +'\n' + this.staves.join('\n\n--\n') }
+  stavesStr() { return this.staves.join('\n\n--\n') }
+
+  singlePartToString() {
+    return ('' + this.head) === '==' ? this.stavesStr() : this.toString()
+  }
+
+  toString() { return this.head +'\n' + this.stavesStr() }
+
   toJSON = makeToJSON('head', 'staves')
 }

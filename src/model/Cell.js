@@ -1,5 +1,5 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
+import { makeToJSON, lastItem } from '../utils/helpers'
 import Time from './Time'
 import Note from './Note'
 import Rest from './Rest'
@@ -11,6 +11,7 @@ import Clef from './Clef'
 import Key from './Key'
 
 const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
+const makeBar = (value = '|') => new Bar(value)
 
 export default class Cell {
   constructor(cell = { data: [] }) {
@@ -36,6 +37,7 @@ export default class Cell {
       })
     }
     this.setAlters()
+    this.extractBars()
   }
 
   parse(lexer) {
@@ -79,6 +81,19 @@ export default class Cell {
     })
   }
 
+  extractBars() {
+    const { data } = this
+    if (data.length) {
+      this.rightBar = lastItem(data).name === 'bar' ?
+                     data.pop() : makeBar()
+      this.leftBar = data.length === 0 || data[0].name !== 'bar' ?
+                     makeBar() : data.shift()
+    } else {
+      this.leftBar = makeBar()
+      this.rightBar = makeBar()
+    }
+  }
+
   toString() {
     const data = []
     const beamed = []
@@ -104,5 +119,5 @@ export default class Cell {
     return data.join(' ')
   }
 
-  toJSON = makeToJSON('data')
+  toJSON = makeToJSON('data', 'leftBar', 'rightBar')
 }

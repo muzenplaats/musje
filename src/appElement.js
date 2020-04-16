@@ -22,7 +22,7 @@ export default function appElement() {
         try {
           score = new Score(this.scoreStr); this.error = ''
         } catch (e) {
-          score = new Score(); this.error = e
+          score = new Score(); this.error = e.stack
         }
         return score
       }
@@ -49,8 +49,9 @@ export default function appElement() {
       el('button', { click: () => player.pause() }, '||'),
       el('button', { click: () => player.stop() }, '[]'),
       el('pre', { style: 'color: #d53' }, data.$error),
-      el('pre', { style: 'width: 100%; white-space: pre-wrap' },
-                data.$info),
+      el('pre', {
+        style: 'border: 1px solid #ccc; padding: 5px; width: 100%; background-color: #eee; white-space: pre-wrap'
+      }, data.$info),
       el('div', data.$scoreJsonElement)
     ]),
 
@@ -60,7 +61,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/008.musje', txt => { data.scoreStr = txt })
+  loadText('scores/009.musje', txt => { data.scoreStr = txt })
 
   return main
 }

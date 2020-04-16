@@ -65,7 +65,10 @@ export default class Body {
     this.measures = measures.map(measure => new Measure(measure))
   }
 
-  toString() { return this.parts.join('\n\n') }
+  toString() {
+    if (this.parts.length === 1) return this.parts[0].singlePartToString()
+    return this.parts.join('\n\n')
+  }
 
   toJSON = makeToJSON('parts', 'measures')
 }
