@@ -8,11 +8,21 @@ export default class SystemLayout extends AbstractLayout {
     this.measures = measures
     this.style = style
 
-    this.width = 300    // temp.
-    this.height = 30    // tmep.
+    const { length } = measures
+    measures.forEach((measure, m) => {
+      measure.atSysBegin = m === 0
+      measure.atSysEnd = m === length - 1
+    })
 
-    this.measuresLayouts =
-          measures.map(measure => new MeasureLayout(measure, style))
+    this.measuresLayouts = measures.map(measure => {
+      const layout = new MeasureLayout(measure, style)
+      layout.atSysBegin = measure.atSysBegin
+      layout.atSysEnd = measure.atSysEnd
+      return layout
+    })
+
+    // this.width is set by BodyLayout
+    this.height = 30    // tmep.
   }
 
   set position(pos) {

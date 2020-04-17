@@ -11,7 +11,7 @@ import Clef from './Clef'
 import Key from './Key'
 
 const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
-const makeBar = (value = '|') => new Bar(value)
+const makeBar = value => new Bar(value)
 
 export default class Cell {
   constructor(cell = { data: [] }) {

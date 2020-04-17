@@ -5,7 +5,11 @@ import ChordLayout from './ChordLayout'
 import MultipartLayout from './MultipartLayout'
 import TimeLayout from './TimeLayout'
 import BarLayout from './BarLayout'
+import Bar from '../model/Bar'
 import { max } from '../utils/helpers'
+
+const CONVERT_LEFT_BAR = { ':|': '|', ':|:': '|:' }
+const CONVERT_RIGHT_BAR = { '|:': '|', ':|:': ':|' }
 
 export default class CellLayout extends AbstractLayout {
   constructor(cell, style) {
@@ -15,15 +19,33 @@ export default class CellLayout extends AbstractLayout {
     this.style = style
     this.dataLayout = new DataLayout(cell.data, style)
 
-    const { leftBar, rightBar } = cell
-    if (leftBar) this.leftBarLayout = new BarLayout(cell.leftBar, style)
-    if (rightBar) this.rightBarLayout = new BarLayout(cell.rightBar, style)
+    this.leftBarLayout = new BarLayout(cell.leftBar, style)
+    this.rightBarLayout = new BarLayout(cell.rightBar, style)
 
     this.setMinWidth()
 
     // Tmp
     this.width = this.minWidth
     this.height = this.dataLayout.height
+  }
+
+  addShownLeftBar() {
+    const { cell } = this
+    let { value } = cell.leftBar
+    value = CONVERT_LEFT_BAR[value]
+    cell.shownLeftBar = new Bar(value)
+    this.shownLeftBarLayout = new BarLayout(cell.shownLeftBar, this.style)
+    this.shownLeftBarLayout.position = this.leftBarLayout.xy
+  }
+
+  addShownRightBar() {
+    const { cell } = this
+    let { value } = cell.rightBar
+    value = CONVERT_RIGHT_BAR[value]
+    if (!value) return
+    cell.shownRightBar = new Bar(value)
+    this.shownRightBarLayout = new BarLayout(cell.shownRightBar, this.style)
+    this.shownRightBarLayout.position = this.rightBarLayout.xy
   }
 
   setMinWidth() {

@@ -4,10 +4,12 @@ import restElement from './restElement'
 import chordElement from './chordElement'
 import multipartElement from './multipartElement'
 import timeElement from './timeElement'
+import barElement from './barElement'
 import box from './box'
 
 export default function cellElement(cellLayout) {
-  const { dataLayout } = cellLayout
+  const { dataLayout, shownLeftBarLayout,
+          rightBarLayout, shownRightBarLayout } = cellLayout
 
   return el.create('g', [
     // box(cellLayout, 'green'),
@@ -19,6 +21,9 @@ export default function cellElement(cellLayout) {
       if ('chord' in layout) return chordElement(layout)
       if ('time' in layout) return timeElement(layout)
       if ('multipart' in layout) return multipartElement(layout)
-    })
+    }),
+    shownLeftBarLayout ? barElement(shownLeftBarLayout) : [],
+    shownRightBarLayout ? barElement(shownRightBarLayout) :
+                          barElement(rightBarLayout)
   ])
 }

@@ -54,7 +54,9 @@ export default class BodyLayout extends AbstractLayout {
     lengths.forEach(len => {
       end = begin + len
       const measures = this.measures.slice(begin, end)
-      this.systemsLayouts.push(new SystemLayout(measures, this.style))
+      const systemLayout = new SystemLayout(measures, this.style)
+      systemLayout.width = this.width
+      this.systemsLayouts.push(systemLayout)
       begin = end
     })
   }

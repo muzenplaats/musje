@@ -19,6 +19,7 @@ export default class Staff {
     } else {
       this.cells = staff.cells.map(cell => new Cell(cell))
     }
+    this.resetLeftBars()
     this.setBeams()
     this.setT()
   }
@@ -28,6 +29,13 @@ export default class Staff {
     while (lexer.is('cell')) {
       this.cells.push(new Cell(lexer))
     }
+  }
+
+  resetLeftBars() {
+    const { cells } = this
+    cells.forEach((cell, c) => {
+      if (c > 0) cell.leftBar.value = cells[c - 1].rightBar.value
+    })
   }
 
   setBeams() {

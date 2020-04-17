@@ -5,17 +5,17 @@ export default class Measure {
   constructor(measure = { parts: [] }) {
     this.name = 'measure'
     this.parts = measure.parts
-    // this.extractBars()
+    // this.setBars()
     this.cells = this.mapCell(c => c)
   }
 
-  makeBars() {
-    const c0 = this.cells[0]
-    if (c0) {
-      this.leftBar = new Bar(c0.leftBar.value)
-      this.rightBar = new Bar(c0.rightBar.value)
-    }
-  }
+  // setBars() {
+  //   const c0 = this.cells[0]
+  //   if (c0) {
+  //     this.leftBar = new Bar(c0.leftBar.value)
+  //     this.rightBar = new Bar(c0.rightBar.value)
+  //   }
+  // }
 
   eachCell(cb) {
     this.parts.forEach((part, p) => {

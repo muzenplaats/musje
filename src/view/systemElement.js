@@ -6,7 +6,7 @@ export default function systemElement(systemLayout) {
   const { measuresLayouts } = systemLayout
 
   return el.create('g', [
-    box(systemLayout, 'green'),
+    // box(systemLayout, 'green'),
     measuresLayouts.map(layout => measureElement(layout))
   ])
 }
