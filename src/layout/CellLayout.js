@@ -8,8 +8,8 @@ import BarLayout from './BarLayout'
 import Bar from '../model/Bar'
 import { max } from '../utils/helpers'
 
-const CONVERT_LEFT_BAR = { ':|': '|', ':|:': '|:' }
-const CONVERT_RIGHT_BAR = { '|:': '|', ':|:': ':|' }
+const CONVERT_LEFT_BAR = { '|:': '|:', ':|:': '|:', '||': '||' }
+const CONVERT_RIGHT_BAR = { ':|': ':|', ':|:': ':|', '||': '||', '|]': '|]' }
 
 export default class CellLayout extends AbstractLayout {
   constructor(cell, style) {
@@ -35,35 +35,48 @@ export default class CellLayout extends AbstractLayout {
     value = CONVERT_LEFT_BAR[value]
     cell.shownLeftBar = new Bar(value)
     this.shownLeftBarLayout = new BarLayout(cell.shownLeftBar, this.style)
-    this.shownLeftBarLayout.position = this.leftBarLayout.xy
+    this.setMinWidth()
   }
 
   addShownRightBar() {
     const { cell } = this
     let { value } = cell.rightBar
     value = CONVERT_RIGHT_BAR[value]
-    if (!value) return
     cell.shownRightBar = new Bar(value)
     this.shownRightBarLayout = new BarLayout(cell.shownRightBar, this.style)
-    this.shownRightBarLayout.position = this.rightBarLayout.xy
+    this.setMinWidth()
   }
 
   setMinWidth() {
     const { paddingLeft, paddingRight } = this.style.cell
-    const { leftBar, rightBar } = this.cell
+    const { leftBar, rightBar, shownLeftBar, shownRightBar } = this.cell
     this.minWidth = this.dataLayout.minWidth + paddingLeft + paddingRight +
-                    (leftBar ? this.leftBarLayout.width / 2 : 0) +
-                    (rightBar ? this.rightBarLayout.width / 2 : 0)
+                    (shownLeftBar ? this.shownLeftBarLayout.width :
+                                    this.leftBarLayout.width / 2) +
+                    (shownRightBar ? this.shownRightBarLayout. width :
+                                     this.rightBarLayout.width / 2)
   }
 
   set position(pos) {
     super.position = pos
-    const { x, x2, y2 } = this
-    const { paddingLeft } = this.style.cell
-    const { leftBar, rightBar } = this.cell
-    if (leftBar) this.leftBarLayout.position = { x, y2 }
-    this.dataLayout.position = { x: x + paddingLeft, y2 }
-    if (rightBar) this.rightBarLayout.position = { x2, y2 }
+    let { x, x2, y2 } = this
+    const { paddingLeft, paddingRight } = this.style.cell
+    const { shownLeftBar, shownRightBar } = this.cell
+    if (shownLeftBar) {
+      this.shownLeftBarLayout.position = { x, y2 }
+      x += this.shownLeftBarLayout.width + paddingLeft
+      this.dataLayout.position = { x, y2 }
+    }
+
+    if (shownRightBar) {
+      this.shownRightBarLayout.position = { x2, y2 }
+      x2 = this.shownRightBarLayout.x - paddingRight
+      this.dataLayout.position = { x2, y2 }
+    } else {
+      this.rightBarLayout.position = { cx: x2, y2 }
+      x2 = this.rightBarLayout.x - paddingRight
+      this.dataLayout.position = { x2, y2 }
+    }
   }
 
   toJSON() {

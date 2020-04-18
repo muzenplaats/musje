@@ -30,7 +30,7 @@ export default class BodyLayout extends AbstractLayout {
     const { width } = this
     const minWidths = this.measures
           .map(measure => new MeasureLayout(measure, this.style))
-          .map(measure => measure.minWidth)
+          .map(MeasureLayout => MeasureLayout.minWidth)
     const lengths = []
     let currW = 0
     minWidths.forEach((minW, m) => {

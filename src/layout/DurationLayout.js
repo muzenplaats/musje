@@ -186,4 +186,8 @@ class DotsLayout extends AbstractLayout {
       }, this.dotSize))
     }
   }
+
+  toJSON() {
+    return { ...super.toJSON(), layouts: this.layouts }
+  }
 }

@@ -20,14 +20,12 @@ export default class MeasureLayout extends AbstractLayout {
     let { x, x2, y2 } = this
 
     this.cellsLayouts.forEach(layout => {
-      layout.position = { x, y2 }
       if (this.atSysBegin) {
         layout.addShownLeftBar()
       } else if (this.atSysEnd) {
         layout.addShownRightBar()
       }
-      // cell.rightBar.position = this.atSysEnd ? { x2, y2 }
-      //                                        : { cx: x2, y2 }
+      layout.position = { x, y2 }
     })
   }
 
