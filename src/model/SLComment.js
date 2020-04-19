@@ -14,7 +14,8 @@ export default class SLComment {
   }
 
   parse(lexer) {
-
+    lexer.token('//')
+    lexer.token('all', lexeme => { this.value = lexeme })
   }
 
   toString() { return '//' + this.value }

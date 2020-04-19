@@ -1,6 +1,42 @@
-title: Twinkle Twinkle Little Star
-composer: Wolfgang Amadeus Mozarts
+title: 小星星
+lyricist: 珍·泰勒
+// source: https://zh.wikipedia.org/wiki/%E4%B8%80%E9%96%83%E4%B8%80%E9%96%83%E5%B0%8F%E6%98%9F%E6%98%9F
 
 2/4 1 1 | 5 5 | 6 6 | 5- | 4 4 | 3 3 | 2 2 | 1- ||
     5 5 | 4 4 | 3 3 | 2- | 5 5 | 4 4 | 3 3 | 2- ||
     1 1 | 5 5 | 6 6 | 5- | 4 4 | 3 3 | 2 2 | 1- |]
+
+/*
+lyrics[fr-FR]:
+Brille, brille, petite étoile
+Comme j'aimerais savoir qui tu es!
+Si haut au-dessus du monde
+Comme un diamant dans le ciel
+Brille, brille, petite étoile
+Comme j'aimerais savoir qui tu es!
+
+lyrics[en-UK]:
+Twinkle, twinkle, little star,
+How I wonder what you are!
+Up above the world so high,
+Like a diamond in the sky.
+Twinkle, twinkle, little star,
+How I wonder what you are!
+
+lyrics[zh-TW]:
+一閃一閃亮晶晶 滿天都是小星星
+掛在天上放光明 好像許多小眼睛
+一閃一閃亮晶晶 滿天都是小星星
+
+lyrics[zh-HK]:
+一閃一閃小星星 一顆一顆亮晶晶
+高高掛在天空上 伴著月兒放光華
+一閃一閃小星星 漫天都是小星星
+
+// 香港特別行政區政府的一個清潔香港廣告，亦用了這首歌曲填上新歌詞，以宣傳清潔香港的訊息
+
+lyrics[zh-HK]:
+一隻一隻小烏蠅 一隻一隻好高興
+菸頭布滿在地上 紙巾膠袋一起唱
+一隻一隻小烏蠅 一隻一隻好高興
+*/

@@ -2,7 +2,8 @@ import el from '../utils/el'
 import box from './box'
 
 export default function headElement(headLayout) {
-  const { titleLayout, subtitleLayout, composerLayout, arrangerLayout } = headLayout
+  const { titleLayout, subtitleLayout,
+          composerLayout, lyricistLayout, arrangerLayout } = headLayout
   const { title, subtitle, composer, lyricist, arranger } = headLayout.head
 
   const getStyle = ({ family, size, anchor }) => `
@@ -23,7 +24,11 @@ export default function headElement(headLayout) {
     }, subtitle) : [],
     composer ? el('text', {
       ...composerLayout.x2by,
-      style: getStyle({ ...subtitleLayout, anchor: 'end' })
-    }, composer) : []
+      style: getStyle({ ...composerLayout, anchor: 'end' })
+    }, composer) : [],
+    lyricist ? el('text', {
+      ...lyricistLayout.x2by,
+      style: getStyle({ ...lyricistLayout, anchor: 'end' })
+    }, lyricist) : []
   ])
 }

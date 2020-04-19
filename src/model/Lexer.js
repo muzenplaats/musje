@@ -1,4 +1,6 @@
 import makeLexerClass from '../utils/makeLexerClass'
+import SLComment from './SLComment'
+import MLComment from './MLComment'
 
 const cjk = '\u2E80-\u2FD5\u3190-\u319f\u3400-\u4DBF\u4E00-\u9FCC\uF900-\uFAAD'
 const letter = `A-Za-z${cjk}`
@@ -46,7 +48,22 @@ const Lexer = makeLexerClass({
   'part-head': '==',
   'sl-comment': '\\/\\/',
   'ml-comment': '\\/\\*',
-  comment: '\\/[\\/\\*]'
+  comment: '\\/[\\/\\*]',
+  'all': '.*'
 })
+
+Lexer.prototype.skipWhite = function () {
+  while ((this.is('S') || this.is('comment') || this.eol) && !this.eof) {
+    if (this.eol) {
+      this.nextLine()
+    } else if (this.is('S')) {
+      this.token('SS')
+    } else if (this.is('sl-comment')) {
+      new SLComment(this)
+    } else {
+      new MLComment(this)
+    }
+  }
+}
 
 export default Lexer

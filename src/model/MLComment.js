@@ -1,7 +1,7 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
-export default class SLComment {
+export default class MLComment {
   constructor(comment) {
     this.name = 'ml-comment'
     if (comment.name === 'lexer') {
@@ -14,7 +14,9 @@ export default class SLComment {
   }
 
   parse(lexer) {
-
+    lexer.token('/*')
+    lexer.mlwithout('*/', lexeme => { this.value = lexeme })
+    lexer.token('*/')
   }
 
   toString() { return `/*${this.value}*/` }
