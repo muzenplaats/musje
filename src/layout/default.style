@@ -62,11 +62,11 @@ head {
 }
 
 body {
-  systems-sep: 50%
+  systems-sep: 60%
 }
 
 system {
-  tmp: 0
+  staves-sep: 30%
 }
 
 cell {

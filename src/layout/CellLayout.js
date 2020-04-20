@@ -26,7 +26,7 @@ export default class CellLayout extends AbstractLayout {
 
     // Tmp
     this.width = this.minWidth
-    this.height = this.dataLayout.height
+    this.height = Math.max(this.dataLayout.height, this.rightBarLayout.height)
   }
 
   addShownLeftBar() {

@@ -1,5 +1,6 @@
 import AbstractLayout from './AbstractLayout'
 import MeasureLayout from './MeasureLayout'
+import { range, sum } from '../utils/helpers'
 
 export default class SystemLayout extends AbstractLayout {
   constructor(measures, style) {
@@ -22,7 +23,26 @@ export default class SystemLayout extends AbstractLayout {
     })
 
     // this.width is set by BodyLayout
-    this.height = 30    // tmep.
+    this.setHeight()
+  }
+
+  setHeight() {
+    if (!this.measuresLayouts.length) { this.height = 0; return }
+
+    this.stavesHeights = range(this.measuresLayouts[0].cellsLayouts.length)
+                        .map(() => 0)
+    this.measuresLayouts.forEach(measureLayout => {
+      measureLayout.cellsLayouts.forEach((cellLayout, c) => {
+        this.stavesHeights[c] = Math.max(this.stavesHeights[c],
+                                         cellLayout.height)
+      })
+    })
+    this.height = sum(this.stavesHeights) +
+                  this.style.system.stavesSep * (this.stavesHeights.length - 1)
+
+    this.measuresLayouts.forEach(measureLayout => {
+      measureLayout.setHeight(this.height, this.stavesHeights)
+    })
   }
 
   set position(pos) {

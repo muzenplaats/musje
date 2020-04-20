@@ -26,8 +26,15 @@ export default class Staff {
 
   parse(lexer) {
     this.cells = []
+    if (lexer.is('--')) {
+      lexer.token('--')
+      lexer.skipSS()
+      if (!lexer.eol) lexer.error('Unexpected token')
+    }
+    lexer.skipWhite()
     while (lexer.is('cell')) {
       this.cells.push(new Cell(lexer))
+      lexer.skipWhite()
     }
   }
 

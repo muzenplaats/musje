@@ -1,6 +1,7 @@
 import Lexer from './Lexer'
 import { makeToJSON, range } from '../utils/helpers'
 import Part from './Part'
+import Cell from './Cell'
 import Measure from './Measure'
 
 export default class Body {

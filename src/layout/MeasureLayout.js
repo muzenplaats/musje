@@ -10,22 +10,28 @@ export default class MeasureLayout extends AbstractLayout {
     this.style = style
     this.cellsLayouts = measure.cells.map(cell => new CellLayout(cell, style))
     this.minWidth = max(this.cellsLayouts.map(layout => layout.minWidth))
-    this.makeSticks()
+    // this.makeSticks()
     this.width = this.minWidth
-    this.height = 50
+  }
+
+  // SetHeight by SystemLayout
+  setHeight(height, stavesHeights) {
+    this.height = height
+    this.stavesHeights = stavesHeights
   }
 
   set position(pos) {
     super.position = pos
-    let { x, x2, y2 } = this
+    let { x, y } = this
 
-    this.cellsLayouts.forEach(layout => {
+    this.cellsLayouts.forEach((layout, c) => {
       if (this.atSysBegin) {
         layout.addShownLeftBar()
       } else if (this.atSysEnd) {
         layout.addShownRightBar()
       }
-      layout.position = { x, y2 }
+      layout.position = { x, y }
+      y += this.stavesHeights[c] + this.style.system.stavesSep
     })
   }
 

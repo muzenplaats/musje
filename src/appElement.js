@@ -18,6 +18,7 @@ export default function appElement() {
     scoreStr: '',
     score: {
       get() {
+        // return new Score(this.scoreStr)
         let score
         try {
           score = new Score(this.scoreStr); this.error = ''
@@ -31,10 +32,10 @@ export default function appElement() {
     info: { get() { return this.score } },
     error: '',
     scoreElement: { el() { return scoreElement(this.scoreLayout) } },
-    scoreJsonElement: { el() { return jsonElement('score', this.score) } },
-    scoreLayoutJsonElement: {
-      el() { return jsonElement('scoreLayout', this.scoreLayout) }
-    }
+    // scoreJsonElement: { el() { return jsonElement('score', this.score) } },
+    // scoreLayoutJsonElement: {
+    //   el() { return jsonElement('scoreLayout', this.scoreLayout) }
+    // }
   })
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
@@ -42,7 +43,7 @@ export default function appElement() {
 
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
-        style: 'width: 100%; height: 100px',
+        style: 'width: 100%; height: 200px',
         value: data.$scoreStr
       }),
       el('button', { click: () => player.play(data.score) }, '>'),
@@ -52,12 +53,12 @@ export default function appElement() {
       el('pre', {
         style: 'border: 1px solid #ccc; padding: 5px; width: 100%; background-color: #eee; white-space: pre-wrap'
       }, data.$info),
-      el('div', data.$scoreJsonElement)
+      // el('div', data.$scoreJsonElement)
     ]),
 
     el('div', { style: 'width: 47%; float: left; padding-left: 30px'}, [
       el('div', data.$scoreElement),
-      el('div', data.$scoreLayoutJsonElement)
+      // el('div', data.$scoreLayoutJsonElement)
     ])
   ])
 
