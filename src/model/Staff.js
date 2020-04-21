@@ -2,6 +2,7 @@ import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 import { Q } from './constants'
 import Cell from './Cell'
+import Tie from './Tie'
 
 const timeToDurQ = time => {
   const { beats, beatType } = time
@@ -21,6 +22,8 @@ export default class Staff {
     }
     this.resetLeftBars()
     this.setBeams()
+    this.linkTies()
+    this.linkSlurs()
     this.setT()
   }
 
@@ -103,6 +106,86 @@ export default class Staff {
       dumpGroup()
     })
     return groups
+  }
+
+  linkTies() {
+    const getNextNote = (c, d) => {
+      let ndt
+      do {
+        let ncell = this.cells[c]
+        d++; ndt = ncell.data[d]
+        if (!ndt) {
+          c++; d = 0; ncell = this.cells[c]
+          if (!ncell) break
+          ndt = ncell.data[d]
+        }
+        if (ndt) {
+          if (ndt.name === 'note') return { ndt, ncell }
+          if (ndt.name === 'rest') break
+        }
+      } while (ndt)
+      return {}
+    }
+
+    this.cells.forEach((cell, c) => {
+      cell.data.forEach((dt, d) => {
+        if (!dt.tie) return
+        if (dt.name === 'chord') return   // TODO
+        const { type } = dt.tie
+        if (type === 'begin' || type === 'continue') {
+          let { ndt, ncell } = getNextNote(c, d)
+          if (ndt) {
+            if (ndt.pitch.midiNumber !== dt.pitch.midiNumber) return
+            ndt.tie = new Tie({
+              type: ndt.tie ? 'continue' : 'end',
+              cell: ncell
+            })
+            dt.tie.cell = cell
+            dt.tie.nextNote = ndt
+            dt.tie.next = ndt.tie
+            ndt.tie.prevNote = dt
+            ndt.tie.prev = dt.tie
+          }
+        }
+      })
+    })
+  }
+
+  linkSlurs() {
+    const makeNextData = (c, d) => {
+      return () => {
+        let ncell, ndt
+        while (!ndt) {
+          ncell = this.cells[c]; d++; ndt = ncell.data[d]
+          if (!ndt) {
+            c++; d = 0; ncell = this.cells[c]
+            if (!ncell) break
+            ndt = ncell.data[d]
+          }
+        }
+        return { ncell, ndt }
+      }
+    }
+
+    this.cells.forEach((cell, c) => {
+      cell.data.forEach((dt, d) => {
+        if (!dt.beginSlurs) return
+        const nextData = makeNextData(c, d)
+        let { ncell, ndt } = nextData()
+        while (ndt) {
+          if (ndt.endSlurs) {
+            dt.beginSlurs[0].cell = cell
+            dt.beginSlurs[0].nextNote = ndt
+            dt.beginSlurs[0].next = ndt.endSlurs[0]
+            ndt.endSlurs[0].cell = ncell
+            ndt.endSlurs[0].prevNote = dt
+            ndt.endSlurs[0].prev = dt.beginSlurs[0]
+            break
+          }
+          let n = nextData(); ndt = n.ndt; ncell = n.ncell
+        }
+      })
+    })
   }
 
   setT() {

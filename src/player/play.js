@@ -78,9 +78,10 @@ const playNote = (note, context) => {
 const playChord = (chord, context) => {
   const dur = getDur(chord)
   tos.push(setTimeout(() => {
-    console.log(`play: ${chord}`)
+    // console.log(`play: ${chord}`)
+    chord.onplay()
     chord.pitches.forEach(pitch => {
-      oscPlay(0, pitch.frequency, dur, () =>console.log('stop'), context)
+      oscPlay(0, pitch.frequency, dur, () => chord.onstop(), context)
     })
   }, chord.t * 1000))
 }

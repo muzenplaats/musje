@@ -16,6 +16,7 @@ export default class CellLayout extends AbstractLayout {
     super()
     this.name = 'cell-layout'
     this.cell = cell
+    cell.layout = this  // used by tie
     this.style = style
     this.dataLayout = new DataLayout(cell.data, style)
 
@@ -27,6 +28,7 @@ export default class CellLayout extends AbstractLayout {
     // Tmp
     this.width = this.minWidth
     this.height = Math.max(this.dataLayout.height, this.rightBarLayout.height)
+    this.dy = this.height
   }
 
   addShownLeftBar() {
@@ -59,23 +61,23 @@ export default class CellLayout extends AbstractLayout {
 
   set position(pos) {
     super.position = pos
-    let { x, x2, y2 } = this
+    let { x, x2, by } = this
     const { paddingLeft, paddingRight } = this.style.cell
     const { shownLeftBar, shownRightBar } = this.cell
     if (shownLeftBar) {
-      this.shownLeftBarLayout.position = { x, y2 }
+      this.shownLeftBarLayout.position = { x, by }
       x += this.shownLeftBarLayout.width + paddingLeft
-      this.dataLayout.position = { x, y2 }
+      this.dataLayout.position = { x, by }
     }
 
     if (shownRightBar) {
-      this.shownRightBarLayout.position = { x2, y2 }
+      this.shownRightBarLayout.position = { x2, by }
       x2 = this.shownRightBarLayout.x - paddingRight
-      this.dataLayout.position = { x2, y2 }
+      this.dataLayout.position = { x2, by }
     } else {
-      this.rightBarLayout.position = { cx: x2, y2 }
+      this.rightBarLayout.position = { cx: x2, by }
       x2 = this.rightBarLayout.x - paddingRight
-      this.dataLayout.position = { x2, y2 }
+      this.dataLayout.position = { x2, by }
     }
   }
 
@@ -131,14 +133,15 @@ class DataLayout extends AbstractLayout {
   setHeight() {
     this.height = max(this.layouts.map(layout => layout.height))
     this.height = max([0, this.height])
+    this.dy = this.height
   }
 
   set position(pos) {
     super.position = pos
     const { dataSep } = this.style.cell
-    let { x, y2 } = this
+    let { x, by } = this
     this.layouts.forEach(layout => {
-      layout.position = { x, y2 }
+      layout.position = { x, by }
       x = layout.x2 + dataSep
     })
   }

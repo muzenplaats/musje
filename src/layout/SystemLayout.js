@@ -29,19 +29,29 @@ export default class SystemLayout extends AbstractLayout {
   setHeight() {
     if (!this.measuresLayouts.length) { this.height = 0; return }
 
-    this.stavesHeights = range(this.measuresLayouts[0].cellsLayouts.length)
-                        .map(() => 0)
-    this.measuresLayouts.forEach(measureLayout => {
-      measureLayout.cellsLayouts.forEach((cellLayout, c) => {
-        this.stavesHeights[c] = Math.max(this.stavesHeights[c],
-                                         cellLayout.height)
-      })
-    })
-    this.height = sum(this.stavesHeights) +
-                  this.style.system.stavesSep * (this.stavesHeights.length - 1)
+    // this.stavesHeights = range(this.measuresLayouts[0].cellsLayouts.length)
+    //                     .map(() => 0)
+    // this.stavesDys = this.stavesHeights.slice()
+    // this.stavesDy2s = this.stavesHeights.slice()
+
+    const arr0 = range(this.measuresLayouts[0].cellsLayouts.length).map(() => 0)
+    this.staves = { heights: arr0, dys: arr0.slice(), dy2s: arr0.slice() }
 
     this.measuresLayouts.forEach(measureLayout => {
-      measureLayout.setHeight(this.height, this.stavesHeights)
+      measureLayout.cellsLayouts.forEach((cellLayout, c) => {
+        this.staves.dys[c] = Math.max(this.staves.dys[c], cellLayout.dy)
+        this.staves.dy2s[c] = Math.max(this.staves.dy2s[c], cellLayout.dy2)
+        this.staves.heights[c] = this.staves.dys[c] + this.staves.dy2s[c]
+      })
+    })
+
+    this.height = sum(this.staves.heights) +
+                  this.style.system.stavesSep * (this.staves.heights.length - 1)
+
+// console.log('system-layout', this.height, this.stavesDys, this.stavesDy2s, this.stavesHeights)
+
+    this.measuresLayouts.forEach(measureLayout => {
+      measureLayout.setHeight(this.height, this.staves)
     })
   }
 

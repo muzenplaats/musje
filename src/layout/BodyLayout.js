@@ -11,6 +11,7 @@ export default class BodyLayout extends AbstractLayout {
     this.style = style
     this.setWidth()
     this.makeSystemsLayouts()
+    this.markCurvesSys()
     this.setHeight()
   }
 
@@ -58,6 +59,21 @@ export default class BodyLayout extends AbstractLayout {
       systemLayout.width = this.width
       this.systemsLayouts.push(systemLayout)
       begin = end
+    })
+  }
+
+  markCurvesSys() {
+    this.systemsLayouts.forEach((systemLayout, s) => {
+      systemLayout.measures.forEach(measure => {
+        measure.cells.forEach(cell => {
+          cell.data.forEach(dt => {
+            const { tie, beginSlurs, endSlurs } = dt
+            if (tie) tie.sys = s
+            if (beginSlurs) beginSlurs.forEach(slur => { slur.sys = s })
+            if (endSlurs) endSlurs.forEach(slur => { slur.sys = s })
+          })
+        })
+      })
     })
   }
 

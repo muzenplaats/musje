@@ -1,6 +1,7 @@
 import AbstractLayout from './AbstractLayout'
 import PitchLayout from './PitchLayout'
 import DurationLayout from './DurationLayout'
+import tieLayout from './tieLayout'
 
 export default class NoteLayout extends AbstractLayout {
   constructor(note, style) {
@@ -11,6 +12,7 @@ export default class NoteLayout extends AbstractLayout {
     this.pitchLayout = new PitchLayout(note.pitch, style)
     this.durationLayout = new DurationLayout(note.duration, style)
     this.setSize(note.duration, this.pitchLayout)
+    if (note.tie) this.tieLayout = new tieLayout(note.tie, style)
   }
 
   setSize(duration, pl) {
@@ -22,6 +24,7 @@ export default class NoteLayout extends AbstractLayout {
     } else {
       this.setTypeGt4Size(dots, pl)
     }
+    this.dy = this.height
   }
 
   setTypeLt4Size(pl) {
@@ -70,13 +73,14 @@ export default class NoteLayout extends AbstractLayout {
         type  >  4 ? { x: stepLayout.x, y2 } :
      /* type  <  4 */{ x2, cy: stepLayout.cy }
 
-    // const { tie, beginSlurs, endSlurs } = this
-    // if (tie || beginSlurs || endSlurs) {
-    //   const { cx: x, y } = this.pitch.stepPosition
-    //   if (tie) tie.position = { x, y }
-    //   if (beginSlurs) beginSlurs.forEach(slur => { slur.position = { x, y } })
-    //   if (endSlurs) endSlurs.forEach(slur => { slur.position = { x, y } })
-    // }
+    const { tie, beginSlurs, endSlurs } = this.note
+    if (tie || beginSlurs || endSlurs) {
+      const { cx: x, y } = this.pitchLayout.stepLayout
+      if (tie) this.tieLayout.position = { x, y }
+
+      // if (beginSlurs) beginSlurs.forEach(slur => { slur.position = { x, y } })
+      // if (endSlurs) endSlurs.forEach(slur => { slur.position = { x, y } })
+    }
   }
 
   toJSON() {

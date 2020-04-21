@@ -22,6 +22,7 @@ export default function appElement() {
         let score
         try {
           score = new Score(this.scoreStr); this.error = ''
+          // console.log('score', score)
         } catch (e) {
           score = new Score(); this.error = e //.stack
         }
@@ -62,7 +63,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/007.musje', txt => { data.scoreStr = txt })
+  loadText('scores/004.musje', txt => { data.scoreStr = txt })
 
   return main
 }

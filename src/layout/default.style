@@ -1,5 +1,5 @@
 base {
-  size: 20px
+  size: 18px
 }
 
 title-font {
@@ -62,7 +62,7 @@ head {
 }
 
 body {
-  systems-sep: 60%
+  systems-sep: 100%
 }
 
 system {

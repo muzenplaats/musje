@@ -1,6 +1,11 @@
 import { makeToJSON } from '../utils/helpers'
 
 export default class AbstractLayout {
+  set x1(n) { this.x = n }
+  get x1() { return this.x }
+  set y1(n) { this.y = n }
+  get y1() { return this.y }
+
   set x2(n) { this.x = n - this.width }
   get x2() { return this.x + this.width }
   set y2(n) { this.y = n - this.height }
@@ -10,6 +15,11 @@ export default class AbstractLayout {
   get cx() { return this.x + this.width / 2 }
   set cy(n) { this.y = n - this.height / 2 }
   get cy() { return this.y + this.height / 2 }
+
+  set dx2(n) { this.dx = this.width - n }
+  get dx2() { return this.width - this.dx }
+  set dy2(n) { this.dy = this.height - n }
+  get dy2() { return this.height - this.dy }
 
   set bx(n) { this.x = n - this.dx }
   get bx() { return this.x + this.dx }

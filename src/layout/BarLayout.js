@@ -31,7 +31,7 @@ export default class BarLayout extends AbstractLayout {
       case ':|:':
         size = { width: 2 * lhd() - heavyWidth, height }; break
     }
-    Object.assign(this, size)
+    Object.assign(this, size, { dy: size.height })
   }
 
   set position(pos) {

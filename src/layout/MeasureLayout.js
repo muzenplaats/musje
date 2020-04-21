@@ -15,14 +15,15 @@ export default class MeasureLayout extends AbstractLayout {
   }
 
   // SetHeight by SystemLayout
-  setHeight(height, stavesHeights) {
+  setHeight(height, staves) {
     this.height = height
-    this.stavesHeights = stavesHeights
+    this.staves = staves
   }
 
   set position(pos) {
     super.position = pos
     let { x, y } = this
+    const { stavesSep } = this.style.system
 
     this.cellsLayouts.forEach((layout, c) => {
       if (this.atSysBegin) {
@@ -30,8 +31,10 @@ export default class MeasureLayout extends AbstractLayout {
       } else if (this.atSysEnd) {
         layout.addShownRightBar()
       }
-      layout.position = { x, y }
-      y += this.stavesHeights[c] + this.style.system.stavesSep
+      const staffHeight = this.staves.heights[c]
+      const staffDy = this.staves.dys[c]
+      layout.position = { x, y2: y + staffDy }
+      y += staffHeight + stavesSep
     })
   }
 

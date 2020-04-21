@@ -20,6 +20,7 @@ export default class TimeLayout extends AbstractLayout {
     const { time, timeFont } = this.style
     const lineH = this.lineLayout.height
     this.height = timeFont.height * 2 + lineH + time.lineNumberSep * 2
+    this.dy = this.height
   }
 
   set position(pos) {
