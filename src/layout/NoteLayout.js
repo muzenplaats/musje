@@ -1,7 +1,8 @@
 import AbstractLayout from './AbstractLayout'
 import PitchLayout from './PitchLayout'
 import DurationLayout from './DurationLayout'
-import tieLayout from './tieLayout'
+import TieLayout from './TieLayout'
+import SlurLayout from './SlurLayout'
 
 export default class NoteLayout extends AbstractLayout {
   constructor(note, style) {
@@ -12,7 +13,16 @@ export default class NoteLayout extends AbstractLayout {
     this.pitchLayout = new PitchLayout(note.pitch, style)
     this.durationLayout = new DurationLayout(note.duration, style)
     this.setSize(note.duration, this.pitchLayout)
-    if (note.tie) this.tieLayout = new tieLayout(note.tie, style)
+
+    const { tie, beginSlurs, endSlurs } = note
+    if (tie) this.tieLayout = new TieLayout(tie, style)
+    if (beginSlurs) {
+      this.beginSlursLayouts =
+                           beginSlurs.map(slur => new SlurLayout(slur, style))
+    }
+    if (endSlurs) {
+      this.endSlursLayouts = endSlurs.map(slur => new SlurLayout(slur, style))
+    }
   }
 
   setSize(duration, pl) {
@@ -77,9 +87,12 @@ export default class NoteLayout extends AbstractLayout {
     if (tie || beginSlurs || endSlurs) {
       const { cx: x, y } = this.pitchLayout.stepLayout
       if (tie) this.tieLayout.position = { x, y }
-
-      // if (beginSlurs) beginSlurs.forEach(slur => { slur.position = { x, y } })
-      // if (endSlurs) endSlurs.forEach(slur => { slur.position = { x, y } })
+      if (beginSlurs) {
+        this.beginSlursLayouts.forEach(layout => { layout.position = { x, y } })
+      }
+      if (endSlurs) {
+        this.endSlursLayouts.forEach(layout => { layout.position = { x, y } })
+      }
     }
   }
 

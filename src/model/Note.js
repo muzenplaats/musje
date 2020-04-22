@@ -43,12 +43,16 @@ export default class Note {
     this.pitch.onplay()
     this.duration.onplay()
     if (this.tie) this.tie.onplay()
+    if (this.beginSlurs) this.beginSlurs.forEach(slur => slur.onplay())
+    if (this.endSlurs) this.endSlurs.forEach(slur => slur.onplay())
   }
 
   onstop() {
     this.pitch.onstop()
     this.duration.onstop()
     if (this.tie) this.tie.onstop()
+    if (this.beginSlurs) this.beginSlurs.forEach(slur => slur.onstop())
+    if (this.endSlurs) this.endSlurs.forEach(slur => slur.onstop())
   }
 
   toString() {

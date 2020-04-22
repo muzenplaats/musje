@@ -18,10 +18,6 @@ export default class Tie {
     lexer.token('~', () => { this.type = 'begin' })
   }
 
-  get showPrev() {
-    return this.prev && this.prev.sys !== this.sys
-  }
-
   get onplay() { return this._onplay || (() => {}) }
   set onplay(newf) {
     const oldf = this.onplay

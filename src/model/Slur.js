@@ -17,6 +17,17 @@ export default class Slur {
     lexer.token('paran', lexeme => { this.value = lexeme })
   }
 
+  get onplay() { return this._onplay || (() => {}) }
+  set onplay(newf) {
+    const oldf = this.onplay
+    this._onplay = () => { oldf(); newf() }
+  }
+  get onstop() { return this._onstop || (() => {}) }
+  set onstop(newf) {
+    const oldf = this.onstop
+    this._onstop = () => { oldf(); newf() }
+  }
+
   toString() { return this.value }
   toJSON = makeToJSON('value')
 }

@@ -64,13 +64,22 @@ export default class BodyLayout extends AbstractLayout {
 
   markCurvesSys() {
     this.systemsLayouts.forEach((systemLayout, s) => {
-      systemLayout.measures.forEach(measure => {
-        measure.cells.forEach(cell => {
-          cell.data.forEach(dt => {
-            const { tie, beginSlurs, endSlurs } = dt
-            if (tie) tie.sys = s
-            if (beginSlurs) beginSlurs.forEach(slur => { slur.sys = s })
-            if (endSlurs) endSlurs.forEach(slur => { slur.sys = s })
+      systemLayout.measuresLayouts.forEach(measureLayout => {
+        measureLayout.cellsLayouts.forEach((cellLayout, c) => {
+          const assignSys = layout => {
+            layout.systemLayout = systemLayout
+            layout.sys = s
+            layout.c = c
+          }
+          cellLayout.dataLayout.layouts.forEach(layout => {
+            const { tieLayout, beginSlursLayouts, endSlursLayouts } = layout
+            if (tieLayout) assignSys(tieLayout)
+            if (beginSlursLayouts) {
+              beginSlursLayouts.forEach(layout => assignSys(layout))
+            }
+            if (endSlursLayouts) {
+              endSlursLayouts.forEach(layout => assignSys(layout))
+            }
           })
         })
       })

@@ -4,10 +4,12 @@ import pathD from '../math/pathD'
 
 export default function curveElement(curveLayout) {
   const { tie, slur, lift, strokeWidth } = curveLayout
-  // const { x1, y1, x2, y2 } = curveLayout.endPoints
   let endPoints
   if (tie) {
-    endPoints = tie.showPrev ? curveLayout.prevEndPoints : curveLayout.endPoints
+    endPoints = curveLayout.showPrev ? curveLayout.prevEndPoints :
+                                       curveLayout.endPoints
+  } else if (slur) {
+    endPoints = slur.value === '(' ? curveLayout.endPoints : curveLayout.prevEndPoints
   }
   const { x1, y1, x2, y2 } = endPoints
 

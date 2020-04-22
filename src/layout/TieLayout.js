@@ -12,13 +12,14 @@ export default class TieLayout extends AbstractLayout {
     this.strokeWidth = strokeWidth
   }
 
-  set position(pos) {
-    super.position = pos
+  get showPrev() {
+    const { prev } = this.tie
+    return prev && prev.layout.sys !== this.sys
   }
 
   get endPoints() {
     const { x1, y1 } = this
-    const { next, sys } = this.tie
+    const { next } = this.tie
     let x2, y2
 
     // Incorrect tie
@@ -27,7 +28,7 @@ export default class TieLayout extends AbstractLayout {
       y2 = y1 - 20
 
     // Tie to the same system
-    } else if (sys === next.sys) {
+    } else if (this.sys === next.layout.sys) {
       x2 = next.layout.x1
       y2 = next.layout.y1
 

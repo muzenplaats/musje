@@ -44,7 +44,7 @@ export default function appElement() {
 
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
-        style: 'width: 100%; height: 200px',
+        style: 'width: 100%; height: 100px',
         value: data.$scoreStr
       }),
       el('button', { click: () => player.play(data.score) }, '>'),
@@ -63,7 +63,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/004.musje', txt => { data.scoreStr = txt })
+  loadText('scores/010.musje', txt => { data.scoreStr = txt })
 
   return main
 }
