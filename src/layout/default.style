@@ -17,7 +17,7 @@ subtitle-font {
 }
 creator-font {
   family: Times New Roman
-  size: 110%
+  size: 105%
   width-ratio: 0.45
   height-ratio: 0.9
   dy-ratio: 0.8
@@ -56,9 +56,9 @@ score {
 }
 
 head {
-  title-subtitle-sep: 90%
-  title-creator-sep: 95%
-  creators-sep: 50%
+  title-subtitle-sep: 70%
+  title-creator-sep: 75%
+  creators-sep: 30%
 }
 
 body {
@@ -123,4 +123,14 @@ durationLE2 {
   line-dot-sep: 40%
   dot-size: 12%
   dots-sep: 40%
+}
+
+tie {
+  lift: 70%
+  stroke-width: 9%
+}
+
+slur {
+  lift: 70%
+  stroke-width: 9%
 }

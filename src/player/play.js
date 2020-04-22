@@ -1,3 +1,5 @@
+import { sum } from '../utils/helpers'
+
 const tos = []
 
 export function play(obj) {
@@ -34,6 +36,17 @@ const oscPlay = (t, freq, dur, onended, context) => {
   if (onended) { osc.onended = onended }
 }
 
+const getTiedNotes = note => {
+  const { tie } = note
+  const notes = [note]
+  let nnote = tie.nextNote
+  while (nnote) {
+    notes.push(nnote)
+    if (nnote.tie) nnote = nnote.tie.nextNote
+  }
+  return notes
+}
+
 const getDur = dt => dt.duration.seconds
 
 const playScore = (score, context) => {
@@ -67,11 +80,22 @@ const playCell = (cell, context) => {
 
 const playNote = (note, context) => {
   const { pitch, duration } = note
-  const dur = getDur(note)
   tos.push(setTimeout(() => {
     // console.log(`play: ${note}`, pitch.frequency)
-    note.onplay()
-    oscPlay(0, pitch.frequency, dur, () => note.onstop(), context)
+    const { tie } = note
+    if (tie) {
+      if (tie.type === 'begin') {
+        const notes = getTiedNotes(note)
+        notes.forEach(note => note.onplay())
+        const dur = sum(notes.map(note => getDur(note)))
+        const stopHandler = () => notes.forEach(note => note.onstop())
+        oscPlay(0, pitch.frequency, dur, stopHandler, context)
+      }
+    } else {
+      note.onplay()
+      const dur = getDur(note)
+      oscPlay(0, pitch.frequency, dur, () => note.onstop(), context)
+    }
   }, note.t * 1000))
 }
 

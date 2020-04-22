@@ -3,8 +3,11 @@ class PathD {
     this.data = ''
   }
   clear() { this.data = ''; return this }
-  moveTo(x, y) { this.data += `M${x},${y}`; return this }
-  lineTo(x, y) { this.data += `L${x},${y}`; return this }
+  moveTo(x, y) { this.data += `M${x} ${y}`; return this }
+  lineTo(x, y) { this.data += `L${x} ${y}`; return this }
+  curveTo(x1, y1, x2, y2, x, y) {
+    this.data += `C${x1} ${y1},${x2} ${y2},${x}, ${y}`; return this
+  }
 
   lines(data) {
     this.clear()
@@ -16,6 +19,8 @@ class PathD {
     })
     return this.data
   }
+
+  toString() { return this.data }
 }
 
 export default new PathD()

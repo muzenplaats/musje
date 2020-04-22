@@ -7,10 +7,9 @@ export default class TieLayout extends AbstractLayout {
     this.tie = tie
     tie.layout = this
     this.style = style
-  }
-
-  setPosition(x1, y1, x2, y2) {
-    Object.assign(this, { width: x2 - x1, height: y2 - y1 }, { x1, y1 })
+    const { lift, strokeWidth } = style.tie
+    this.lift = lift
+    this.strokeWidth = strokeWidth
   }
 
   set position(pos) {
@@ -34,7 +33,7 @@ export default class TieLayout extends AbstractLayout {
 
     // Tie to next system
     } else {
-      const clo = this.cell.layout
+      const clo = this.tie.cell.layout
       const rightBarLayout = clo.shownRightBarLayout || clo.rightBarLayout
       x2 = rightBarLayout.x
       y2 = rightBarLayout.y
@@ -48,7 +47,7 @@ export default class TieLayout extends AbstractLayout {
   // Tie to previous system
   get prevEndPoints() {
     const { x: x1, y: y1 } = this
-    const { x: x2, y: y2 } = this.cell.layout.shownLeftBarLayout
+    const { x: x2, y: y2 } = this.tie.cell.layout.shownLeftBarLayout
     return { x1, y1, x2, y2 }
   }
 }
