@@ -148,7 +148,9 @@ const makePart = (el, part) => {
       measureCells.forEach(cell => {
         setCellAccidentals(cell)
         const ldata = lastItem(cell.data)
-        if (!ldata || ldata.name !== 'bar') cell.data.push({ name: 'bar', value: '|' })
+        if (!ldata || ldata.name !== 'bar') {
+          cell.data.push({ name: 'bar', value: '|' })
+        }
       })
     }
   })
@@ -258,7 +260,10 @@ const makeNote = el => {
       tuplet: gcel => note.tuplet = { type: gcel.getAttr('type') }
     }),
     tie: cel => { if (cel.getAttr('type') === 'start') note.duration.tie = true },
-    lyric: cel => { note.lyric = makeLyric(cel) },
+    lyric: cel => {
+      note.lyrics = note.lyrics || []
+      note.lyrics.push(makeLyric(cel))
+    },
     staff: cel => { note.staff = cel.content - 1 }
   })
   return note

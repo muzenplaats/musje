@@ -21,26 +21,24 @@ export default function fromMxlElement() {
   const data = el.setData({
     score: {
       get() {
+        // console.log('get fromMxl')
+        return Score.fromMxl(mxlStr)
         let score
         try {
-          score = Score.fromMxl(mxlStr)
-          this.error = ''
+          score = Score.fromMxl(mxlStr); this.error = ''
         } catch (e) {
-          score = new Score()
-          this.error = e
+          score = new Score(); this.error = e
         }
         return score
       }
     },
     scoreStr: { get() { return '' + this.score } },
-    scoreLayout: {
-      get() { return new ScoreLayout(this.score, style) }
-    },
+    // scoreLayout: { get() { return new ScoreLayout(this.score, style) } },
     info: { get() { return this.scoreStr } },
     error: '',
-    scoreElement: {
-      el() { return el.create('div'); return scoreElement(this.scoreLayout) }
-    },
+    // scoreElement: {
+    //   el() { return el.create('div'); return scoreElement(this.scoreLayout) }
+    // },
     // scoreJsonElement: { el() { return jsonElement('score', this.score) } },
     // scoreLayoutJsonElement: {
     //   el() { return jsonElement('scoreLayout', this.scoreLayout) }

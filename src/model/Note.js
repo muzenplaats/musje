@@ -14,14 +14,15 @@ export default class Note {
     } else if (typeof note === 'string') {
       this.parse(new Lexer(note))
     } else {
-      this.pitch = new Pitch(note.pitch, style)
-      this.duration = new Duration(note.duration, style)
-      this.articulations = note.articulations
-      this.tie = note.tie
-      this.beginSlurs = note.beginSlurs
-      this.endSlurs = note.endSlurs
-      this.tuplet = note.tuplet
-      this.lyric = note.lyric
+      const { pitch, duration, articulations, tie, beginSlurs, endSlurs, tuplet, lyrics } = note
+      this.pitch = new Pitch(pitch)
+      this.duration = new Duration(duration)
+      if (articulations) this.articulations = articulations
+      if (tie) this.tie = new Tie(tie)
+      if (beginSlurs) this.beginSlurs = beginSlurs.map(slur => new Slur(slur))
+      if (endSlurs) this.endSlurs = endSlurs.map(slur => new Slur(slur))
+      if (tuplet) this.tuplet = tuplet
+      if (lyrics) this.lyrics = lyrics.map(lyric => new Lyric(lyric))
     }
   }
 

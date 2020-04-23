@@ -21,7 +21,16 @@ export default class Direction {
     lexer.token('/\\', lexeme => {
       this.placement = lexeme === '/' ? 'above' : 'below'
     })
-    lexer.token('words', lexeme => { this.words = lexeme.trim() })
+    if (lexer.is('wedge')) {
+      lexer.token('wedge')
+      lexer.token('(')
+      lexer.token('words', lexeme => { this.wedge = lexeme.trim() })
+      lexer.token(')')
+    } else if (lexer.is('dynamics')) {
+      lexer.token('dynamics', lexeme => { this.dynamics = lexeme })
+    } else if (lexer.is('words')) {
+      lexer.token('words', lexeme => { this.words = lexeme.trim() })
+    }
   }
 
   toString() {
@@ -30,7 +39,7 @@ export default class Direction {
     strs.push(placement === 'above' ? '/' : '\\')
     if (words) strs.push(words)
     if (wedge) strs.push(`wedge(${wedge})`)
-    if (dynamics) strs.push(`dynamics(${dynamics})`)
+    if (dynamics) strs.push(dynamics)
     return strs.join('')
   }
 

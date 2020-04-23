@@ -25,6 +25,8 @@ const Lexer = makeLexerClass({
   letter: `[${letter}]`,
   word: `[${letter}]+`,
   words: `[${letter} ]+`,
+  wedge: 'wedge',
+  dynamics: '(p{1,6}|f{1,6}|m[pf]|sfp{0,2}|fp|rfz?|sf{1,2}z|fz)',
   paran: '[\\(\\)]',
   title: 'title:',
   subtitle: 'subtitle:',

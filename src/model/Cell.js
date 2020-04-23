@@ -11,7 +11,6 @@ import Clef from './Clef'
 import Key from './Key'
 
 const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
-const makeBar = value => new Bar(value)
 
 export default class Cell {
   constructor(cell = { data: [] }) {
@@ -58,6 +57,8 @@ export default class Cell {
       } else if (lexer.is('bar')) {
         this.data.push(new Bar(lexer))
         if (this.data.length > 1) { lexer.skipWhite(); break }
+      } else if (lexer.is('==') || lexer.is('--')) {
+        break
       } else {
         lexer.error('music data in cell')
       }
@@ -85,12 +86,12 @@ export default class Cell {
     const { data } = this
     if (data.length) {
       this.rightBar = lastItem(data).name === 'bar' ?
-                     data.pop() : makeBar()
+                      data.pop() : new Bar('|')
       this.leftBar = data.length === 0 || data[0].name !== 'bar' ?
-                     makeBar() : data.shift()
+                     new Bar('|') : data.shift()
     } else {
-      this.leftBar = makeBar()
-      this.rightBar = makeBar()
+      this.leftBar = new Bar('|')
+      this.rightBar = new Bar('|')
     }
   }
 

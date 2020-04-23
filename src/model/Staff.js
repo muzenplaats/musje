@@ -207,13 +207,18 @@ export default class Staff {
 
   toString() {
     const cellsStr = this.cells.join(' ')
-    let lyrics = []
+
+    let lyrics = [[]]
     this.cells.forEach(cell => {
       cell.data.forEach(dt => {
-        if (dt.lyric) lyrics.push(dt.lyric)
+        if (!dt.lyrics) return
+        dt.lyrics.forEach((lyric, i) => {
+          lyrics[i] = lyrics[i] || []
+          lyrics[i].push(lyric)
+        })
       })
     })
-    const lyricsStr = lyrics.join(' ')
+    const lyricsStr = lyrics[0].join(' ')   // tmp
     const strs = [cellsStr]
     if (lyricsStr) strs.push('lyrics: ' + lyricsStr)
     return strs.join('\n\n')
