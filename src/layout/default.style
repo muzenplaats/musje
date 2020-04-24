@@ -45,6 +45,25 @@ accidental-font {
   dy-ratio: 0.39
   lift: 25%
 }
+direction-font {
+  family: Times New Roman
+  size: 70%
+  height-ratio: 0.9
+  dy-ratio: 0.75
+}
+dynamics-font {
+  family: Cadence
+  size: 100%
+  width-ratio: 0.45
+  height-ratio: 0.52
+  dy-ratio: 0.51
+}
+lyrics-font {
+  family: Times New Roman
+  size: 70%
+  height-ratio: 0.9
+  dy-ratio: 0.75
+}
 
 score {
   width: 450px
@@ -62,17 +81,17 @@ head {
 }
 
 body {
-  systems-sep: 100%
+  systems-sep: 180%
 }
 
 system {
-  staves-sep: 30%
+  staves-sep: 150%
 }
 
 cell {
   padding-left: 50%
   padding-right: 50%
-  data-sep: 25%
+  data-sep: 95%
 }
 
 bar {
@@ -99,6 +118,10 @@ note {
 
 chord {
   pitches-sep: 10%
+}
+
+direction {
+  tmp: 0
 }
 
 pitch {

@@ -3,6 +3,7 @@ import { makeToJSON } from '../utils/helpers'
 import { Q } from './constants'
 import Cell from './Cell'
 import Tie from './Tie'
+import Lyrics from './Lyrics'
 
 const timeToDurQ = time => {
   const { beats, beatType } = time
@@ -38,6 +39,18 @@ export default class Staff {
     while (lexer.is('cell')) {
       this.cells.push(new Cell(lexer))
       lexer.skipWhite()
+    }
+    if (lexer.is('lyrics')) {
+      const lyrics = new Lyrics(lexer)
+      this.cells.forEach(cell => {
+        cell.data.forEach(dt => {
+          if (dt.name === 'note' || dt.name === 'chord') {
+            dt.lyrics = dt.lyrics || []
+            const lyric = lyrics.list.shift()
+            if (lyric) dt.lyrics.push(lyric)
+          }
+        })
+      })
     }
   }
 
@@ -189,7 +202,7 @@ export default class Staff {
   }
 
   setT() {
-    const tempo = 60 / 150
+    const tempo = 60 / 90
     let t = 0, tQ = 0
     this.cells.forEach(cell => {
       cell.data.forEach(dt => {

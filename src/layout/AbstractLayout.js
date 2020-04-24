@@ -30,6 +30,7 @@ export default class AbstractLayout {
 
   get wh() { return { width: this.width, height: this.height }}
   get xy() { return { x: this.x, y: this.y } }
+  get xby() { return { x: this.x, y: this.by } }
   get cxby() { return { x: this.cx, y: this.by }}
   get x2by() { return { x: this.x2, y: this.by }}
   get rect() {

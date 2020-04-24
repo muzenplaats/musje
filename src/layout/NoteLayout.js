@@ -3,6 +3,7 @@ import PitchLayout from './PitchLayout'
 import DurationLayout from './DurationLayout'
 import TieLayout from './TieLayout'
 import SlurLayout from './SlurLayout'
+import TextLayout from './TextLayout'
 
 export default class NoteLayout extends AbstractLayout {
   constructor(note, style) {
@@ -14,7 +15,7 @@ export default class NoteLayout extends AbstractLayout {
     this.durationLayout = new DurationLayout(note.duration, style)
     this.setSize(note.duration, this.pitchLayout)
 
-    const { tie, beginSlurs, endSlurs } = note
+    const { tie, beginSlurs, endSlurs, lyrics } = note
     if (tie) this.tieLayout = new TieLayout(tie, style)
     if (beginSlurs) {
       this.beginSlursLayouts =
@@ -22,6 +23,11 @@ export default class NoteLayout extends AbstractLayout {
     }
     if (endSlurs) {
       this.endSlursLayouts = endSlurs.map(slur => new SlurLayout(slur, style))
+    }
+    if (lyrics) {
+      this.lyricsLayouts = lyrics.map(lyric => {
+        return new TextLayout(lyric.text, style.lyricsFont)
+      })
     }
   }
 
@@ -83,7 +89,7 @@ export default class NoteLayout extends AbstractLayout {
         type  >  4 ? { x: stepLayout.x, y2 } :
      /* type  <  4 */{ x2, cy: stepLayout.cy }
 
-    const { tie, beginSlurs, endSlurs } = this.note
+    const { tie, beginSlurs, endSlurs, lyrics } = this.note
     if (tie || beginSlurs || endSlurs) {
       const { cx: x, y } = this.pitchLayout.stepLayout
       if (tie) this.tieLayout.position = { x, y }
@@ -93,6 +99,14 @@ export default class NoteLayout extends AbstractLayout {
       if (endSlurs) {
         this.endSlursLayouts.forEach(layout => { layout.position = { x, y } })
       }
+    }
+
+    // Tmp
+    if (lyrics) {
+      const { cx } = this.pitchLayout.stepLayout
+      this.lyricsLayouts.forEach(layout => {
+        layout.position = { cx, y2: y2 + 20 }
+      })
     }
   }
 

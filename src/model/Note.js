@@ -4,6 +4,7 @@ import Pitch from './Pitch'
 import Duration from './Duration'
 import Tie from './Tie'
 import Slur from './Slur'
+import Tuplet from './Tuplet'
 import Lyric from './Lyric'
 
 export default class Note {
@@ -28,19 +29,37 @@ export default class Note {
 
   parse(lexer) {
     while (lexer.is('(')) {
-      this.beginSlurs = this.beginSlurs || []
-      this.beginSlurs.push(new Slur(lexer))
+      if (lexer.is('tuplet-begin')) {
+        this.tuplet = new Tuplet(lexer)
+      } else {
+        this.beginSlurs = this.beginSlurs || []
+        this.beginSlurs.push(new Slur(lexer))
+      }
     }
     this.pitch = new Pitch(lexer)
     this.duration = new Duration(lexer)
-    if (lexer.is('~')) this.tie = new Tie(lexer)
+    while (lexer.is('tuplet-end')) {
+      this.tuplet = new Tuplet(lexer)
+    }
     while (lexer.is(')')) {
       this.endSlurs = this.endSlurs || []
       this.endSlurs.push(new Slur(lexer))
     }
+    if (lexer.is('~')) this.tie = new Tie(lexer)
   }
 
-  onplay() {
+  get onplay() { return this._onplay || this.defaultOnplay.bind(this) }
+  set onplay(newf) {
+    const oldf = this.onplay
+    this._onplay = () => { oldf(); newf() }
+  }
+  get onstop() { return this._onstop || this.defaultOnstop.bind(this) }
+  set onstop(newf) {
+    const oldf = this.onstop
+    this._onstop = () => { oldf(); newf() }
+  }
+
+  defaultOnplay() {
     this.pitch.onplay()
     this.duration.onplay()
     if (this.tie) this.tie.onplay()
@@ -48,7 +67,7 @@ export default class Note {
     if (this.endSlurs) this.endSlurs.forEach(slur => slur.onplay())
   }
 
-  onstop() {
+  defaultOnstop() {
     this.pitch.onstop()
     this.duration.onstop()
     if (this.tie) this.tie.onstop()
@@ -60,12 +79,12 @@ export default class Note {
     const strs = []
     const { articulations, beginSlurs, endSlurs, tuplet, duration, tie } = this
     if (beginSlurs) strs.push(beginSlurs.join(''))
-    if (tuplet && tuplet.type === 'start') {
+    if (tuplet && tuplet.type === 'begin') {
       strs.push(`(${duration.modification.actual}:`)
     }
     if (articulations) strs.push('x')
     strs.push(`${this.pitch}${duration}`)
-    if (tuplet && tuplet.type === 'stop') strs.push(':)')
+    if (tuplet && tuplet.type === 'end') strs.push(':)')
     if (endSlurs) strs.push(endSlurs.join(''))
     if (tie) strs.push(this.tie)
     return strs.join('')

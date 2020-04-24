@@ -36,6 +36,7 @@ export default class Cell {
       })
     }
     this.setAlters()
+    this.setModifications()
     this.extractBars()
   }
 
@@ -78,6 +79,21 @@ export default class Cell {
         case 'note': return setAlter(dt.pitch)
         case 'chord': return dt.pitches.forEach(setAlter)
         case 'multipart': return
+      }
+    })
+  }
+
+  setModifications() {
+    let actual, normal
+    this.data.forEach(dt => {
+      const { tuplet, duration } = dt
+      if (tuplet && tuplet.type === 'begin') {
+        actual = tuplet.actual
+        normal = tuplet.normal
+      }
+      if (duration && actual) duration.modification = { actual, normal }
+      if (tuplet && tuplet.type === 'end') {
+        actual = undefined; normal = undefined
       }
     })
   }
