@@ -60,7 +60,7 @@ dynamics-font {
 }
 lyrics-font {
   family: Times New Roman
-  size: 70%
+  size: 90%
   height-ratio: 0.9
   dy-ratio: 0.75
 }
@@ -70,7 +70,7 @@ score {
   margin-left: 10px
   margin-top: 10px
   margin-right: 10px
-  margin-bottom: 10px
+  margin-bottom: 30px
   head-body-sep: 20px
 }
 
@@ -89,9 +89,9 @@ system {
 }
 
 cell {
-  padding-left: 50%
-  padding-right: 50%
-  data-sep: 95%
+  padding-left: 120%
+  padding-right: 120%
+  data-sep: 200%
 }
 
 bar {

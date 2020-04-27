@@ -26,7 +26,10 @@ export default class NoteLayout extends AbstractLayout {
     }
     if (lyrics) {
       this.lyricsLayouts = lyrics.map(lyric => {
-        return new TextLayout(lyric.text, style.lyricsFont)
+        const textLayout = new TextLayout(lyric.text, style.lyricsFont)
+        textLayout.lyric =lyric
+        lyric.layout = textLayout
+        return textLayout
       })
     }
   }

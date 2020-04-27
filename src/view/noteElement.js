@@ -24,12 +24,13 @@ export default function noteElement(noteLayout) {
   const elements = {}
 
   const setColor = color => {
-    const { lyrics } =  elements
+    const { lyrics, hyphens } =  elements
     if (lyrics) lyrics.forEach(element => element.style.fill = color)
+    if (hyphens) hyphens.forEach(element => element.style.fill = color)
   }
 
   // note.onplay = () => setColor('#b5c')
-  note.onplay = () => setColor('blue')
+  note.onplay = () => setColor('orange')
   note.onstop = () => setColor('black')
 
   return el.create('g', [
@@ -47,6 +48,20 @@ export default function noteElement(noteLayout) {
       return el.push(elements, 'lyrics').create('text', {
         ...layout.cxby, style: getStyle({ ...layout, anchor: 'middle' })
       }, layout.text)
-    }) : []
+    }) : [],
+
+    // Hyphen of lyrics
+    lyricsLayouts ? flatten(lyricsLayouts.map(layout => {
+      const { lyric } = layout
+      if (!lyric.next) return []
+      const { x2, by: y } = layout
+      const nlayout = lyric.next.layout
+      if (!nlayout) return
+      const nx = nlayout.x
+      return el.push(elements, 'hyphens').create('text', {
+        x: (x2 + nx) / 2, y,
+        style: getStyle({ ...layout, anchor: 'middle' })
+      }, '-')
+    })) : []
   ])
 }

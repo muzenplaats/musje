@@ -3,7 +3,7 @@ import SLComment from './SLComment'
 import MLComment from './MLComment'
 
 const cjk = '\u2E80-\u2FD5\u3190-\u319f\u3400-\u4DBF\u4E00-\u9FCC\uF900-\uFAAD'
-const letter = `A-Za-z${cjk}`
+const letter = `A-Za-z\u00C0-\u024F${cjk}`
 const pitch = '[#nb]*[1-7][,\']*'
 
 const Lexer = makeLexerClass({
@@ -56,7 +56,8 @@ const Lexer = makeLexerClass({
   dynamics: '(p{1,6}|f{1,6}|m[pf]|sfp{0,2}|fp|rfz?|sf{1,2}z|fz)',
   'tuplet-begin': '\\(\\d+:',
   'tuplet-end': ':\\)',
-  'lyrics': 'lyrics',
+  lyrics: 'lyrics',
+  lyric: `([A-Za-z\u00C0-\u024F,\\.!\']+|[${cjk}])`,
   cell: '(\\(?[#nb]?\\d|<|[\\:\\|]|[\\/\\\\])',
   'part-head': '==',
   'sl-comment': '\\/\\/',

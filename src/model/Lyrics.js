@@ -12,6 +12,11 @@ export default class Lyrics {
     } else {
       this.list = lyrics.list.map(item => new Lyric(item))
     }
+    this.list.forEach((lyric, l) => {
+      if (lyric.syllabic === 'begin' || lyric.syllabic === 'middle') {
+        lyric.next = this.list[l + 1]
+      }
+    })
   }
 
   parse(lexer) {
@@ -19,11 +24,11 @@ export default class Lyrics {
     lexer.token(':')
     lexer.skipWhite()
     this.list = []
-    let lyric, prevLyric
-    while (lexer.is('word')) {
-      lyric = new Lyric(lexer, prevLyric)
+    let lyric, prev
+    while (lexer.is('lyric')) {
+      lyric = new Lyric(lexer, prev)
       this.list.push(lyric)
-      prevLyric = lyric
+      prev = lyric
       lexer.skipWhite()
     }
   }

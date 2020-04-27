@@ -18,7 +18,7 @@ export default function appElement() {
     scoreStr: '',
     score: {
       get() {
-        // return new Score(this.scoreStr)
+        return new Score(this.scoreStr)
         let score
         try {
           score = new Score(this.scoreStr); this.error = ''
@@ -63,7 +63,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/011.musje', txt => { data.scoreStr = txt })
+  loadText('scores/007.musje', txt => { data.scoreStr = txt })
 
   return main
 }

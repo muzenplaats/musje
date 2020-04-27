@@ -11,6 +11,21 @@ const timeToDurQ = time => {
   return Q / beatType * 4
 }
 
+const makeNextData = (cells, c, d) => {
+  return () => {
+    let ncell, ndt
+    while (!ndt) {
+      ncell = cells[c]; d++; ndt = ncell.data[d]
+      if (!ndt) {
+        c++; d = 0; ncell = cells[c]
+        if (!ncell) break
+        ndt = ncell.data[d]
+      }
+    }
+    return { ncell, ndt }
+  }
+}
+
 export default class Staff {
   constructor(staff) {
     this.name = 'staff'
@@ -165,25 +180,10 @@ export default class Staff {
   }
 
   linkSlurs() {
-    const makeNextData = (c, d) => {
-      return () => {
-        let ncell, ndt
-        while (!ndt) {
-          ncell = this.cells[c]; d++; ndt = ncell.data[d]
-          if (!ndt) {
-            c++; d = 0; ncell = this.cells[c]
-            if (!ncell) break
-            ndt = ncell.data[d]
-          }
-        }
-        return { ncell, ndt }
-      }
-    }
-
     this.cells.forEach((cell, c) => {
       cell.data.forEach((dt, d) => {
         if (!dt.beginSlurs) return
-        const nextData = makeNextData(c, d)
+        const nextData = makeNextData(this.cells, c, d)
         let { ncell, ndt } = nextData()
         while (ndt) {
           if (ndt.endSlurs) {
