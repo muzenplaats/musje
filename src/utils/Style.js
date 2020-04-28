@@ -31,7 +31,9 @@ export default class Style {
       lexer.token('names', lexeme => {
         names = lexeme.replace(/ +/g, '').split(',').map(hyphenToCamel)
       })
-      names.forEach(aname => { this.rawValue[aname] = {} })
+      names.forEach(aname => {
+        this.rawValue[aname] = this.rawValue[aname] || {}
+      })
       lexer.skipSS()
       lexer.token('{')
       lexer.nextLine()

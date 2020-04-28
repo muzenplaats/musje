@@ -55,7 +55,7 @@ export default class Staff {
       this.cells.push(new Cell(lexer))
       lexer.skipWhite()
     }
-    if (lexer.is('lyrics')) {
+    while (lexer.is('lyrics-head')) {
       const lyrics = new Lyrics(lexer)
       this.cells.forEach(cell => {
         cell.data.forEach(dt => {
@@ -221,19 +221,21 @@ export default class Staff {
   toString() {
     const cellsStr = this.cells.join(' ')
 
-    let lyrics = [[]]
+    let lyricss = [[]]
     this.cells.forEach(cell => {
       cell.data.forEach(dt => {
         if (!dt.lyrics) return
         dt.lyrics.forEach((lyric, i) => {
-          lyrics[i] = lyrics[i] || []
-          lyrics[i].push(lyric)
+          lyricss[i] = lyricss[i] || []
+          lyricss[i].push(lyric)
         })
       })
     })
-    const lyricsStr = lyrics[0].join(' ')   // tmp
+    const lyricsStrs = lyricss.map(lyrics => lyrics.join(' '))
     const strs = [cellsStr]
-    if (lyricsStr) strs.push('lyrics: ' + lyricsStr)
+    lyricsStrs.forEach(lyricsStr => {
+      if (lyricsStr) strs.push('lyrics: ' + lyricsStr)
+    })
     return strs.join('\n\n')
   }
 

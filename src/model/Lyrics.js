@@ -20,8 +20,7 @@ export default class Lyrics {
   }
 
   parse(lexer) {
-    lexer.token('lyrics')
-    lexer.token(':')
+    lexer.token('lyrics-head')
     lexer.skipWhite()
     this.list = []
     let lyric, prev
@@ -30,6 +29,7 @@ export default class Lyrics {
       this.list.push(lyric)
       prev = lyric
       lexer.skipWhite()
+      if (lexer.is('lyrics-head')) break
     }
   }
 

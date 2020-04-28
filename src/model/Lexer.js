@@ -56,7 +56,7 @@ const Lexer = makeLexerClass({
   dynamics: '(p{1,6}|f{1,6}|m[pf]|sfp{0,2}|fp|rfz?|sf{1,2}z|fz)',
   'tuplet-begin': '\\(\\d+:',
   'tuplet-end': ':\\)',
-  lyrics: 'lyrics',
+  'lyrics-head': 'lyrics.*:',
   lyric: `([A-Za-z\u00C0-\u024F,\\.!\']+|[${cjk}])`,
   cell: '(\\(?[#nb]?\\d|<|[\\:\\|]|[\\/\\\\])',
   'part-head': '==',

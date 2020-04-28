@@ -1,32 +1,36 @@
 title: 小星星
 lyricist: 珍·泰勒
+title: Twinkle, Twinkle, Little Star
+composer: French melody "Ah! vous dirai-je, Maman"
+lyricist: Jane Taylor
 // source: https://zh.wikipedia.org/wiki/%E4%B8%80%E9%96%83%E4%B8%80%E9%96%83%E5%B0%8F%E6%98%9F%E6%98%9F
+// source: https://fr.wikipedia.org/wiki/Twinkle,_Twinkle,_Little_Star
 
 2/4 1 1 | 5 5 | 6 6 | 5- | 4 4 | 3 3 | 2 2 | 1- ||
     5 5 | 4 4 | 3 3 | 2- | 5 5 | 4 4 | 3 3 | 2- ||
     1 1 | 5 5 | 6 6 | 5- | 4 4 | 3 3 | 2 2 | 1- |]
-/*
+
 lyrics:
 一閃一閃亮晶晶 滿天都是小星星
 掛在天上放光明 好像許多小眼睛
 一閃一閃亮晶晶 滿天都是小星星
-*/
-/*
+
+
 lyrics:
 Twin-kle, twin-kle, lit-tle star,
 How I won-der what you are!
-Up ab-ove the world so high,
+Up a-bove the world so high,
 Like a dia-mond in the sky.
 Twin-kle, twin-kle, lit-tle star,
 How I won-der what you are!
-*/
+
 
 lyrics:
 Bril-le, bril-le, petite ét-oile
 Comme j'aime-rais savoir qui tu es!
 Si haut au-dessus du mon-de
-Comme un diamant dans le ciel
-Bril-le, bril-le, pet-ite ét-oile
+Comme un dia-mant dans le ciel
+Bril-le, bril-le, petite ét-oile
 Comme j'aime-rais savoir qui tu es!
 
 /*

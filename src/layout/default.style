@@ -4,20 +4,20 @@ base {
 
 title-font {
   family: Times New Roman
-  size: 130%
+  size: 120%
   height-ratio: 0.9
   dy-ratio: 0.75
 }
 subtitle-font {
   family: Times New Roman
-  size: 120%
+  size: 110%
   width-ratio: 0.45
   height-ratio: 0.9
   dy-ratio: 0.8
 }
 creator-font {
   family: Times New Roman
-  size: 105%
+  size: 100%
   width-ratio: 0.45
   height-ratio: 0.9
   dy-ratio: 0.8
@@ -70,7 +70,7 @@ score {
   margin-left: 10px
   margin-top: 10px
   margin-right: 10px
-  margin-bottom: 30px
+  margin-bottom: 80px
   head-body-sep: 20px
 }
 
@@ -81,7 +81,7 @@ head {
 }
 
 body {
-  systems-sep: 180%
+  systems-sep: 500%
 }
 
 system {
@@ -118,6 +118,12 @@ note {
 
 chord {
   pitches-sep: 10%
+}
+
+note, chord {
+  data-lyric-sep: 50%
+  lyrics-v-sep: 50%
+  lyrics-h-sep: 50%
 }
 
 direction {

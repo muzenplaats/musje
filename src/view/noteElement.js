@@ -18,7 +18,7 @@ export default function noteElement(noteLayout) {
   const getStyle = ({ family, size, anchor }) => `
     font-family: ${family}
     font-size: ${size}
-    text-anchor: ${anchor}
+    text-anchor: ${anchor || 'begin'}
   `
 
   const elements = {}
@@ -55,6 +55,11 @@ export default function noteElement(noteLayout) {
       const { lyric } = layout
       if (!lyric.next) return []
       const { x2, by: y } = layout
+      if (lyric.layout.sys !== lyric.next.layout.sys) {
+        return el.push(elements, 'hyphens').create('text', {
+          x: x2 + 2, y, style: getStyle(layout)
+        }, '-')
+      }
       const nlayout = lyric.next.layout
       if (!nlayout) return
       const nx = nlayout.x

@@ -104,11 +104,14 @@ export default class NoteLayout extends AbstractLayout {
       }
     }
 
-    // Tmp
     if (lyrics) {
       const { cx } = this.pitchLayout.stepLayout
+      const { dataLyricSep, lyricsVSep } = this.style.note
+      const { dy, height } = this.style.lyricsFont
+      let by = this.by + dataLyricSep + dy
       this.lyricsLayouts.forEach(layout => {
-        layout.position = { cx, y2: y2 + 20 }
+        layout.position = { cx, by }
+        by += lyricsVSep + height
       })
     }
   }

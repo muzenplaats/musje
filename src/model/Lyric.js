@@ -21,7 +21,6 @@ export default class Lyric {
 
     // syllabic := single | begin | middle | end
     const setHyphened = () => {
-      lexer.token('-')
       switch (this.prev && this.prev.syllabic) {
         case 'begin': // fall through
         case 'middle': this.syllabic = 'middle'; break
@@ -39,9 +38,8 @@ export default class Lyric {
         default: this.syllabic = 'single'
       }
     }
-    if (lexer.is('--')) { setUnhyphened(); return }
-    if (lexer.is('-')) {
-      setHyphened()
+    if (lexer.is('-') && !lexer.is('--')) {
+      setHyphened(); lexer.token('-'); lexer.skipWhite()
     } else {
       setUnhyphened()
     }

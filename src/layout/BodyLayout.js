@@ -12,6 +12,7 @@ export default class BodyLayout extends AbstractLayout {
     this.setWidth()
     this.makeSystemsLayouts()
     this.markCurvesSys()
+    this.markLyricsSys()
     this.setHeight()
   }
 
@@ -80,6 +81,19 @@ export default class BodyLayout extends AbstractLayout {
             if (endSlursLayouts) {
               endSlursLayouts.forEach(layout => assignSys(layout))
             }
+          })
+        })
+      })
+    })
+  }
+
+  markLyricsSys() {
+    this.systemsLayouts.forEach((systemLayout, s) => {
+      systemLayout.measuresLayouts.forEach(measureLayout => {
+        measureLayout.cellsLayouts.forEach(cellLayout => {
+          cellLayout.dataLayout.layouts.forEach(layout => {
+            const { lyricsLayouts } = layout
+            if (lyricsLayouts) lyricsLayouts.forEach(lo => { lo.sys = s })
           })
         })
       })
