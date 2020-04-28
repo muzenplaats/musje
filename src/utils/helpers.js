@@ -3,6 +3,7 @@ const { concat } = []
 export const flatten = arr => concat.apply([], arr)
 export const repeat = (rep, num) => new Array(num + 1).join(rep)
 export const lastItem = arr => arr[arr.length - 1]
+export const min = arr => Math.min.apply(null, arr)
 export const max = arr => Math.max.apply(null, arr)
 export const sum = arr => arr.reduce((a, b) => a + b)
 

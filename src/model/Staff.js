@@ -205,15 +205,20 @@ export default class Staff {
     const tempo = 60 / 90
     let t = 0, tQ = 0
     this.cells.forEach(cell => {
+      let tc = 0, tcQ = 0
       cell.data.forEach(dt => {
         dt.t = t
         dt.tQ = tQ
+        dt.tc = tc
+        dt.tcQ = tcQ
         const { duration } = dt
         if (!duration) return
         const dur = duration.quarters * tempo
         duration.seconds = dur
         t += dur
         tQ += duration.quartersQ
+        tc += dur
+        tcQ += duration.quartersQ
       })
     })
   }

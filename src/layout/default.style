@@ -70,7 +70,7 @@ score {
   margin-left: 10px
   margin-top: 10px
   margin-right: 10px
-  margin-bottom: 80px
+  margin-bottom: 10px
   head-body-sep: 20px
 }
 
@@ -81,17 +81,17 @@ head {
 }
 
 body {
-  systems-sep: 500%
+  systems-sep: 200%
 }
 
 system {
-  staves-sep: 150%
+  staves-sep: 100%
 }
 
 cell {
-  padding-left: 120%
-  padding-right: 120%
-  data-sep: 200%
+  padding-left: 60%
+  padding-right: 60%
+  data-sep: 30%
 }
 
 bar {

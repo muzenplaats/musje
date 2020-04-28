@@ -63,7 +63,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/007.musje', txt => { data.scoreStr = txt })
+  loadText('scores/011.musje', txt => { data.scoreStr = txt })
 
   return main
 }
