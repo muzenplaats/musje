@@ -43,5 +43,6 @@ class ZeroLayout extends AbstractLayout {
   constructor(style) {
     super()
     Object.assign(this, style.restFont)
+    this.dx = this.width / 2
   }
 }

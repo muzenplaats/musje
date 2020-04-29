@@ -32,6 +32,8 @@ export default class PitchLayout extends AbstractLayout {
     this.width = stepW + (accidental ? accW + stepAccidentalSep : 0),
     this.height = octave >= 0 ? Math.max(stepAccH, stepOctH)
                               : stepAccH + stepOctaveSep + octH
+    this.dx2 = this.stepLayout.dx2
+    this.dy = this.height
   }
 
   set position(pos) {
@@ -69,6 +71,7 @@ class StepLayout extends AbstractLayout {
     super()
     this.name = 'step-layout'
     Object.assign(this, style.stepFont)
+    this.dx = this.width / 2
   }
 }
 

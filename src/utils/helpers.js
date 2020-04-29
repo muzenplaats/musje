@@ -31,6 +31,12 @@ export const range = num => {
   return result
 }
 
+export const zeros = num => {
+  const result = []
+  for (let i = 0; i < num; i++) result.push(0)
+  return result
+}
+
 export const arrayToSet = arr => {
   const result = {}
   arr.forEach(name => { result[name] = true })

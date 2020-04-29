@@ -62,6 +62,7 @@ class PitchesLayout extends AbstractLayout {
       height += pitchLayout.height + pitchesSep
     })
     this.width = width
+    this.dx2 = this.layouts[0].dx2
     this.height = height
   }
 

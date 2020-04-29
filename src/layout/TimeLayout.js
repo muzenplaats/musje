@@ -13,6 +13,7 @@ export default class TimeLayout extends AbstractLayout {
     this.lineLayout = new LineLayout(this.beatsLayout,
                                      this.beatTypeLayout, style)
     this.width = this.lineLayout.width
+    this.dx = this.width / 2
     this.setHeight()
   }
 

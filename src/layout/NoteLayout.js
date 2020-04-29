@@ -29,6 +29,7 @@ export default class NoteLayout extends AbstractLayout {
         const textLayout = new TextLayout(lyric.text, style.lyricsFont)
         textLayout.lyric =lyric
         lyric.layout = textLayout
+        textLayout.dx = textLayout.width / 2
         return textLayout
       })
     }
@@ -43,6 +44,7 @@ export default class NoteLayout extends AbstractLayout {
     } else {
       this.setTypeGt4Size(dots, pl)
     }
+    this.dx2 = pl.dx2
     this.dy = this.height
   }
 
@@ -105,12 +107,11 @@ export default class NoteLayout extends AbstractLayout {
     }
 
     if (lyrics) {
-      const { cx } = this.pitchLayout.stepLayout
       const { dataLyricSep, lyricsVSep } = this.style.note
       const { dy, height } = this.style.lyricsFont
       let by = this.by + dataLyricSep + dy
       this.lyricsLayouts.forEach(layout => {
-        layout.position = { cx, by }
+        layout.position = { cx: this.bx, by }
         by += lyricsVSep + height
       })
     }
