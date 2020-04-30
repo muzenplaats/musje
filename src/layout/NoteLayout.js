@@ -44,8 +44,18 @@ export default class NoteLayout extends AbstractLayout {
     } else {
       this.setTypeGt4Size(dots, pl)
     }
-    this.dx2 = pl.dx2
-    this.dy = this.height
+    this.dx = pl.dx
+    const { lyrics } = this.note || this.chord || this.rest
+    if (lyrics) {
+      const { length } = lyrics
+      const { dataLyricSep, lyricsVSep} = this.style.note
+      const dy2 = dataLyricSep + lyricsVSep * (length - 1) +
+                  this.style.lyricsFont.height * length
+      this.height += dy2
+      this.dy2 = dy2
+    } else {
+      this.dy = this.height
+    }
   }
 
   setTypeLt4Size(pl) {
@@ -78,7 +88,7 @@ export default class NoteLayout extends AbstractLayout {
     const { octave } = this.note.pitch
     const { type, dots } = this.note.duration
     const { dotLift } = this.style.durationGE4
-    const { x, y, x2, y2 } = this
+    const { x, y, x2, by } = this
     const { stepLayout, octavesLayout } = this.pitchLayout
     this.pitchLayout.position = { x, y }
 
@@ -90,8 +100,8 @@ export default class NoteLayout extends AbstractLayout {
     }
 
     this.durationLayout.position =
-        type === 4 ? { x2, y2: stepLayout.y2 - dotLift } :
-        type  >  4 ? { x: stepLayout.x, y2 } :
+        type === 4 ? { x2, by: stepLayout.by - dotLift } :
+        type  >  4 ? { x: stepLayout.x, by } :
      /* type  <  4 */{ x2, cy: stepLayout.cy }
 
     const { tie, beginSlurs, endSlurs, lyrics } = this.note

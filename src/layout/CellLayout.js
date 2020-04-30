@@ -31,8 +31,9 @@ export default class CellLayout extends AbstractLayout {
 
     // Tmp
     // this.width = this.minWidth
-    this.height = Math.max(this.dataLayout.height, this.rightBarLayout.height)
-    this.dy = this.height
+    this.height = Math.max(this.dataLayout.dy, this.rightBarLayout.height) +
+                  this.dataLayout.dy2
+    this.dy2 = this.dataLayout.dy2
   }
 
   addShownLeftBar() {
@@ -144,9 +145,10 @@ class DataLayout extends AbstractLayout {
   // }
 
   setHeight() {
-    this.height = max(this.layouts.map(layout => layout.height))
-    this.height = max([0, this.height])
-    this.dy = this.height
+    const dy = max(this.layouts.map(layout => layout.dy).concat(0))
+    const dy2 = max(this.layouts.map(layout => layout.dy2).concat(0))
+    this.height = dy + dy2
+    this.dy = dy
   }
 
   set position(pos) {
@@ -160,7 +162,7 @@ class DataLayout extends AbstractLayout {
 
     this.sticks.forEach(stick => {
       const { dirsAbove, main, dirsBelow, lyrics, x: sx } = stick
-      if (main) main.position = { x: x + sx, by }
+      if (main) main.position = { bx: x + sx, by }
     })
   }
 

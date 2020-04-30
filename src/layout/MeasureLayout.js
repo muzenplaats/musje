@@ -38,7 +38,7 @@ export default class MeasureLayout extends AbstractLayout {
       }
       const staffHeight = this.staves.heights[c]
       const staffDy = this.staves.dys[c]
-      layout.position = { x, y2: y + staffDy }
+      layout.position = { x, by: y + staffDy }
       y += staffHeight + stavesSep
     })
   }

@@ -27,12 +27,12 @@ export default class PitchLayout extends AbstractLayout {
     const octH = octave ? this.octavesLayout.height : 0
     const { stepAccidentalSep, stepOctaveSep } = this.style.pitch
     const { lift } = this.style.accidentalFont
-    const stepAccH = accidental ? Math.max(stepH, accH + lift) : stepH
+    const stepAccH = stepH // accidental ? Math.max(stepH, accH + lift) : stepH
     const stepOctH = stepH + (octave ? octH + stepOctaveSep : 0)
     this.width = stepW + (accidental ? accW + stepAccidentalSep : 0),
     this.height = octave >= 0 ? Math.max(stepAccH, stepOctH)
                               : stepAccH + stepOctaveSep + octH
-    this.dx2 = this.stepLayout.dx2
+    this.dx2 = this.stepLayout.width / 2
     this.dy = this.height
   }
 
@@ -71,7 +71,6 @@ class StepLayout extends AbstractLayout {
     super()
     this.name = 'step-layout'
     Object.assign(this, style.stepFont)
-    this.dx = this.width / 2
   }
 }
 

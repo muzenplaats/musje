@@ -38,7 +38,7 @@ step-font, rest-font {
 }
 accidental-font {
   family: Cadence
-  size: 80%
+  size: 90%
   width-ratio: 0.3
   height-ratio: 0.75
   dx-ratio: 0.3
@@ -85,7 +85,7 @@ body {
 }
 
 system {
-  staves-sep: 180%
+  staves-sep: 100%
 }
 
 cell {

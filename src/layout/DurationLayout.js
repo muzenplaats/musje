@@ -28,6 +28,7 @@ export default class DurationLayout extends AbstractLayout {
     } else {
       this.setTypeLt4Size(dots)
     }
+    this.dy = this.height
   }
 
   setTypeLt4Size(dots) {

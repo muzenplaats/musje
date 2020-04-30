@@ -1,6 +1,6 @@
-import AbstractLayout from './AbstractLayout'
+ import AbstractLayout from './AbstractLayout'
 import MeasureLayout from './MeasureLayout'
-import { range, sum } from '../utils/helpers'
+import { zeros, sum } from '../utils/helpers'
 
 export default class SystemLayout extends AbstractLayout {
   constructor(measures, style) {
@@ -29,13 +29,14 @@ export default class SystemLayout extends AbstractLayout {
   setHeight() {
     if (!this.measuresLayouts.length) { this.height = 0; return }
 
-    const arr0 = range(this.measuresLayouts[0].cellsLayouts.length).map(() => 0)
+    const arr0 = zeros(this.measuresLayouts[0].cellsLayouts.length)
     this.staves = { heights: arr0, dys: arr0.slice(), dy2s: arr0.slice() }
 
     this.measuresLayouts.forEach(measureLayout => {
       measureLayout.cellsLayouts.forEach((cellLayout, c) => {
         this.staves.dys[c] = Math.max(this.staves.dys[c], cellLayout.dy)
         this.staves.dy2s[c] = Math.max(this.staves.dy2s[c], cellLayout.dy2)
+        if (cellLayout.dy2 > 0) console.log('dy2', cellLayout.dy2)
         this.staves.heights[c] = this.staves.dys[c] + this.staves.dy2s[c]
       })
     })
