@@ -9,9 +9,13 @@ export default class MeasureLayout extends AbstractLayout {
     this.measure = measure
     this.style = style
     this.cellsLayouts = measure.cells.map(cell => new CellLayout(cell, style))
-    this.minWidth = max(this.cellsLayouts.map(layout => layout.minWidth))
     this.makeSticks()
     this.alignSticks()
+    this.setCellsSticks()
+    this.cellsLayouts.forEach(layout => {
+      layout.dataLayout.setMinWidth(); layout.setMinWidth()
+    })
+    this.minWidth = max(this.cellsLayouts.map(layout => layout.minWidth))
     this.width = this.minWidth
   }
 
@@ -47,18 +51,32 @@ export default class MeasureLayout extends AbstractLayout {
     while (hasCellsSticks(cellsSticks)) {
       this.sticks.push(peelSticksWithSmallestTcQ(cellsSticks))
     }
-    console.log('Sticks for a MeasureLayout', this.sticks)
+    // console.log('Sticks for a MeasureLayout', this.sticks)
   }
 
   // Calc min-width, x = 0 right after cell: padding-left
   alignSticks() {
-    if (this.sticks.length) {
-      const firstStick = this.sticks[0]
-      setStickDx(firstStick)
-      firstStick.x = firstStick.dx
-      setStickDx2(lastItem(this.sticks))
-    }
+    if (!this.sticks.length) return
+    const firstStick = this.sticks[0]
+    setStickDx(firstStick)
+    firstStick.x = firstStick.minX = firstStick.dx
+    setStickDx2(lastItem(this.sticks))
     const currXs = initCurrXs(this.sticks)
+    this.sticks.forEach((stick, s) => {
+      if (s > 0) setStickX(currXs, stick, this.style)
+      updateCurrXs(currXs, stick)
+    })
+    console.log('Sticks for a MeasureLayout', this.sticks)
+  }
+
+  setCellsSticks() {
+    this.sticks.forEach(stick => {
+      stick.cells.forEach((cell, c) => {
+        const cellStick = Object.assign({}, cell, stick)
+        delete cellStick.cells
+        this.cellsLayouts[c].sticks.push(cellStick)
+      })
+    })
   }
 
   toJSON() {
@@ -149,6 +167,39 @@ const initCurrXs = sticks => {
       if (cell.lyrics) updateArr(currXsCell, cell, 'lyrics')
     })
   })
-  // console.log('currXs', currXs)
+  console.log('currXs', currXs)
   return currXs
+}
+
+const setStickX = (currXs, stick, style) => {
+  const { dataSep } = style.cell
+  const { lyricsHSep } =  style.note
+  let x = 0
+  stick.cells.forEach((cell, c) => {
+    if (!cell) return
+    const cellCurrXs = currXs.cells[c]
+    const { main, dirsAbove, dirsBelow, lyrics } = cell
+    if (main) x = Math.max(x, cellCurrXs.main + dataSep + main.dx)
+    // if (dirsAbove) dx = max(dirsAbove.map(dir => dir[dxName]).concat(dx))
+    // if (dirsBelow) dx = max(dirsBelow.map(dir => dir[dxName]).concat(dx))
+    if (lyrics) lyrics.forEach((lyric, l) => {
+      x = Math.max(x, cellCurrXs.lyrics[l] + lyricsHSep + lyric.dx)
+    })
+  })
+  stick.x = x
+  stick.minX = x
+}
+
+const updateCurrXs = (currXs, stick) => {
+  stick.cells.forEach((cell, c) => {
+    if (!cell) return
+    const cellCurrXs = currXs.cells[c]
+    const { main, dirsAbove, dirsBelow, lyrics } = cell
+    if (main) cellCurrXs.main = stick.x + main.dx2
+    // if (dirsAbove) dx = max(dirsAbove.map(dir => dir[dxName]).concat(dx))
+    // if (dirsBelow) dx = max(dirsBelow.map(dir => dir[dxName]).concat(dx))
+    if (lyrics) lyrics.forEach((lyric, l) => {
+      cellCurrXs.lyrics[l] = stick.x + lyric.dx2
+    })
+  })
 }

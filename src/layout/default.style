@@ -81,11 +81,11 @@ head {
 }
 
 body {
-  systems-sep: 200%
+  systems-sep: 250%
 }
 
 system {
-  staves-sep: 100%
+  staves-sep: 180%
 }
 
 cell {

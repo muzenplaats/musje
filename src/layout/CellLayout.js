@@ -7,7 +7,7 @@ import TimeLayout from './TimeLayout'
 import DirectionLayout from './DirectionLayout'
 import BarLayout from './BarLayout'
 import Bar from '../model/Bar'
-import { max } from '../utils/helpers'
+import { max, lastItem } from '../utils/helpers'
 
 const CONVERT_LEFT_BAR = { '|:': '|:', ':|:': '|:', '||': '||' }
 const CONVERT_RIGHT_BAR = { ':|': ':|', ':|:': ':|', '||': '||', '|]': '|]' }
@@ -24,10 +24,13 @@ export default class CellLayout extends AbstractLayout {
     this.leftBarLayout = new BarLayout(cell.leftBar, style)
     this.rightBarLayout = new BarLayout(cell.rightBar, style)
 
-    this.setMinWidth()
+    this.sticks = []  // will be filled by MeasureLayout
+    this.dataLayout.sticks = this.sticks
+
+    // this.setMinWidth()
 
     // Tmp
-    this.width = this.minWidth
+    // this.width = this.minWidth
     this.height = Math.max(this.dataLayout.height, this.rightBarLayout.height)
     this.dy = this.height
   }
@@ -58,6 +61,7 @@ export default class CellLayout extends AbstractLayout {
                                     this.leftBarLayout.width / 2) +
                     (shownRightBar ? this.shownRightBarLayout. width :
                                      this.rightBarLayout.width / 2)
+    this.width = this.minWidth
   }
 
   set position(pos) {
@@ -95,7 +99,7 @@ class DataLayout extends AbstractLayout {
     this.data = data
     this.style = style
     this.setLayouts()
-    this.setMinWidth()
+    // this.setMinWidth()
 
     // Tmp
     this.width = this.minWidth
@@ -124,12 +128,20 @@ class DataLayout extends AbstractLayout {
   }
 
   setMinWidth() {
-    const { dataSep } = this.style.cell
-    const { layouts } = this
-    const { length } = layouts
-    this.minWidth = length ? (length - 1) * dataSep : 0
-    layouts.forEach(layout => { this.minWidth += layout.width })
+    console.log('cell set min width', this.sticks)
+    const firstStick = this.sticks[0]
+    const lastStick = lastItem(this.sticks)
+    this.minWidth = firstStick.dx + lastStick.x + lastStick.dx2
+    this.width = this.minWidth
   }
+
+  // setMinWidth() {
+  //   const { dataSep } = this.style.cell
+  //   const { layouts } = this
+  //   const { length } = layouts
+  //   this.minWidth = length ? (length - 1) * dataSep : 0
+  //   layouts.forEach(layout => { this.minWidth += layout.width })
+  // }
 
   setHeight() {
     this.height = max(this.layouts.map(layout => layout.height))
@@ -141,9 +153,14 @@ class DataLayout extends AbstractLayout {
     super.position = pos
     const { dataSep } = this.style.cell
     let { x, by } = this
-    this.layouts.forEach(layout => {
-      layout.position = { x, by }
-      x = layout.x2 + dataSep
+    // this.layouts.forEach(layout => {
+    //   layout.position = { x, by }
+    //   x = layout.x2 + dataSep
+    // })
+
+    this.sticks.forEach(stick => {
+      const { dirsAbove, main, dirsBelow, lyrics, x: sx } = stick
+      if (main) main.position = { x: x + sx, by }
     })
   }
 
