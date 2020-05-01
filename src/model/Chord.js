@@ -3,6 +3,7 @@ import { makeToJSON } from '../utils/helpers'
 import Pitch from './Pitch'
 import Duration from './Duration'
 import Tie from './Tie'
+import Tuplet from './Tuplet'
 import Slur from './Slur'
 
 export default class Chord {

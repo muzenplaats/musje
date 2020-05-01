@@ -129,7 +129,6 @@ class DataLayout extends AbstractLayout {
   }
 
   setMinWidth() {
-    console.log('cell set min width', this.sticks)
     const firstStick = this.sticks[0]
     const lastStick = lastItem(this.sticks)
     this.minWidth = firstStick.dx + lastStick.x + lastStick.dx2

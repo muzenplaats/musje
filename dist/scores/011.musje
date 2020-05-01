@@ -5,7 +5,7 @@ composer: Gabriel Fauré
 // clef(G2) key(-3minor)
 3/4 /Andantino 0-. |
 /dolce 5 /wedge(crescendo) 1' 2' /wedge(stop) |
-b3'~ (3:3'_2'_1'_:) (3:3'_2'_1'_:) |
+b3'~ [3:3'_2'_1'_:] [3:3'_2'_1'_:] |
 /wedge(diminuendo) 1'- /wedge(stop) b7 |]
 
 lyrics: Dans un som - meil que char - mait ton i - ma - ge

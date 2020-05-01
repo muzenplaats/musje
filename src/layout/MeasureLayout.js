@@ -66,7 +66,7 @@ export default class MeasureLayout extends AbstractLayout {
       if (s > 0) setStickX(currXs, stick, this.sticks[s - 1], this.style)
       updateCurrXs(currXs, stick)
     })
-    console.log('Sticks for a MeasureLayout', this.sticks)
+    // console.log('Sticks for a MeasureLayout', this.sticks)
   }
 
   setCellsSticks() {
@@ -167,14 +167,14 @@ const initCurrXs = sticks => {
       if (cell.lyrics) updateArr(currXsCell, cell, 'lyrics')
     })
   })
-  console.log('currXs', currXs)
+  // console.log('currXs', currXs)
   return currXs
 }
 
 const setStickX = (currXs, stick, prevStick, style) => {
   const { dataSep } = style.cell
   const { lyricsHSep } =  style.note
-  console.log('prevStick', prevStick)
+  // console.log('prevStick', prevStick)
   let x = prevStick.x + style.stepFont.width / 2 + dataSep / 2
   stick.cells.forEach((cell, c) => {
     if (!cell) return

@@ -37,6 +37,7 @@ export default class Cell {
     }
     this.setAlters()
     this.setModifications()
+    this.linkTuplets()
     this.extractBars()
   }
 
@@ -94,6 +95,19 @@ export default class Cell {
       if (duration && actual) duration.modification = { actual, normal }
       if (tuplet && tuplet.type === 'end') {
         actual = undefined; normal = undefined
+      }
+    })
+  }
+
+  linkTuplets() {
+    let tupletBegin = {}
+    this.data.forEach(dt => {
+      const { tuplet } = dt
+      if (!tuplet) return
+      if (tuplet.type === 'begin') {
+        tupletBegin = tuplet
+      } else {
+        tupletBegin.next = tuplet
       }
     })
   }

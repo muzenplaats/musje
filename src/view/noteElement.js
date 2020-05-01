@@ -2,11 +2,13 @@ import el from '../utils/el'
 import pitchElement from './pitchElement'
 import durationElement from './durationElement'
 import curveElement from './curveElement'
+import tupletElement from './tupletElement'
 import box from './box'
 import { flatten } from '../utils/helpers'
 
 export default function noteElement(noteLayout) {
-  const { note, pitchLayout, durationLayout, tieLayout,
+  const { note, pitchLayout, durationLayout,
+          tieLayout, tupletLayout,
           beginSlursLayouts, endSlursLayouts, lyricsLayouts } = noteLayout
 
   const showTie = tieLayout => {
@@ -14,6 +16,9 @@ export default function noteElement(noteLayout) {
     const { tie } =  tieLayout
     return tie.type !== 'end' || tieLayout.showPrev
   }
+
+  const showTuplet = tupletLayout =>
+                     tupletLayout && tupletLayout.tuplet.type === 'begin'
 
   const getStyle = ({ family, size, anchor }) => `
     font-family: ${family}
@@ -38,6 +43,7 @@ export default function noteElement(noteLayout) {
     pitchElement(pitchLayout),
     durationElement(durationLayout),
     showTie(tieLayout) ? curveElement(tieLayout) : [],
+    showTuplet(tupletLayout) ? tupletElement(tupletLayout) : [],
     beginSlursLayouts ? beginSlursLayouts.map(layout => {
       return curveElement(layout)
     }) : [],

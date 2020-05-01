@@ -2,6 +2,7 @@ import AbstractLayout from './AbstractLayout'
 import PitchLayout from './PitchLayout'
 import DurationLayout from './DurationLayout'
 import TieLayout from './TieLayout'
+import TupletLayout from './TupletLayout'
 import SlurLayout from './SlurLayout'
 import TextLayout from './TextLayout'
 
@@ -15,8 +16,9 @@ export default class NoteLayout extends AbstractLayout {
     this.durationLayout = new DurationLayout(note.duration, style)
     this.setSize(note.duration, this.pitchLayout)
 
-    const { tie, beginSlurs, endSlurs, lyrics } = note
+    const { tie, tuplet, beginSlurs, endSlurs, lyrics } = note
     if (tie) this.tieLayout = new TieLayout(tie, style)
+    if (tuplet) this.tupletLayout = new TupletLayout(tuplet, style)
     if (beginSlurs) {
       this.beginSlursLayouts =
                            beginSlurs.map(slur => new SlurLayout(slur, style))
@@ -104,10 +106,11 @@ export default class NoteLayout extends AbstractLayout {
         type  >  4 ? { x: stepLayout.x, by } :
      /* type  <  4 */{ x2, cy: stepLayout.cy }
 
-    const { tie, beginSlurs, endSlurs, lyrics } = this.note
-    if (tie || beginSlurs || endSlurs) {
+    const { tie, tuplet, beginSlurs, endSlurs, lyrics } = this.note
+    if (tie || tuplet || beginSlurs || endSlurs) {
       const { cx: x, y } = this.pitchLayout.stepLayout
       if (tie) this.tieLayout.position = { x, y }
+      if (tuplet) this.tupletLayout.position = { x, y: this.y }
       if (beginSlurs) {
         this.beginSlursLayouts.forEach(layout => { layout.position = { x, y } })
       }

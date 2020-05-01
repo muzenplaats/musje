@@ -14,8 +14,8 @@ export default class Tuplet {
   }
 
   parse(lexer) {
-    if (lexer.is('(')) {
-      lexer.token('(', () => { this.type = 'begin' })
+    if (lexer.is('[')) {
+      lexer.token('[', () => { this.type = 'begin' })
       lexer.token('digits', lexeme => { this.actual = +lexeme })
       this.normal = 2
       lexer.token(':')

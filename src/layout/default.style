@@ -45,11 +45,17 @@ accidental-font {
   dy-ratio: 0.39
   lift: 25%
 }
+tuplet-font {
+  family: Times New Roman
+  size: 90%
+  height-ratio: 0.9
+  dy-ratio: 0.75
+}
 direction-font {
   family: Times New Roman
   size: 70%
   height-ratio: 0.9
-  dy-ratio: 0.75
+  dy-ratio: 0.5
 }
 dynamics-font {
   family: Cadence
@@ -122,6 +128,7 @@ chord {
 }
 
 note, chord {
+  pitch-tuplet-sep: 30%
   data-lyric-sep: 50%
   lyrics-v-sep: 50%
   lyrics-h-sep: 50%
@@ -157,10 +164,15 @@ durationLE2 {
 
 tie {
   lift: 70%
-  stroke-width: 9%
+  stroke-width: 3%
 }
 
 slur {
   lift: 70%
-  stroke-width: 9%
+  stroke-width: 3%
+}
+
+tuplet {
+  lift: 30%
+  stroke-width: 5%
 }

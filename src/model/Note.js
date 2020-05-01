@@ -28,7 +28,7 @@ export default class Note {
   }
 
   parse(lexer) {
-    while (lexer.is('(')) {
+    while (lexer.is('[')) {
       if (lexer.is('tuplet-begin')) {
         this.tuplet = new Tuplet(lexer)
       } else {
@@ -63,6 +63,7 @@ export default class Note {
     this.pitch.onplay()
     this.duration.onplay()
     if (this.tie) this.tie.onplay()
+    if (this.tuplet) this.tuplet.onplay()
     if (this.beginSlurs) this.beginSlurs.forEach(slur => slur.onplay())
     if (this.endSlurs) this.endSlurs.forEach(slur => slur.onplay())
   }
@@ -71,6 +72,7 @@ export default class Note {
     this.pitch.onstop()
     this.duration.onstop()
     if (this.tie) this.tie.onstop()
+    if (this.tuplet) this.tuplet.onstop()
     if (this.beginSlurs) this.beginSlurs.forEach(slur => slur.onstop())
     if (this.endSlurs) this.endSlurs.forEach(slur => slur.onstop())
   }
@@ -80,11 +82,11 @@ export default class Note {
     const { articulations, beginSlurs, endSlurs, tuplet, duration, tie } = this
     if (beginSlurs) strs.push(beginSlurs.join(''))
     if (tuplet && tuplet.type === 'begin') {
-      strs.push(`(${duration.modification.actual}:`)
+      strs.push(`[${duration.modification.actual}:`)
     }
     if (articulations) strs.push('x')
     strs.push(`${this.pitch}${duration}`)
-    if (tuplet && tuplet.type === 'end') strs.push(':)')
+    if (tuplet && tuplet.type === 'end') strs.push(':]')
     if (endSlurs) strs.push(endSlurs.join(''))
     if (tie) strs.push(this.tie)
     return strs.join('')

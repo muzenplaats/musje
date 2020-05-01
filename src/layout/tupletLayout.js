@@ -1,5 +1,5 @@
 import AbstractLayout from './AbstractLayout'
-import { lastItem } from '../utils/helpers'
+import TextLayout from './TextLayout'
 
 export default class TupletLayout extends AbstractLayout {
   constructor(tuplet, style) {
@@ -8,53 +8,32 @@ export default class TupletLayout extends AbstractLayout {
     this.tuplet = tuplet
     tuplet.layout = this
     this.style = style
+    this.textLayout = new TextLayout(tuplet.actual, style.tupletFont)
     const { lift, strokeWidth } = style.tuplet
     this.lift = lift
     this.strokeWidth = strokeWidth
-  }
-
-  get showPrev() {
-    const { prev } = this.slur
-    return !prev || prev.layout.sys !== this.sys
+    this.pitchTupletSep = style.note.pitchTupletSep
   }
 
   get endPoints() {
     const { x1, y1 } = this
-    const { next } = this.slur
+    const { next } = this.tuplet
     let x2, y2
 
-    // Incorrect slur
-    if (!next) {
+    if (!next) { // unclosed
       x2 = x1 + 30
       y2 = y1 - 20
-
-    // Slur to the same system
-    } else if (this.sys === next.layout.sys) {
+    } else {
       x2 = next.layout.x1
       y2 = next.layout.y1
+    }
 
-    // Slur to next system
-    } else {
-      const measureLayout = lastItem(this.systemLayout.measuresLayouts)
-      const clo = measureLayout.cellsLayouts[this.c]
-      const rightBarLayout = clo.shownRightBarLayout || clo.rightBarLayout
-      x2 = rightBarLayout.x
-      y2 = rightBarLayout.y
+    this.textLayout.position = {
+      cx: (x1 + x2) / 2 , cy: (y1 + y2) / 2 - this.pitchTupletSep - this.lift
     }
 
     this.width = x2 - x1
     this.height = Math.abs(y2 - y1)
-    return { x1, y1, x2, y2 }
-  }
-
-  // Slur to previous system
-  get prevEndPoints() {
-    const { x: x1, y: y1 } = this
-    if (!this.slur.prev) return { x1, y1, x2: x1 - 30, y2: y1 - 20 }
-
-    const measureLayout = this.systemLayout.measuresLayouts[0]
-    const clo = measureLayout.cellsLayouts[this.c]
-    const { x: x2, y: y2 } = clo.shownLeftBarLayout
     return { x1, y1, x2, y2 }
   }
 }
