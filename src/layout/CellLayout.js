@@ -153,7 +153,7 @@ class DataLayout extends AbstractLayout {
 
   set position(pos) {
     super.position = pos
-    const { dataSep } = this.style.cell
+    const { dataSep, dataDirectionSep } = this.style.cell
     let { x, by } = this
     // this.layouts.forEach(layout => {
     //   layout.position = { x, by }
@@ -162,7 +162,18 @@ class DataLayout extends AbstractLayout {
 
     this.sticks.forEach(stick => {
       const { dirsAbove, main, dirsBelow, lyrics, x: sx } = stick
-      if (main) main.position = { bx: x + sx, by }
+      const bx = x + sx
+      if (main) main.position = { bx, by }
+      // Tmp
+      if (dirsAbove && dirsAbove.length) {
+        const y2 = main.y - dataDirectionSep
+        dirsAbove[0].position = { bx, y2 }
+      }
+      // Tmp
+      if (dirsBelow && dirsBelow.length) {
+        const y = by + dataDirectionSep
+        dirsBelow[0].position = { bx, y }
+      }
     })
   }
 

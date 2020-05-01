@@ -92,6 +92,7 @@ cell {
   padding-left: 60%
   padding-right: 60%
   data-sep: 30%
+  data-direction-sep: 30%
 }
 
 bar {
@@ -112,7 +113,7 @@ time {
 
 note {
   pitch-beam-sep: 9%
-  pitch-line-sep: 25%
+  pitch-line-sep: 60%
   pitch-dot-sep: 6%
 }
 
@@ -148,10 +149,10 @@ durationGE4 {
 durationLE2 {
   line-width: 50%
   line-height: 6%
-  lines-sep: 40%
-  line-dot-sep: 40%
+  lines-sep: 60%
+  line-dot-sep: 60%
   dot-size: 12%
-  dots-sep: 40%
+  dots-sep: 60%
 }
 
 tie {

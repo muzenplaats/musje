@@ -36,7 +36,6 @@ export default class SystemLayout extends AbstractLayout {
       measureLayout.cellsLayouts.forEach((cellLayout, c) => {
         this.staves.dys[c] = Math.max(this.staves.dys[c], cellLayout.dy)
         this.staves.dy2s[c] = Math.max(this.staves.dy2s[c], cellLayout.dy2)
-        if (cellLayout.dy2 > 0) console.log('dy2', cellLayout.dy2)
         this.staves.heights[c] = this.staves.dys[c] + this.staves.dy2s[c]
       })
     })

@@ -27,6 +27,7 @@ export default class DirectionLayout extends AbstractLayout {
       this.width = 20
       this.height = 0
     }
+    this.dx = this.width / 2
     this.dy = this.height
   }
 

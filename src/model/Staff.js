@@ -5,27 +5,6 @@ import Cell from './Cell'
 import Tie from './Tie'
 import Lyrics from './Lyrics'
 
-const timeToDurQ = time => {
-  const { beats, beatType } = time
-  if (beatType === 8) return beats % 3 === 0 ? 1.5 * Q : 0.5 * Q
-  return Q / beatType * 4
-}
-
-const makeNextData = (cells, c, d) => {
-  return () => {
-    let ncell, ndt
-    while (!ndt) {
-      ncell = cells[c]; d++; ndt = ncell.data[d]
-      if (!ndt) {
-        c++; d = 0; ncell = cells[c]
-        if (!ncell) break
-        ndt = ncell.data[d]
-      }
-    }
-    return { ncell, ndt }
-  }
-}
-
 export default class Staff {
   constructor(staff) {
     this.name = 'staff'
@@ -41,6 +20,7 @@ export default class Staff {
     this.linkTies()
     this.linkSlurs()
     this.setT()
+    if (this.lyricsLines) this.placeLyrics()
   }
 
   parse(lexer) {
@@ -56,9 +36,16 @@ export default class Staff {
       lexer.skipWhite()
     }
     while (lexer.is('lyrics-head')) {
-      const lyrics = new Lyrics(lexer)
+      this.lyricsLines = this.lyricsLines || []
+      this.lyricsLines.push(new Lyrics(lexer))
+    }
+  }
+
+  placeLyrics() {
+    this.lyricsLines.forEach(lyrics => {
       this.cells.forEach(cell => {
         cell.data.forEach(dt => {
+          if (dt.tie && dt.tie.type !== 'begin') return
           if (dt.name === 'note' || dt.name === 'chord') {
             dt.lyrics = dt.lyrics || []
             const lyric = lyrics.list.shift()
@@ -66,7 +53,8 @@ export default class Staff {
           }
         })
       })
-    }
+    })
+    delete this.lyricsLines
   }
 
   resetLeftBars() {
@@ -245,4 +233,25 @@ export default class Staff {
   }
 
   toJSON = makeToJSON('cells')
+}
+
+const timeToDurQ = time => {
+  const { beats, beatType } = time
+  if (beatType === 8) return beats % 3 === 0 ? 1.5 * Q : 0.5 * Q
+  return Q / beatType * 4
+}
+
+const makeNextData = (cells, c, d) => {
+  return () => {
+    let ncell, ndt
+    while (!ndt) {
+      ncell = cells[c]; d++; ndt = ncell.data[d]
+      if (!ndt) {
+        c++; d = 0; ncell = cells[c]
+        if (!ncell) break
+        ndt = ncell.data[d]
+      }
+    }
+    return { ncell, ndt }
+  }
 }
