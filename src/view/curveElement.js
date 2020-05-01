@@ -27,9 +27,9 @@ export default function curveElement(curveLayout) {
   const cy22 = cy12 + strokeWidth
 
   const pathEl = el.create('path', {
-    d: pathD.clear().moveTo(x1, y1)
-            .curveTo(cx11, cy11, cx12, cy12, x2, y2)
-            .curveTo(cx22, cy22, cx21, cy21, x1, y1),
+    d: pathD().moveTo(x1, y1)
+              .curveTo(cx11, cy11, cx12, cy12, x2, y2)
+              .curveTo(cx22, cy22, cx21, cy21, x1, y1),
     style: 'fill: black'
   })
 

@@ -164,12 +164,12 @@ durationLE2 {
 
 tie {
   lift: 70%
-  stroke-width: 3%
+  stroke-width: 9%
 }
 
 slur {
   lift: 70%
-  stroke-width: 3%
+  stroke-width: 9%
 }
 
 tuplet {

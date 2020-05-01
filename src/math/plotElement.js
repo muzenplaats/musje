@@ -45,12 +45,12 @@ export default function plotElement() {
   let minorYTicks = coor.hlines({ x: 0, y: [-1, 0.125, 1], width: 5 })
   const yTickNums = coor.ynums({ x: 0 - 0.5, y: [-1, 0.5, 1] })
 
-  majorXTicks = pathD.lines(majorXTicks)
-  minorXTicks = pathD.lines(minorXTicks)
-  majorYTicks = pathD.lines(majorYTicks)
-  minorYTicks = pathD.lines(minorYTicks)
-  const lines = pathD.lines(dataset)
-  const axis = pathD.lines(xAxis.axis)
+  majorXTicks = pathD().lines(majorXTicks)
+  minorXTicks = pathD().lines(minorXTicks)
+  majorYTicks = pathD().lines(majorYTicks)
+  minorYTicks = pathD().lines(minorYTicks)
+  const lines = pathD().lines(dataset)
+  const axis = pathD().lines(xAxis.axis)
   // M.print(axis)
 
 

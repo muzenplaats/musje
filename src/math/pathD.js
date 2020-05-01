@@ -2,15 +2,15 @@ class PathD {
   constructor() {
     this.data = ''
   }
-  clear() { this.data = ''; return this }
   moveTo(x, y) { this.data += `M${x} ${y}`; return this }
   lineTo(x, y) { this.data += `L${x} ${y}`; return this }
+  vertTo(y) { this.data += `V${y}`; return this }
+  vertBy(dy) { this.data += `v${dy}`; return this }
   curveTo(x1, y1, x2, y2, x, y) {
     this.data += `C${x1} ${y1},${x2} ${y2},${x}, ${y}`; return this
   }
 
   lines(data) {
-    this.clear()
     if (!Array.isArray(data)) data = [data]
     data.forEach(dt => {
       const { x, y } = dt
@@ -23,4 +23,4 @@ class PathD {
   toString() { return this.data }
 }
 
-export default new PathD()
+export default function pathD() { return new PathD() }

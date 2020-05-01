@@ -24,8 +24,10 @@ export default function tupletElement(tupletLayout) {
   const y22 = y21 + slope * (x22 - x2)
 
   const pathEl = el.create('path', {
-    d: pathD.moveTo(x1, y1).lineTo(x11, y11).lineTo(x12, y12)
-            .moveTo(x2, y2).lineTo(x21, y21).lineTo(x22, y22),
+    d: pathD().moveTo(x1, y1).vertBy(-lift).lineTo(x12, y12)
+              .moveTo(x2, y2).lineTo(x21, y21).lineTo(x22, y22),
+    // d: pathD().moveTo(x1, y1).lineTo(x11, y11).lineTo(x12, y12)
+    //           .moveTo(x2, y2).lineTo(x21, y21).lineTo(x22, y22),
     style: `stroke-width: ${strokeWidth}; stroke: black; fill: none`
   })
 
