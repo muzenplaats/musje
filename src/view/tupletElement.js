@@ -13,21 +13,15 @@ export default function tupletElement(tupletLayout) {
   y1 -= pitchTupletSep
   y2 -= pitchTupletSep
 
-  const x11 = x1
-  const y11 = y1 - lift
-  const x12 = cx - halfTextWidth - textSep
-  const y12 = y11 + slope * (x12 - x1)
+  const x1a = cx - halfTextWidth - textSep
+  const y1a = y1 - lift + slope * (x1a - x1)
 
-  const x21 = x2
-  const y21 = y2 - lift
-  const x22 = cx + halfTextWidth + textSep
-  const y22 = y21 + slope * (x22 - x2)
+  const x2a = cx + halfTextWidth + textSep
+  const y2a = y2 - lift + slope * (x2a - x2)
 
   const pathEl = el.create('path', {
-    d: pathD().moveTo(x1, y1).vertBy(-lift).lineTo(x12, y12)
-              .moveTo(x2, y2).lineTo(x21, y21).lineTo(x22, y22),
-    // d: pathD().moveTo(x1, y1).lineTo(x11, y11).lineTo(x12, y12)
-    //           .moveTo(x2, y2).lineTo(x21, y21).lineTo(x22, y22),
+    d: pathD().moveTo(x1, y1).vertBy(-lift).lineTo(x1a, y1a)
+              .moveTo(x2, y2).vertBy(-lift).lineTo(x2a, y2a),
     style: `stroke-width: ${strokeWidth}; stroke: black; fill: none`
   })
 
