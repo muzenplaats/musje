@@ -3,9 +3,10 @@ import MeasureLayout from './MeasureLayout'
 import { zeros, sum } from '../utils/helpers'
 
 export default class SystemLayout extends AbstractLayout {
-  constructor(measures, style) {
+  constructor(headLayout, measures, style) {
     super()
     this.name = 'system-layout'
+    this.headLayout = headLayout
     this.measures = measures
     this.style = style
 
@@ -51,6 +52,8 @@ export default class SystemLayout extends AbstractLayout {
   set position(pos) {
     super.position = pos
     let { x, y2 } = this
+    this.headLayout.position = { x, y2 }
+    x += this.headLayout.width
     this.measuresLayouts.forEach(layout => {
       layout.position = { x, y2 }
       x += layout.width
@@ -58,7 +61,7 @@ export default class SystemLayout extends AbstractLayout {
   }
 
   toJSON() {
-    const { measuresLayouts } = this
-    return { ...super.toJSON(), measuresLayouts }
+    const { headLayout, measuresLayouts } = this
+    return { ...super.toJSON(), headLayout, measuresLayouts }
   }
 }

@@ -1,7 +1,7 @@
 title: Après un rêve
 composer: Gabriel Fauré
 
-== // Voice: midi(channel: 1, program: 53, pan: 0)
+== Voice: midi(channel: 1, program: 53, pan: 0)
 // clef(G2) key(-3minor)
 3/4 /Andantino 0-. |
 /dolce 5 /wedge(crescendo) 1' 2' /wedge(stop) |
@@ -10,7 +10,7 @@ b3'~ [3:3'_2'_1'_:] [3:3'_2'_1'_:] |
 
 lyrics: Dans un som - meil que char - mait ton i - ma - ge
 
-== // Piano: midi(channel: 2, program: 1, pan: 0)
+== Piano: midi(channel: 2, program: 1, pan: 0)
 // clef(G2) key(-3minor)
 3/4 \pp <1b35>_<135>_ <135>_<135>_ <135>_<135>_ | <1b35>_<135>_ <135>_<135>_ <b7,235>_<7,235>_ |
 <6,1b35>_<6,135>_ <6,135>_<6,135>_ <6,134>_<6,134>_ |

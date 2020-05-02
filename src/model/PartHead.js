@@ -17,6 +17,30 @@ export default class PartHead {
 
   parse(lexer) {
     lexer.token('==')
+    lexer.token('words', lexeme => { this.partName = lexeme.trim() })
+    lexer.skipSS()
+    if (lexer.is('(')) {
+      lexer.token('(')
+      lexer.token('abbreviation', lexeme => { this.abbreviation = lexeme })
+      lexer.token(')')
+    }
+    if (lexer.is(':')) {
+      lexer.token(':')
+      lexer.skipSS()
+      const midi = this.midi = {}
+      lexer.token('midi')
+      lexer.token('(')
+      lexer.token('channel'); lexer.token(':'); lexer.skipSS()
+      lexer.token('digits', lexeme => { midi.channel = +lexeme })
+      lexer.token(','); lexer.skipSS()
+      lexer.token('program'); lexer.token(':'); lexer.skipSS()
+      lexer.token('digits', lexeme => { midi.program = +lexeme })
+      lexer.token(','); lexer.skipSS()
+      lexer.token('pan'); lexer.token(':'); lexer.skipSS()
+      lexer.token('digits', lexeme => { midi.pan = +lexeme })
+      lexer.token(')')
+    }
+    lexer.skipWhite()
   }
 
   toString() {
@@ -24,8 +48,9 @@ export default class PartHead {
     const strs = ['==']
     if (partName) strs.push(partName)
     if (abbreviation) strs.push(`(${abbreviation})`)
-    if (strs.length > 1) strs[strs.length - 1] += ':'
+    // if (strs.length > 1) strs[strs.length - 1] += ':'
     if (midi) {
+      strs[strs.length - 1] += ':'
       const { channel, program, pan }  = midi
       const midiStrs = []
       if (typeof channel === 'number') midiStrs.push(`channel: ${channel}`)

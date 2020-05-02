@@ -1,4 +1,5 @@
 import AbstractLayout from './AbstractLayout'
+import SystemHeadLayout from './SystemHeadLayout'
 import SystemLayout from './SystemLayout'
 import MeasureLayout from './MeasureLayout'
 import { lastItem, sum } from '../utils/helpers'
@@ -7,6 +8,7 @@ export default class BodyLayout extends AbstractLayout {
   constructor(body, style) {
     super()
     this.name = 'body-layout'
+    this.parts = body.parts
     this.measures = body.measures
     this.style = style
     this.setWidth()
@@ -14,6 +16,7 @@ export default class BodyLayout extends AbstractLayout {
     this.markCurvesSys()
     this.markLyricsSys()
     this.setHeight()
+    // console.log(this.createSystemHeadLayout())
   }
 
   setWidth() {
@@ -28,35 +31,53 @@ export default class BodyLayout extends AbstractLayout {
             (systemsLayouts.length - 1) * this.style.body.systemsSep) : 0
   }
 
+  createSystemHeadLayout(nameType = 'abbreviation') {
+    const head = {
+      nameType,   // full | abbreviation
+      partHeads: this.parts.map(part => part.head)
+    }
+    return new SystemHeadLayout(head, this.style)
+  }
+
   makeSystemsLayouts() {
-    const { width } = this
+    const systemWidth = this.width
     const minWidths = this.measures
           .map(measure => new MeasureLayout(measure, this.style))
           .map(MeasureLayout => MeasureLayout.minWidth)
-    const lengths = []
-    let currW = 0
+    const fullHeadWidth = this.createSystemHeadLayout('full').width
+    const abbrHeadWidth = this.createSystemHeadLayout('abbreviation').width
+
+    const sysWidths = []
+    let currW = fullHeadWidth
+
     minWidths.forEach((minW, m) => {
       currW += minW
-      if (currW === width) {
-        lengths.push(m + 1)
-        currW = 0
-      } else if (currW > width) {
-        lengths.push(m)
-        currW = minW
+      if (currW === systemWidth) {
+        sysWidths.push(m + 1)
+        currW = abbrHeadWidth
+      } else if (currW > systemWidth) {
+        sysWidths.push(m)
+        currW = abbrHeadWidth + minW
       }
     })
-    if (lastItem(lengths) !== minWidths.length) lengths.push(minWidths.length)
-    for (let i = lengths.length - 1; i > 0; i--) {
-      lengths[i] = lengths[i] - lengths[i - 1]
+
+    if (lastItem(sysWidths) !== minWidths.length) {
+      sysWidths.push(minWidths.length)
     }
-    console.log(lengths)
+    for (let i = sysWidths.length - 1; i > 0; i--) {
+      sysWidths[i] = sysWidths[i] - sysWidths[i - 1]
+    }
+
+    console.log(sysWidths)
 
     this.systemsLayouts = []
     let begin = 0, end
-    lengths.forEach(len => {
-      end = begin + len
+    sysWidths.forEach((sysWidth, sys) => {
+      end = begin + sysWidth
       const measures = this.measures.slice(begin, end)
-      const systemLayout = new SystemLayout(measures, this.style)
+      const headLayout =
+              this.createSystemHeadLayout(sys ? 'abbreviation' : 'full')
+      const systemLayout = new SystemLayout(headLayout, measures, this.style)
       systemLayout.width = this.width
       this.systemsLayouts.push(systemLayout)
       begin = end

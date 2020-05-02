@@ -18,7 +18,7 @@ export default function appElement() {
     scoreStr: '',
     score: {
       get() {
-        return new Score(this.scoreStr)
+        // return new Score(this.scoreStr)
         let score
         try {
           score = new Score(this.scoreStr); this.error = ''

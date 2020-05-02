@@ -36,4 +36,9 @@ export default class TupletLayout extends AbstractLayout {
     this.height = Math.abs(y2 - y1)
     return { x1, y1, x2, y2 }
   }
+
+  toJSON() {
+    const { textLayout } = this
+    return { ...super.toJSON(), textLayout}
+  }
 }

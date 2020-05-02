@@ -8,6 +8,7 @@ const pitch = '[#nb]*[1-7][,\']*'
 
 const Lexer = makeLexerClass({
   0: '0',
+  ',': ',',
   '/': '\\/',
   '\\': '\\\\',
   '<': '<',
@@ -28,10 +29,12 @@ const Lexer = makeLexerClass({
   '*/': '\\*\\/',
   digit: '\\d',
   digits: '\\d+',
+  paran: '[\\(\\)]',
   letter: `[${letter}]`,
   word: `[${letter}]+`,
   words: `[${letter} ]+`,
-  paran: '[\\(\\)]',
+  abbreviation: `[${letter}\\.]+`,
+  midi: 'midi', channel: 'channel', program: 'program', pan: 'pan',
   title: 'title:',
   subtitle: 'subtitle:',
   composer: 'composer:',
