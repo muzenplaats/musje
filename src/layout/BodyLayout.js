@@ -16,7 +16,6 @@ export default class BodyLayout extends AbstractLayout {
     this.markCurvesSys()
     this.markLyricsSys()
     this.setHeight()
-    // console.log(this.createSystemHeadLayout())
   }
 
   setWidth() {
@@ -31,10 +30,9 @@ export default class BodyLayout extends AbstractLayout {
             (systemsLayouts.length - 1) * this.style.body.systemsSep) : 0
   }
 
-  createSystemHeadLayout(nameType = 'abbreviation') {
+  createSystemHeadLayout(nameType) {
     const head = {
-      nameType,   // full | abbreviation
-      partHeads: this.parts.map(part => part.head)
+      nameType, partHeads: this.parts.map(part => part.head)
     }
     return new SystemHeadLayout(head, this.style)
   }

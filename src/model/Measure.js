@@ -1,31 +1,30 @@
 import Bar from'./Bar'
-import { makeToJSON } from '../utils/helpers'
+import { range, makeToJSON } from '../utils/helpers'
 
 export default class Measure {
   constructor(measure = { parts: [] }) {
     this.name = 'measure'
     this.parts = measure.parts
-    // this.setBars()
-    this.cells = this.mapCell(c => c)
+    this.cells = this.mapCell(cell => cell)
+    this.partIndices = this.mapCell((cell, c, s, p) => p)
+    this.setPartsToCellsIndices()
   }
 
-  // setBars() {
-  //   const c0 = this.cells[0]
-  //   if (c0) {
-  //     this.leftBar = new Bar(c0.leftBar.value)
-  //     this.rightBar = new Bar(c0.rightBar.value)
-  //   }
-  // }
+  setPartsToCellsIndices() {
+    this.partsToCellsIndices = range(this.parts.length).map(() => [])
+    this.eachCell((cell, c, s, p) => this.partsToCellsIndices[p].push(c))
+  }
 
   eachCell(cb) {
+    let c = 0
     this.parts.forEach((part, p) => {
-      part.staves.forEach((cell, s) => cb(cell, s, p))
+      part.staves.forEach((cell, s) => { cb(cell, c, s, p); c++ })
     })
   }
 
   mapCell(cb) {
     const result = []
-    this.eachCell((cell, s, p) => result.push(cb(cell, s, p)))
+    this.eachCell((cell, c, s, p) => result.push(cb(cell, c, s, p)))
     return result
   }
 

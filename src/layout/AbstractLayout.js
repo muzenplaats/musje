@@ -33,6 +33,8 @@ export default class AbstractLayout {
   get xby() { return { x: this.x, y: this.by } }
   get cxby() { return { x: this.cx, y: this.by }}
   get x2by() { return { x: this.x2, y: this.by }}
+  get x2cy() { return { x: this.x2, y: this.cy }}
+  get cxcy() { return { x: this.cx, y: this.cy }}
   get rect() {
     const { x, y, width, height } = this
     return { x, y, width, height }

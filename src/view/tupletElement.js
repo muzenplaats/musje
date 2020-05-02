@@ -43,10 +43,10 @@ export default function tupletElement(tupletLayout) {
 
   return el.create('g', [
     // box(curveLayout, 'orange'),
+    // box(textLayout, 'orange'),
     pathEl,
     el.assign(elements, 'text').create('text', {
-      x: textLayout.cx, y: textLayout.by,
-      style: getStyle(textLayout)
+      ...textLayout.cxcy, style: getStyle(textLayout)
     }, textLayout.text)
   ])
 }

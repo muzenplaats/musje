@@ -31,7 +31,14 @@ export default class SystemLayout extends AbstractLayout {
     if (!this.measuresLayouts.length) { this.height = 0; return }
 
     const arr0 = zeros(this.measuresLayouts[0].cellsLayouts.length)
-    this.staves = { heights: arr0, dys: arr0.slice(), dy2s: arr0.slice() }
+    const { partIndices, partsToCellsIndices } = this.measuresLayouts[0].measure
+    this.staves = {
+      partIndices,
+      partsToCellsIndices,
+      heights: arr0,
+      dys: arr0.slice(),
+      dy2s: arr0.slice()
+    }
 
     this.measuresLayouts.forEach(measureLayout => {
       measureLayout.cellsLayouts.forEach((cellLayout, c) => {
@@ -44,6 +51,8 @@ export default class SystemLayout extends AbstractLayout {
     this.height = sum(this.staves.heights) +
                   this.style.system.stavesSep * (this.staves.heights.length - 1)
 
+    this.headLayout.height = this.height
+    this.headLayout.staves = this.staves
     this.measuresLayouts.forEach(measureLayout => {
       measureLayout.setHeight(this.height, this.staves)
     })

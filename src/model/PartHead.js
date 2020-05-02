@@ -10,7 +10,7 @@ export default class PartHead {
       this.parse(new Lexer(head))
     } else {
       this.partName = head.partName
-      this.abbreviation = head.abbreviation
+      this.abbreviation = head.abbreviation || ''
       this.midi = head.midi
     }
   }
@@ -19,6 +19,7 @@ export default class PartHead {
     lexer.token('==')
     lexer.token('words', lexeme => { this.partName = lexeme.trim() })
     lexer.skipSS()
+    this.abbreviation = ''
     if (lexer.is('(')) {
       lexer.token('(')
       lexer.token('abbreviation', lexeme => { this.abbreviation = lexeme })
