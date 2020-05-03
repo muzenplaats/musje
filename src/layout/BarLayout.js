@@ -7,8 +7,20 @@ export default class BarLayout extends AbstractLayout {
     this.name = 'bar-layout'
     this.bar = bar
     this.style = style
+    this.displayLines = true
+    this.displayDots = true
+    this.setSize()
+  }
+
+  setHeight(height) {
+    this.height = height
+    this.lightSize.height = height
+    this.heavySize.height = height
+  }
+
+  setSize() {
     const { lightWidth, heavyWidth, lineHeight: height, dotSize,
-            linesSep, lineDotSep } = style.bar
+            linesSep, lineDotSep } = this.style.bar
 
     this.lightSize = { width: lightWidth, height }
     this.heavySize = { width: heavyWidth, height }
@@ -18,7 +30,7 @@ export default class BarLayout extends AbstractLayout {
     const lhd = () => lh() + lineDotSep + dotSize
 
     let size
-    switch (bar.value) {
+    switch (this.bar.value) {
       case '|':
         size = this.lightSize; break
       case '||':

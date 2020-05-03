@@ -1,6 +1,8 @@
 import AbstractLayout from './AbstractLayout'
 import CellLayout from './CellLayout'
-import { min, max, lastItem, zeros } from '../utils/helpers'
+import BarLayout from './BarLayout'
+import Bar from '../model/Bar'
+import { min, max, lastItem, range, zeros } from '../utils/helpers'
 
 export default class MeasureLayout extends AbstractLayout {
   constructor(measure, style) {
@@ -27,19 +29,70 @@ export default class MeasureLayout extends AbstractLayout {
 
   set position(pos) {
     super.position = pos
-    let { x, y } = this
+    let { x, x2, y, y2 } = this
+    const tmpY = y
     const { stavesSep } = this.style.system
 
+    const lastCellIndex = this.cellsLayouts.length - 1
     this.cellsLayouts.forEach((layout, c) => {
       if (this.atSysBegin) {
         layout.addShownLeftBar()
+        this.connectBars('left', [[0, lastCellIndex]])
+        this.leftBarLayouts.forEach(layout => layout.position = { x, y: tmpY })
       } else if (this.atSysEnd) {
         layout.addShownRightBar()
+        this.connectBars('right', this.staves.partsToCellsIndices)
+        this.rightBarLayouts.forEach(layout => layout.position = { x2, y: tmpY })
       }
       const staffHeight = this.staves.heights[c]
       const staffDy = this.staves.dys[c]
       layout.position = { x, by: y + staffDy }
       y += staffHeight + stavesSep
+    })
+  }
+
+  connectBars(side, cellsIndicesList) {
+    const getLeftBarLayout = cellLayout => {
+      const { shownLeftBarLayout, leftBarLayout } = cellLayout
+      return shownLeftBarLayout || leftBarLayout
+    }
+    const getRightBarLayout = cellLayout => {
+      const { shownRightBarLayout, rightBarLayout } = cellLayout
+      return shownRightBarLayout || rightBarLayout
+    }
+    const addMeasureBarLayout = (side, cs) => {
+      const barLineHeight = this.staves.by0s[cs[0]] + this.staves.by0s[cs[1]] +
+                            this.style.bar.lineHeight
+      if (side === 'left') {
+        this.leftBarLayouts = this.leftBarLayouts || []
+        const value = getLeftBarLayout(this.cellsLayouts[cs[0]]).bar.value
+        const barLayout = new BarLayout(new Bar(value), this.style)
+        barLayout.setHeight(barLineHeight)
+        barLayout.displayDots = false
+        this.leftBarLayouts.push(barLayout)
+      } else if (side === 'right') {
+        this.rightBarLayouts = this.rightBarLayouts || []
+        const value = getRightBarLayout(this.cellsLayouts[cs[0]]).bar.value
+        const barLayout = new BarLayout(new Bar(value), this.style)
+        barLayout.setHeight(barLineHeight)
+        barLayout.displayDots = false
+        this.rightBarLayouts.push(barLayout)
+      }
+    }
+
+    cellsIndicesList.forEach(cellsIndices => {
+      if (cellsIndices.length < 2) return
+      const cs = [cellsIndices[0], lastItem(cellsIndices)]
+      addMeasureBarLayout(side, cs)
+      range(cs[0], cs[1] + 1).forEach(c => {
+        if (side === 'left') {
+          const barLayout = getLeftBarLayout(this.cellsLayouts[c])
+          barLayout.displayLines = false
+        } else if (side === 'right') {
+          const barLayout = getRightBarLayout(this.cellsLayouts[c])
+          barLayout.displayLines = false
+        }
+      })
     })
   }
 

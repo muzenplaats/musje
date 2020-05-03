@@ -25,9 +25,11 @@ export const precision = (val, digits) => {
   return Math.abs(val) > 1e6 ? prec : '' + (+prec)
 }
 
-export const range = num => {
+// Range with begin inclusive and end exclusive.
+export const range = (begin, end) => {
+  if (end === undefined) { end = begin; begin = 0 }
   const result = []
-  for (let i = 0; i < num; i++) result.push(i)
+  for (let i = begin; i < end; i++) result.push(i)
   return result
 }
 

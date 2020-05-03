@@ -29,23 +29,14 @@ export default class SystemHeadLayout extends AbstractLayout {
     let { x2, y } = this
     if (!this.staves) return
 
-    const { stavesSep } = this.style.system
-    const cellsYs = []
-
-    this.staves.heights.forEach((height, s) => {
-      const dy = this.staves.dys[s]
-      const dy2 = this.staves.dy2s[s]
-      cellsYs.push({ y, by: y + dy, y2: y + height })
-      y += height + stavesSep
-    })
-
+    const cellsBys = this.staves.by0s.map((by0, s) => y + by0)
     x2 -= this.style.system.partNamePaddingRight
     const { partsToCellsIndices } = this.staves
     const { lineHeight } = this.style.bar
     this.partNamesLayouts.forEach((layout, p) => {
       const cellIndices = partsToCellsIndices[p]
-      const y1 = cellsYs[cellIndices[0]].by - lineHeight
-      const y2 = cellsYs[lastItem(cellIndices)].by
+      const y1 = cellsBys[cellIndices[0]] - lineHeight
+      const y2 = cellsBys[lastItem(cellIndices)]
       layout.position = { x2, cy: (y1 + y2) / 2 }
     })
   }

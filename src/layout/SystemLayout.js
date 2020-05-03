@@ -11,15 +11,10 @@ export default class SystemLayout extends AbstractLayout {
     this.style = style
 
     const { length } = measures
-    measures.forEach((measure, m) => {
-      measure.atSysBegin = m === 0
-      measure.atSysEnd = m === length - 1
-    })
-
-    this.measuresLayouts = measures.map(measure => {
+    this.measuresLayouts = measures.map((measure, m) => {
       const layout = new MeasureLayout(measure, style)
-      layout.atSysBegin = measure.atSysBegin
-      layout.atSysEnd = measure.atSysEnd
+      layout.atSysBegin = m === 0
+      layout.atSysEnd = m === length - 1
       return layout
     })
 
@@ -37,7 +32,9 @@ export default class SystemLayout extends AbstractLayout {
       partsToCellsIndices,
       heights: arr0,
       dys: arr0.slice(),
-      dy2s: arr0.slice()
+      dy2s: arr0.slice(),
+      y0s: [],
+      by0s: []
     }
 
     this.measuresLayouts.forEach(measureLayout => {
@@ -46,6 +43,14 @@ export default class SystemLayout extends AbstractLayout {
         this.staves.dy2s[c] = Math.max(this.staves.dy2s[c], cellLayout.dy2)
         this.staves.heights[c] = this.staves.dys[c] + this.staves.dy2s[c]
       })
+    })
+
+    const { stavesSep } = this.style.system
+    let y0 = 0
+    this.staves.heights.forEach((height, s) => {
+      this.staves.y0s.push(y0)
+      this.staves.by0s.push(y0 + this.staves.dys[s])
+      y0 += height + stavesSep
     })
 
     this.height = sum(this.staves.heights) +
