@@ -44,7 +44,7 @@ export default function appElement() {
 
     el('div', { style: 'width: 47%; float: left'}, [
       el('textarea', {
-        style: 'width: 100%; height: 100px',
+        style: 'width: 100%; height: 200px',
         value: data.$scoreStr
       }),
       el('button', { click: () => player.play(data.score) }, '>'),

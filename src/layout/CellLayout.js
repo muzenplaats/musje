@@ -56,11 +56,11 @@ export default class CellLayout extends AbstractLayout {
 
   setMinWidth() {
     const { paddingLeft, paddingRight } = this.style.cell
-    const { leftBar, rightBar, shownLeftBar, shownRightBar } = this.cell
+    const { shownLeftBarLayout, shownRightBarLayout } = this.cell
     this.minWidth = this.dataLayout.minWidth + paddingLeft + paddingRight +
-                    (shownLeftBar ? this.shownLeftBarLayout.width :
+                    (shownLeftBarLayout ? shownLeftBarLayout.width :
                                     this.leftBarLayout.width / 2) +
-                    (shownRightBar ? this.shownRightBarLayout. width :
+                    (shownRightBarLayout ? shownRightBarLayout.width :
                                      this.rightBarLayout.width / 2)
     this.width = this.minWidth
   }

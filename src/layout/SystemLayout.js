@@ -1,6 +1,6 @@
  import AbstractLayout from './AbstractLayout'
 import MeasureLayout from './MeasureLayout'
-import { zeros, sum } from '../utils/helpers'
+import { zeros, sum, lastItem } from '../utils/helpers'
 
 export default class SystemLayout extends AbstractLayout {
   constructor(headLayout, measures, style) {
@@ -34,7 +34,8 @@ export default class SystemLayout extends AbstractLayout {
       dys: arr0.slice(),
       dy2s: arr0.slice(),
       y0s: [],
-      by0s: []
+      by0s: [],
+      y20s: []
     }
 
     this.measuresLayouts.forEach(measureLayout => {
@@ -45,21 +46,24 @@ export default class SystemLayout extends AbstractLayout {
       })
     })
 
-    const { stavesSep } = this.style.system
-    let y0 = 0
-    this.staves.heights.forEach((height, s) => {
-      this.staves.y0s.push(y0)
-      this.staves.by0s.push(y0 + this.staves.dys[s])
-      y0 += height + stavesSep
-    })
-
-    this.height = sum(this.staves.heights) +
-                  this.style.system.stavesSep * (this.staves.heights.length - 1)
+    this.setY0s()
+    this.height = lastItem(this.staves.y20s)
 
     this.headLayout.height = this.height
     this.headLayout.staves = this.staves
     this.measuresLayouts.forEach(measureLayout => {
       measureLayout.setHeight(this.height, this.staves)
+    })
+  }
+
+  setY0s() {
+    const { stavesSep } = this.style.system
+    let y0 = 0
+    this.staves.heights.forEach((height, s) => {
+      this.staves.y0s.push(y0)
+      this.staves.by0s.push(y0 + this.staves.dys[s])
+      this.staves.y20s.push(y0 + this.staves.heights[s])
+      y0 += height + stavesSep
     })
   }
 

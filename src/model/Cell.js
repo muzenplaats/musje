@@ -128,8 +128,9 @@ export default class Cell {
   toString() {
     const data = []
     const beamed = []
-    let bardata = this.leftBar.value === '|' ? [] : [this.leftBar]
-    bardata = bardata.concat(this.data, this.rightBar)
+
+    // Todo: leftBar for the first cell.
+    const bardata = this.data.concat(this.rightBar)
     bardata.forEach(dt => {
       const { duration } = dt
       if (!duration || duration.type < 8) return data.push(dt)
