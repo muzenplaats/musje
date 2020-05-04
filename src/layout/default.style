@@ -102,6 +102,13 @@ system {
   part-name-padding-right: 30%
 }
 
+system-head {
+  braced-staves: Piano, test
+  brace-padding-right: 10%
+  brace-width: 30%
+  brace-stroke-width: 10%
+}
+
 cell {
   padding-left: 60%
   padding-right: 60%

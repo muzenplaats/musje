@@ -32,8 +32,11 @@ export default class BodyLayout extends AbstractLayout {
 
   createSystemHeadLayout(nameType) {
     const head = {
-      nameType, partHeads: this.parts.map(part => part.head)
+      nameType,
+      partHeads: this.parts.map(part => part.head)
     }
+    const measure = this.measures[0]
+    if (measure) head.partsToCellsIndices = measure.partsToCellsIndices
     return new SystemHeadLayout(head, this.style)
   }
 

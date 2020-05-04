@@ -11,9 +11,9 @@
 
 // import appElement from './appElement_old'
 
-import appElement from './tools/toolsElement'
+// import appElement from './tools/toolsElement'
 
-// import appElement from './appElement'
+import appElement from './appElement'
 // import appElement from './fromMxlElement'
 // import appElement from './converterAppElement'
 // import appElement from './math/plotElement'

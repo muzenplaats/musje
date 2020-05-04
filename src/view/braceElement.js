@@ -2,29 +2,24 @@ import el from '../utils/el'
 import box from './box'
 import pathD from '../math/pathD'
 
-export default function braceElement(braceLayout) {
-  const { width, height, strokeWidth } = braceLayout
+// Shape dapted from MuseScore 3.0.
 
-  const xsNorm = [0.923, 0.923, 0.334, 0.334, 0.334, 0.495, 0.990, 0.997, 1.00, 1.00, 1.00, 0.963, 0.936, 0.923, 0.900, 0.883, 0.241, 0.0268, 0.0268, 0.0268, 0.656, 0.656, 0.656, 0.495, 0.00, 0.00, 0.00, 0.495, 0.656, 0.656, 0.656, 0.0268, 0.0268, 0.0268, 0.241, 0.883, 0.900, 0.923, 0.936, 0.963, 1.00, 1.00, 1.00, 0.997, 0.990, 0.495, 0.334, 0.334, 0.334, 0.923, 0.923, 0.923, 0.709, 0.0803, 0.709, 0.923, 0.923]
+const normXs = [0.923, 0.923, 0.334, 0.334, 0.334, 0.495, 0.990, 0.997, 1.00, 1.00, 1.00, 0.963, 0.936, 0.923, 0.900, 0.883, 0.241, 0.0268, 0.0268, 0.0268, 0.656, 0.656, 0.656, 0.495, 0.00, 0.00, 0.00, 0.495, 0.656, 0.656, 0.656, 0.0268, 0.0268, 0.0268, 0.241, 0.883, 0.900, 0.923, 0.936, 0.963, 1.00, 1.00, 1.00, 0.997, 0.990, 0.495, 0.334, 0.334, 0.334, 0.923, 0.923, 0.923, 0.709, 0.0803, 0.709, 0.923, 0.923]
 
-  const ysNorm = [0.354, 0.273, 0.194, 0.116, 0.0763, 0.0382, 0.00399, 0.00356, 0.00285, 0.00242, 0.00114, 0.00, 0.00, 0.00, 0.000143, 0.00114, 0.0450, 0.0957, 0.147, 0.229, 0.309, 0.388, 0.428, 0.465, 0.499, 0.500, 0.501, 0.535, 0.572, 0.612, 0.691, 0.770, 0.853, 0.904, 0.955, 0.999, 1.00, 1.00, 1.00, 1.00, 0.999, 0.998, 0.997, 0.996, 0.996, 0.962, 0.924, 0.884, 0.806, 0.727, 0.646, 0.594, 0.544, 0.500, 0.456, 0.406, 0.354]
+const normYs = [0.354, 0.273, 0.194, 0.116, 0.0763, 0.0382, 0.00399, 0.00356, 0.00285, 0.00242, 0.00114, 0.00, 0.00, 0.00, 0.000143, 0.00114, 0.0450, 0.0957, 0.147, 0.229, 0.309, 0.388, 0.428, 0.465, 0.499, 0.500, 0.501, 0.535, 0.572, 0.612, 0.691, 0.770, 0.853, 0.904, 0.955, 0.999, 1.00, 1.00, 1.00, 1.00, 0.999, 0.998, 0.997, 0.996, 0.996, 0.962, 0.924, 0.884, 0.806, 0.727, 0.646, 0.594, 0.544, 0.500, 0.456, 0.406, 0.354]
 
-  const adjustWidth = () => {
-    // xMin: 0 - xMax: width
-  }
+const transformXs = (x0, width, strokeWidth) => {
+  // Todo: strokeWidth
+  // xs[0-25], xs[25-56]
+  return normXs.map(x => x0 + x * width)
+}
 
-  const adjustHeight = () => {
-    // yMin: 0 - yMax: height
-  }
+const transformYs = (y0, height) => {
+  return normYs.map(y => y0 + y * height)
+}
 
-  const adjustStrokeWidth = () => {
-    // ys[0-25], ys[25-56]
-  }
-
-  const xs = adjustStrokeWidth(adjustWidth())
-  const ys = adjustHeight()
-
-  const pathEl = el.create('path', {
+const getBrace = (xs, ys) => {
+  return el('path', {
     d: pathD()
       .moveTo(xs[0], ys[0])
       .curveTo(xs[1], ys[1], xs[2], ys[2], xs[3], ys[3])
@@ -49,10 +44,16 @@ export default function braceElement(braceLayout) {
       .curveTo(xs[54], ys[54], xs[55], ys[55], xs[56], ys[56]),
     style: 'fill: black'
   })
+}
+
+export default function braceElement(braceLayout) {
+  const { x, y, width, height, strokeWidth } = braceLayout
+
+  const xs = transformXs(x, width, strokeWidth)
+  const ys = transformYs(y, height)
 
   return el.create('g', [
-    // box(curveLayout, 'orange'),
-    // box(textLayout, 'orange'),
-    pathEl,
+    // box(braceLayout, 'green'),
+    getBrace(xs, ys),
   ])
 }
