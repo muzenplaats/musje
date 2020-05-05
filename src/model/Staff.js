@@ -42,17 +42,47 @@ export default class Staff {
   }
 
   placeLyrics() {
+    let inSlur = false
+
     this.lyricsLines.forEach(lyrics => {
-      this.cells.forEach(cell => {
-        cell.data.forEach(dt => {
-          if (dt.tie && dt.tie.type !== 'begin') return
-          if (dt.name === 'note' || dt.name === 'chord') {
-            dt.lyrics = dt.lyrics || []
+      for (let c = 0; c < this.cells.length; c++) {
+        let cell = this.cells[c]
+
+        for (let d = 0; d < cell.data.length; d++) {
+          let dt = cell.data[d]
+          if (dt.tie && dt.tie.type !== 'begin') continue
+
+                  console.log(c, d)
+
+
+          if (!inSlur && dt.name === 'note' || dt.name === 'chord') {
             const lyric = lyrics.list.shift()
-            if (lyric) dt.lyrics.push(lyric)
+            if (lyric) {
+              if (lyric.name === 'lyric-control') {
+                const control = lyric
+                console.log(c, control)
+                if (control.instruction === 'at') {
+                  if (control.measureAmount) {
+                    c = control.measureAmount - 2
+                    console.log('c', c)
+                    break
+                  }
+                } else if (control.instruction === 'increase') {
+                  if (control.measureAmount) {
+                    c += control.measureAmount
+                    break
+                  }
+                }
+              } else {
+                dt.lyrics = dt.lyrics || []
+                dt.lyrics.push(lyric)
+              }
+            }
           }
-        })
-      })
+          if (dt.endSlurs) inSlur = false
+          if (dt.beginSlurs) inSlur = true
+        }
+      }
     })
     delete this.lyricsLines
   }
