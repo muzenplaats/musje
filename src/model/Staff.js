@@ -4,6 +4,7 @@ import { Q } from './constants'
 import Cell from './Cell'
 import Tie from './Tie'
 import Lyrics from './Lyrics'
+import Dummy from './Dummy'
 
 export default class Staff {
   constructor(staff) {
@@ -54,12 +55,12 @@ export default class Staff {
 
                   console.log(c, d)
 
-
           if (!inSlur && dt.name === 'note' || dt.name === 'chord') {
             const lyric = lyrics.list.shift()
             if (lyric) {
               if (lyric.name === 'lyric-control') {
                 const control = lyric
+                cell.data.splice(d, 0, new Dummy({ lyrics: [control]}))
                 console.log(c, control)
                 if (control.instruction === 'at') {
                   if (control.measureAmount) {

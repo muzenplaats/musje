@@ -132,6 +132,8 @@ export default class Cell {
     // Todo: leftBar for the first cell.
     const bardata = this.data.concat(this.rightBar)
     bardata.forEach(dt => {
+      if (dt.name === 'dummy') return
+
       const { duration } = dt
       if (!duration || duration.type < 8) return data.push(dt)
       const { beams } = duration
