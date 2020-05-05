@@ -13,6 +13,12 @@ import './appElement.css'
 import jsonElement from './utils/jsonElement'
 import xmlElement from './utils/xmlElement'
 
+const scoresUrls = (function () {
+  const fnames = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012']
+  return fnames.map(fname => `scores/${fname}.musje`)
+}())
+const defaultUrl = 'scores/010.musje'
+
 export default function appElement() {
   const data = el.setData({
     scoreStr: '',
@@ -39,6 +45,8 @@ export default function appElement() {
     // }
   })
 
+  const loadScore = url => loadText(url, txt => { data.scoreStr = txt })
+
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
 
@@ -47,6 +55,9 @@ export default function appElement() {
         style: 'width: 100%; height: 200px',
         value: data.$scoreStr
       }),
+      el('span', scoresUrls.map((url, i) => {
+        return el('button', { click() { loadScore(url) } }, i + 1)
+      })), ' ',
       el('button', { click: () => player.play(data.score) }, '>'),
       el('button', { click: () => player.pause() }, '||'),
       el('button', { click: () => player.stop() }, '[]'),
@@ -63,7 +74,7 @@ export default function appElement() {
     ])
   ])
 
-  loadText('scores/011.musje', txt => { data.scoreStr = txt })
+  loadScore(defaultUrl)
 
   return main
 }

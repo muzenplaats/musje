@@ -28,24 +28,21 @@ export default class Note {
   }
 
   parse(lexer) {
-    while (lexer.is('[')) {
-      if (lexer.is('tuplet-begin')) {
-        this.tuplet = new Tuplet(lexer)
-      } else {
-        this.beginSlurs = this.beginSlurs || []
-        this.beginSlurs.push(new Slur(lexer))
-      }
+    while (lexer.is('(')) {
+      this.beginSlurs = this.beginSlurs || []
+      this.beginSlurs.push(new Slur(lexer))
     }
+    while (lexer.is('[')) this.tuplet = new Tuplet(lexer)
+
     this.pitch = new Pitch(lexer)
     this.duration = new Duration(lexer)
-    while (lexer.is('tuplet-end')) {
-      this.tuplet = new Tuplet(lexer)
-    }
+
+    while (lexer.is('tuplet-end')) this.tuplet = new Tuplet(lexer)
+    if (lexer.is('~')) this.tie = new Tie(lexer)
     while (lexer.is(')')) {
       this.endSlurs = this.endSlurs || []
       this.endSlurs.push(new Slur(lexer))
     }
-    if (lexer.is('~')) this.tie = new Tie(lexer)
   }
 
   get onplay() { return this._onplay || this.defaultOnplay.bind(this) }

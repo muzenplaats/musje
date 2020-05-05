@@ -43,12 +43,18 @@ export default class MeasureLayout extends AbstractLayout {
 
     if (this.atSysBegin) {
       const lastCellIndex = this.cellsLayouts.length - 1
+      if (!lastCellIndex) return
       this.connectBars('left', [[0, lastCellIndex]])
+      if (!this.leftBarLayouts) return
+
       this.leftBarLayouts.forEach(layout => layout.position = {
         x, y2: y + this.staves.by0s[layout.lastCellIndex]
       })
+
     } else if (this.atSysEnd) {
       this.connectBars('right', this.staves.partsToCellsIndices)
+      if (!this.rightBarLayouts) return
+
       this.rightBarLayouts.forEach((layout, l) => {
         const cellIndex = this.staves.partsToCellsIndices[l]
         layout.position = {
@@ -63,11 +69,15 @@ export default class MeasureLayout extends AbstractLayout {
       const { shownLeftBarLayout, leftBarLayout } = cellLayout
       return shownLeftBarLayout || leftBarLayout
     }
+
     const getRightBarLayout = cellLayout => {
       const { shownRightBarLayout, rightBarLayout } = cellLayout
       return shownRightBarLayout || rightBarLayout
     }
+
     const addMeasureBarLayout = (side, cs) => {
+      if (cs[0] === cs[1]) return
+
       const barLineHeight = this.staves.by0s[cs[1]] - this.staves.by0s[cs[0]] +
                             this.style.bar.lineHeight
       if (side === 'left') {
@@ -92,6 +102,7 @@ export default class MeasureLayout extends AbstractLayout {
     cellsIndicesList.forEach(cellsIndices => {
       if (cellsIndices.length < 2) return
       const cs = [cellsIndices[0], lastItem(cellsIndices)]
+
       addMeasureBarLayout(side, cs)
       range(cs[0], cs[1] + 1).forEach(c => {
         if (side === 'left') {
