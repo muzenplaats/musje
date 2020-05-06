@@ -7,7 +7,7 @@ A numbered musical notation in sheet music.
 Musje is sparrow in Dutch. The first numbered musical notation was
 presented by Jean-Jacques Rousseau to the French Academy of
 Sciences in 1742. It has been evolved and become popular in some
-areas of Asia, and called jianpu, simple music score, in Chinese.
+areas of Asia, and called jianpu, literally simple music score, in Chinese.
 The musje 123 is a music processor based on this notation.
 
 ## Development
@@ -21,4 +21,12 @@ npm run serve
 
 and http://localhost:9000/.
 
-The rendering is based on the unexpected `el.js` by-product.
+The rendering is based on a funny `el.js` by-product.
+
+### Roadmap toward musje 2.0.0-beta
+
+Features to be implemented:
+- Chord and note ties inter-playing.
+- System align justify (default); currently left
+- Fix some direction issues (low priority).
+

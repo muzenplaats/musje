@@ -98,6 +98,7 @@ body {
 }
 
 system {
+  align: justify|left
   staves-sep: 100%
   part-name-padding-right: 30%
 }
