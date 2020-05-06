@@ -213,7 +213,8 @@ const setStickDx = (stick, dxName = 'dx') => {
     if (main) dx = Math.max(dx, main[dxName])
     // if (dirsAbove) dx = max(dirsAbove.map(dir => dir[dxName]).concat(dx))
     // if (dirsBelow) dx = max(dirsBelow.map(dir => dir[dxName]).concat(dx))
-    if (lyrics) dx = max(lyrics.map(dir => dir[dxName]).concat(dx))
+    if (lyrics) dx = max(lyrics.map(lyric => lyric[dxName]).concat(dx)
+                                            .filter(dx => dx !== undefined))
   })
   stick[dxName] = dx
 }

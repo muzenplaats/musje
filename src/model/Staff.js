@@ -43,9 +43,9 @@ export default class Staff {
   }
 
   placeLyrics() {
-    let inSlur = false
+    this.lyricsLines.forEach((lyrics, lineIndex) => {
+      let inSlur = false
 
-    this.lyricsLines.forEach(lyrics => {
       for (let c = 0; c < this.cells.length; c++) {
         let cell = this.cells[c]
 
@@ -53,19 +53,21 @@ export default class Staff {
           let dt = cell.data[d]
           if (dt.tie && dt.tie.type !== 'begin') continue
 
-                  console.log(c, d)
+                  // console.log(c, d)
 
           if (!inSlur && dt.name === 'note' || dt.name === 'chord') {
             const lyric = lyrics.list.shift()
             if (lyric) {
               if (lyric.name === 'lyric-control') {
                 const control = lyric
-                cell.data.splice(d, 0, new Dummy({ lyrics: [control]}))
-                console.log(c, control)
+                const dummy = new Dummy({ lyrics: []})  // used for toString()
+                dummy.lyrics[lineIndex] = control
+                cell.data.splice(d, 0, dummy)
+                // console.log(c, control)
                 if (control.instruction === 'at') {
                   if (control.measureAmount) {
                     c = control.measureAmount - 2
-                    console.log('c', c)
+                    // console.log('c', c)
                     break
                   }
                 } else if (control.instruction === 'increase') {
@@ -76,7 +78,7 @@ export default class Staff {
                 }
               } else {
                 dt.lyrics = dt.lyrics || []
-                dt.lyrics.push(lyric)
+                dt.lyrics[lineIndex] = lyric
               }
             }
           }

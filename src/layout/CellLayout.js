@@ -160,7 +160,7 @@ class DataLayout extends AbstractLayout {
     // })
 
     this.sticks.forEach(stick => {
-      const { dirsAbove, main, dirsBelow, lyrics, x: sx } = stick
+      const { dirsAbove, main, dirsBelow, x: sx } = stick
       const bx = x + sx
       if (main) main.position = { bx, by }
       // Tmp
