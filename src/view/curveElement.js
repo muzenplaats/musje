@@ -26,10 +26,16 @@ export default function curveElement(curveLayout) {
   const cx22 = cx12
   const cy22 = cy12 + strokeWidth
 
+  // To be moved to the style sheet.
+  const thinWidth = strokeWidth * 0.1
+
   const pathEl = el.create('path', {
     d: pathD().moveTo(x1, y1)
+              .horiBy(-thinWidth)
               .curveTo(cx11, cy11, cx12, cy12, x2, y2)
-              .curveTo(cx22, cy22, cx21, cy21, x1, y1),
+              .horiBy(-thinWidth)
+              .curveTo(cx22, cy22, cx21, cy21, x1, y1)
+              .close(),
     style: 'fill: black'
   })
 

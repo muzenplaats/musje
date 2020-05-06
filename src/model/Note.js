@@ -88,5 +88,6 @@ export default class Note {
     if (tie) strs.push(this.tie)
     return strs.join('')
 }
-  toJSON = makeToJSON('pitch', 'duration', 'tie', 'tuplet', 'lyric')
+  toJSON = makeToJSON('pitch', 'duration', 'tie', 'tuplet',
+                      'beginSlurs', 'endSlurs', 'lyric')
 }

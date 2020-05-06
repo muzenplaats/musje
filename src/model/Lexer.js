@@ -27,12 +27,14 @@ const Lexer = makeLexerClass({
   '//': '\\/\\/',
   '/*': '\\/\\*',
   '*/': '\\*\\/',
+
   digit: '\\d',
   digits: '\\d+',
   paran: '[\\(\\)]',
   letter: `[${letter}]`,
   word: `[${letter}]+`,
   words: `[${letter} ]+`,
+
   abbreviation: `[${letter}\\.]+`,
   midi: 'midi', channel: 'channel', program: 'program', pan: 'pan',
   title: 'title:',
@@ -50,13 +52,15 @@ const Lexer = makeLexerClass({
   dots: '\\.{1,2}',
   pitch,
   duration: '[-_=]*\.{1,2}',
+
   time: '[1-9]\\d{0,3}\\/',
-  note: `[\\(\\[\\d:]*${pitch}`,
+  note: `\\(*(\\[\\d+:)*${pitch}`,
   rest: '0',
-  chord: `<(${pitch})*>`,
+  chord: `\\(*(\\[\\d+:)*<(${pitch})*>`,
   multipart: '<',
   direction: `[\\/\\\\][${letter} ]+`,
   bar: '(:\\|:?|\\|:|\\|[\\|\\]]?)',
+
   wedge: 'wedge',
   dynamics: '(p{1,6}|f{1,6}|m[pf]|sfp{0,2}|fp|rfz?|sf{1,2}z|fz)',
   'tuplet-begin': '\\[\\d+:',

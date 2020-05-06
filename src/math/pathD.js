@@ -16,6 +16,7 @@ class PathD {
   curveBy(dx1, dy1, dx2, dy2, dx, dy) {
     this.data += `C${dx1} ${dy1},${dx2} ${dy2},${dx}, ${dy}`; return this
   }
+  close() { this.data += 'Z'; return this }
 
   lines(data) {
     if (!Array.isArray(data)) data = [data]

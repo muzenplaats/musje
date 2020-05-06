@@ -1,6 +1,7 @@
 import AbstractLayout from './AbstractLayout'
 import DurationLayout from './DurationLayout'
 import NoteLayout from './NoteLayout'
+
 const { setSize, setTypeLt4Size, setType4Size, setTypeGt4Size } =
       NoteLayout.prototype
 

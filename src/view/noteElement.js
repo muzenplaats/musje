@@ -42,6 +42,7 @@ export default function noteElement(noteLayout) {
     // box(noteLayout, 'green'),
     pitchElement(pitchLayout),
     durationElement(durationLayout),
+
     showTie(tieLayout) ? curveElement(tieLayout) : [],
     showTuplet(tupletLayout) ? tupletElement(tupletLayout) : [],
     beginSlursLayouts ? beginSlursLayouts.map(layout => {
