@@ -42,54 +42,6 @@ export default class Staff {
     }
   }
 
-  placeLyrics() {
-    this.lyricsLines.forEach((lyrics, lineIndex) => {
-      let inSlur = false
-
-      for (let c = 0; c < this.cells.length; c++) {
-        let cell = this.cells[c]
-
-        for (let d = 0; d < cell.data.length; d++) {
-          let dt = cell.data[d]
-          if (dt.tie && dt.tie.type !== 'begin') continue
-
-                  // console.log(c, d)
-
-          if (!inSlur && dt.name === 'note' || dt.name === 'chord') {
-            const lyric = lyrics.list.shift()
-            if (lyric) {
-              if (lyric.name === 'lyric-control') {
-                const control = lyric
-                const dummy = new Dummy({ lyrics: []})  // used for toString()
-                dummy.lyrics[lineIndex] = control
-                cell.data.splice(d, 0, dummy)
-                // console.log(c, control)
-                if (control.instruction === 'at') {
-                  if (control.measureAmount) {
-                    c = control.measureAmount - 2
-                    // console.log('c', c)
-                    break
-                  }
-                } else if (control.instruction === 'increase') {
-                  if (control.measureAmount) {
-                    c += control.measureAmount
-                    break
-                  }
-                }
-              } else {
-                dt.lyrics = dt.lyrics || []
-                dt.lyrics[lineIndex] = lyric
-              }
-            }
-          }
-          if (dt.endSlurs) inSlur = false
-          if (dt.beginSlurs) inSlur = true
-        }
-      }
-    })
-    delete this.lyricsLines
-  }
-
   resetLeftBars() {
     const { cells } = this
     cells.forEach((cell, c) => {
@@ -242,6 +194,64 @@ export default class Staff {
         tcQ += duration.quartersQ
       })
     })
+  }
+
+  placeLyrics() {
+    this.lyricsLines.forEach((lyrics, lineIndex) => {
+      let inSlur = false
+      let tmpOmitSlur = false
+
+      for (let c = 0; c < this.cells.length; c++) {
+        let cell = this.cells[c]
+
+        for (let d = 0; d < cell.data.length; d++) {
+          let dt = cell.data[d]
+          if (!dt) break
+          if (dt.tie && dt.tie.type !== 'begin') continue
+
+          const headLyric = lyrics.list[0]
+          if (headLyric && headLyric.name === 'lyric-control') {
+            const control = lyrics.list.shift()
+            const dummy = new Dummy({ lyrics: []})  // used for toString()
+            dummy.lyrics[lineIndex] = control
+            cell.data.splice(d, 0, dummy)
+            const { instruction, type, amount } = control
+            if (instruction === 'at') {
+              if (type === 'measure') {
+                c = amount - 2; break
+              } else if (type === 'note') {
+                d = amount - 1; continue
+              }
+            } else if (instruction === 'forward') {
+              if (type === 'measure') {
+                c += amount - 1; break
+              } else if (type === 'note') {
+                d += amount; continue
+              }
+            } else if (instruction === 'backward') {
+              if (type === 'measure') {
+                c -= amount + 1; break
+              } else if (type === 'note') {
+                d -= amount; tmpOmitSlur = true; continue
+              }
+            }
+          }
+
+          if ((!inSlur || tmpOmitSlur) &&
+              (dt.name === 'note' || dt.name === 'chord')) {
+            tmpOmitSlur = false
+            const lyric = lyrics.list.shift()
+            if (lyric) {
+              dt.lyrics = dt.lyrics || []
+              dt.lyrics[lineIndex] = lyric
+            }
+          }
+          if (dt.endSlurs) inSlur = false
+          if (dt.beginSlurs) inSlur = true
+        }
+      }
+    })
+    delete this.lyricsLines
   }
 
   toString() {

@@ -38,7 +38,7 @@ export default class Lyric {
         default: this.syllabic = 'single'
       }
     }
-    if (lexer.is('-') && !lexer.is('--')) {
+    if (lexer.is('-') && !lexer.is('--')  && !lexer.is('lyric-control')) {
       setHyphened(); lexer.token('-'); lexer.skipWhite()
     } else {
       setUnhyphened()
