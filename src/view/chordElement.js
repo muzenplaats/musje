@@ -8,13 +8,11 @@ import { flatten } from '../utils/helpers'
 
 export default function chordElement(chordLayout) {
   const { chord, pitchesLayout, durationLayout,
-          tieLayout, tupletLayout,
+          tieLayout, tupletLayout, tieMode,
           beginSlursLayouts, endSlursLayouts, lyricsLayouts } = chordLayout
 
-  const showChordwiseTie = false
-
   const showTie = tieLayout => {
-    if (!showChordwiseTie || !tieLayout) return false
+    if (tieMode !== 'single' || !tieLayout) return false
     const { tie } =  tieLayout
     return tie.type !== 'end' || tieLayout.showPrev
   }

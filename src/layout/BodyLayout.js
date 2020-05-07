@@ -104,8 +104,8 @@ export default class BodyLayout extends AbstractLayout {
             if (endSlursLayouts) {
               endSlursLayouts.forEach(layout => assignSys(layout))
             }
-            if (chord) layout.pitchesLayout.layouts.forEach(layout => {
-              if (layout.tieLayout) assignSys(layout.tieLayout)
+            if (chord) layout.pitchesLayout.layouts.forEach(playout => {
+              if (playout.tieLayout) assignSys(playout.tieLayout)
             })
           })
         })

@@ -4,7 +4,7 @@ import curveElement from './curveElement'
 
 export default function pitchElement(pitchLayout) {
   const { pitch, stepLayout, accidentalLayout, octavesLayout,
-          tieLayout } = pitchLayout
+          tieLayout, tieMode } = pitchLayout
 
   const sty1 = `
     font-family: ${stepLayout.family}
@@ -18,7 +18,7 @@ export default function pitchElement(pitchLayout) {
   `
 
   const showTie = tieLayout => {
-    if (!tieLayout) return false
+    if (!tieLayout || tieMode === 'single') return false
     const { tie } =  tieLayout
     return tie.type !== 'end' || tieLayout.showPrev
   }

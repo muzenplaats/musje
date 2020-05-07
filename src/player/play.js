@@ -37,14 +37,49 @@ const oscPlay = (t, freq, dur, onended, context) => {
 }
 
 const getTiedNotes = note => {
-  const { tie } = note
   const notes = [note]
-  let nnote = tie.nextNote
+  let nnote = note.tie.nextNote
   while (nnote) {
     notes.push(nnote)
     if (nnote.tie) nnote = nnote.tie.nextNote
   }
   return notes
+}
+
+const getTiedDtPitchPairs = ({ dt, pitch }) => {
+  const pairs = [{ dt, pitch }]
+
+  const nextPair = () => {
+    const { tie } = pitch || dt
+    dt = tie.nextNote
+    pitch = tie.nextPitch
+  }
+
+  nextPair()
+  while (dt) {
+    pairs.push({ dt, pitch })
+    nextPair()
+  }
+  return pairs
+}
+
+const playTiedPairs = (pitch, pairs, context) => {
+  pairs.forEach(({ dt, pitch }) => {
+    if (pitch) pitch.onplay(); else dt.onplay()
+  })
+  const dur = sum(pairs.map(({ dt }) => getDur(dt)))
+  const stopHandler = () => pairs.forEach(({ dt, pitch }) => {
+    if (pitch) pitch.onstop(); else dt.onstop()
+  })
+  oscPlay(0, pitch.frequency, dur, stopHandler, context)
+}
+
+const chordOnplay = pairs => {
+  pairs.forEach(({ dt }) => { if (dt.name === 'chord') dt.onplay() })
+  const dur = sum(pairs.map(({ dt }) => getDur(dt)))
+  setTimeout(() => {
+    pairs.forEach(({ dt }) => { if (dt.name === 'chord') dt.onstop() })
+  }, dur * 1000)
 }
 
 const getDur = dt => dt.duration.seconds
@@ -84,13 +119,10 @@ const playNote = (note, context) => {
     // console.log(`play: ${note}`, pitch.frequency)
     const { tie } = note
     if (tie) {
-      if (tie.type === 'begin') {
-        const notes = getTiedNotes(note)
-        notes.forEach(note => note.onplay())
-        const dur = sum(notes.map(note => getDur(note)))
-        const stopHandler = () => notes.forEach(note => note.onstop())
-        oscPlay(0, pitch.frequency, dur, stopHandler, context)
-      }
+      if (tie.type !== 'begin') return
+      const pairs = getTiedDtPitchPairs({ dt: note })
+      playTiedPairs(pitch, pairs, context)
+      chordOnplay(pairs)
     } else {
       note.onplay()
       const dur = getDur(note)
@@ -104,22 +136,23 @@ const playChord = (chord, context) => {
   tos.push(setTimeout(() => {
     // console.log(`play: ${chord}`)
 
-    chord.onplay()
+    // Call dt.onplay() for tied chords and notes.
+    if (chord.tie && chord.tie.type === 'begin') {
+      console.log(chord.tie.type)
+      const pairs = getTiedDtPitchPairs({ dt: chord })
+      chordOnplay(pairs)
+    }
+
+    // Play pitches.
     chord.pitches.forEach(pitch => {
       if (pitch.tie) {
-        if (pitch.tie.type === 'begin') {
-          pitch.onplay()
-        }
+        if (pitch.tie.type !== 'begin') return
+        const pairs = getTiedDtPitchPairs({ dt: chord, pitch })
+        playTiedPairs(pitch, pairs, context)
       } else {
         pitch.onplay()
         oscPlay(0, pitch.frequency, dur, () => pitch.onstop(), context)
       }
     })
-    setTimeout(chord.onstop, dur * 1000)
-
-    // chord.onplay()
-    // chord.pitches.forEach(pitch => {
-    //   oscPlay(0, pitch.frequency, dur, () => chord.onstop(), context)
-    // })
   }, chord.t * 1000))
 }

@@ -19,6 +19,7 @@ export default class ChordLayout extends AbstractLayout {
     this.pitchesLayout = new PitchesLayout(chord.pitches, style)
     this.durationLayout = new DurationLayout(chord.duration, style)
     this.setSize(chord.duration, this.pitchesLayout)
+    this.tieMode = style.chord.tieMode
 
     const { tie, tuplet, beginSlurs, endSlurs, lyrics } = chord
     if (tie) this.tieLayout = new TieLayout(tie, style)

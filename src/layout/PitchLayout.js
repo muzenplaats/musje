@@ -19,6 +19,7 @@ export default class PitchLayout extends AbstractLayout {
     this.accidentalLayout = new AccidentalLayout(accidental, style)
     this.octavesLayout = new OctavesLayout(octave, style)
     if (tie) this.tieLayout = new TieLayout(tie, style)
+    this.tieMode = style.chord.tieMode
     this.setSize()
   }
 

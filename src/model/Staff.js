@@ -141,15 +141,12 @@ export default class Staff {
             if (!curr || !next) return
 
             if (curr.tie) {
-              if (curr.tie.type === 'end') {
-                curr.tie.type = 'continue'
-              }
+              if (curr.tie.type === 'end') curr.tie.type = 'continue'
             } else {
               curr.tie = new Tie({ type: 'begin' })
             }
             next.tie = new Tie({
-              type: next.tie ? 'continue' : 'end',
-              cell: ncell
+              type: next.tie ? 'continue' : 'end', cell: ncell
             })
             curr.tie.cell = cell
             curr.tie.nextNote = ndt
@@ -158,17 +155,36 @@ export default class Staff {
             next.tie.prevNote = dt
             if (curr.name === 'pitch') next.tie.prevPitch = curr
             next.tie.prev = curr.tie
-          }
 
-          // linkTiePair(dt, ndt)
+
+            // chord~note
+            if (curr.name === 'pitch' && next.name === 'note') {
+              console.log('chord~note', dt.tie)
+              dt.tie.cell = cell
+              dt.tie.nextNote = ndt
+              dt.tie.next = ndt.tie
+
+            // note~chord
+            } else if (curr.name === 'note' && next.name === 'pitch') {
+              console.log('note~chord', ndt.tie)
+
+              // Todo
+              dt.nextCT = ndt.tie
+              ndt.tie = new Tie({
+                type: ndt.tie ? 'continue' : 'end', cell: ncell
+              })
+              ndt.tie.prevNote = dt
+              ndt.tie.prev = dt.tie
+            }
+          }
 
           switch (dt.name) {
             case 'note':
               switch (ndt.name) {
-                case 'note':
+                case 'note':    // note~note
                   linkTiePair(dt, ndt, dt, ndt)
                   break
-                case 'chord':
+                case 'chord':   // note~chord
                   const npitch = getMatchedPitch(ndt.pitches, dt.pitch)
                   linkTiePair(dt, npitch, dt, ndt)
                   break
@@ -176,28 +192,19 @@ export default class Staff {
               break
             case 'chord':
               switch (ndt.name) {
-                case 'note':
+                case 'note':    // chord~note
                   const pitch = getMatchedPitch(dt.pitches, ndt.pitch)
                   linkTiePair(pitch, ndt, dt, ndt)
                   break
-                case 'chord':
+                case 'chord':   // chord-chord
                   const paires = getMatchedPitches(dt.pitches, ndt.pitches)
                   paires.forEach(({ curr, next }) =>
                                           linkTiePair(curr, next, dt, ndt))
+                  linkTiePair(dt, ndt, dt, ndt)
                   break
               }
               break
           }
-
-          // ndt.tie = new Tie({
-          //   type: ndt.tie ? 'continue' : 'end',
-          //   cell: ncell
-          // })
-          // dt.tie.cell = cell
-          // dt.tie.nextNote = ndt
-          // dt.tie.next = ndt.tie
-          // ndt.tie.prevNote = dt
-          // ndt.tie.prev = dt.tie
         }
       })
     })

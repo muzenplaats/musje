@@ -98,7 +98,7 @@ body {
 }
 
 system {
-  align: justify|left
+  align: justify  // justify|left
   staves-sep: 100%
   part-name-padding-right: 30%
 }
@@ -141,6 +141,7 @@ note {
 
 chord {
   pitches-sep: 10%
+  tie-mode: single  // single|multiple
 }
 
 note, chord {
