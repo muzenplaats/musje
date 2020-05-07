@@ -1,8 +1,11 @@
 import el from '../utils/el'
 import box from './box'
+import curveElement from './curveElement'
 
 export default function pitchElement(pitchLayout) {
-  const { pitch, stepLayout, accidentalLayout, octavesLayout } = pitchLayout
+  const { pitch, stepLayout, accidentalLayout, octavesLayout,
+          tieLayout } = pitchLayout
+
   const sty1 = `
     font-family: ${stepLayout.family}
     font-size: ${stepLayout.size}
@@ -13,6 +16,12 @@ export default function pitchElement(pitchLayout) {
     font-size: ${accidentalLayout.size}
     text-anchor: middle
   `
+
+  const showTie = tieLayout => {
+    if (!tieLayout) return false
+    const { tie } =  tieLayout
+    return tie.type !== 'end' || tieLayout.showPrev
+  }
 
   const elements = {}
 
@@ -37,6 +46,8 @@ export default function pitchElement(pitchLayout) {
     pitch.octave ? octavesLayout.layouts.map(layout => {
       return el.push(elements, 'octaves')
                .create('circle', layout.circle)
-    }) : []
+    }) : [],
+
+    showTie(tieLayout) ? curveElement(tieLayout) : []
   ])
 }

@@ -95,7 +95,8 @@ export default class BodyLayout extends AbstractLayout {
             layout.c = c
           }
           cellLayout.dataLayout.layouts.forEach(layout => {
-            const { tieLayout, beginSlursLayouts, endSlursLayouts } = layout
+            const { tieLayout, beginSlursLayouts, endSlursLayouts,
+                    chord } = layout
             if (tieLayout) assignSys(tieLayout)
             if (beginSlursLayouts) {
               beginSlursLayouts.forEach(layout => assignSys(layout))
@@ -103,6 +104,9 @@ export default class BodyLayout extends AbstractLayout {
             if (endSlursLayouts) {
               endSlursLayouts.forEach(layout => assignSys(layout))
             }
+            if (chord) layout.pitchesLayout.layouts.forEach(layout => {
+              if (layout.tieLayout) assignSys(layout.tieLayout)
+            })
           })
         })
       })

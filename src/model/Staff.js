@@ -121,7 +121,7 @@ export default class Staff {
           ndt = ncell.data[d]
         }
         if (ndt) {
-          if (ndt.name === 'note') return { ndt, ncell }
+          if (ndt.name === 'note' || ndt.name === 'chord') return { ndt, ncell }
           if (ndt.name === 'rest') break
         }
       } while (ndt)
@@ -131,22 +131,73 @@ export default class Staff {
     this.cells.forEach((cell, c) => {
       cell.data.forEach((dt, d) => {
         if (!dt.tie) return
-        if (dt.name === 'chord') return   // TODO
+
         const { type } = dt.tie
         if (type === 'begin' || type === 'continue') {
           let { ndt, ncell } = getNextNote(c, d)
-          if (ndt) {
-            if (ndt.pitch.midiNumber !== dt.pitch.midiNumber) return
-            ndt.tie = new Tie({
-              type: ndt.tie ? 'continue' : 'end',
+          if (!ndt || !hasMatchedPitch(dt, ndt)) return
+
+          const linkTiePair = (curr, next, dt, ndt) => {
+            if (!curr || !next) return
+
+            if (curr.tie) {
+              if (curr.tie.type === 'end') {
+                curr.tie.type = 'continue'
+              }
+            } else {
+              curr.tie = new Tie({ type: 'begin' })
+            }
+            next.tie = new Tie({
+              type: next.tie ? 'continue' : 'end',
               cell: ncell
             })
-            dt.tie.cell = cell
-            dt.tie.nextNote = ndt
-            dt.tie.next = ndt.tie
-            ndt.tie.prevNote = dt
-            ndt.tie.prev = dt.tie
+            curr.tie.cell = cell
+            curr.tie.nextNote = ndt
+            if (next.name === 'pitch') curr.tie.nextPitch = next
+            curr.tie.next = next.tie
+            next.tie.prevNote = dt
+            if (curr.name === 'pitch') next.tie.prevPitch = curr
+            next.tie.prev = curr.tie
           }
+
+          // linkTiePair(dt, ndt)
+
+          switch (dt.name) {
+            case 'note':
+              switch (ndt.name) {
+                case 'note':
+                  linkTiePair(dt, ndt, dt, ndt)
+                  break
+                case 'chord':
+                  const npitch = getMatchedPitch(ndt.pitches, dt.pitch)
+                  linkTiePair(dt, npitch, dt, ndt)
+                  break
+              }
+              break
+            case 'chord':
+              switch (ndt.name) {
+                case 'note':
+                  const pitch = getMatchedPitch(dt.pitches, ndt.pitch)
+                  linkTiePair(pitch, ndt, dt, ndt)
+                  break
+                case 'chord':
+                  const paires = getMatchedPitches(dt.pitches, ndt.pitches)
+                  paires.forEach(({ curr, next }) =>
+                                          linkTiePair(curr, next, dt, ndt))
+                  break
+              }
+              break
+          }
+
+          // ndt.tie = new Tie({
+          //   type: ndt.tie ? 'continue' : 'end',
+          //   cell: ncell
+          // })
+          // dt.tie.cell = cell
+          // dt.tie.nextNote = ndt
+          // dt.tie.next = ndt.tie
+          // ndt.tie.prevNote = dt
+          // ndt.tie.prev = dt.tie
         }
       })
     })
@@ -297,4 +348,44 @@ const makeNextData = (cells, c, d) => {
     }
     return { ncell, ndt }
   }
+}
+
+const hasMatchedPitch = (dt, ndt) => {
+  switch (dt.name) {
+    case 'note':
+      switch (ndt.name) {
+        case 'note':
+          return ndt.pitch.midiNumber === dt.pitch.midiNumber
+        case 'chord':
+          return ndt.pitches.some(pitch =>
+                                  pitch.midiNumber === dt.pitch.midiNumber)
+      }
+    case 'chord':
+      switch (ndt.name) {
+        case 'note':
+          return dt.pitches.some(pitch =>
+                                 pitch.midiNumber === ndt.pitch.midiNumber)
+        case 'chord':
+          return dt.pitches.some((pitch, p) =>
+                                 pitch.midiNumber === ndt.pitches[p].midiNumber)
+      }
+  }
+}
+
+const getMatchedPitch = (pitches, pitch) => {
+  for (let i = 0; i < pitches.length; i++) {
+    if (pitches[i].midiNumber === pitch.midiNumber) return pitches[i]
+  }
+}
+
+const getMatchedPitches = (pitches, npitches) => {
+  const result = []
+  pitches.forEach(pitch => {
+    npitches.forEach(npitch => {
+      if (pitch.midiNumber === npitch.midiNumber) {
+        result.push({ curr: pitch, next: npitch })
+      }
+    })
+  })
+  return result
 }

@@ -103,9 +103,23 @@ const playChord = (chord, context) => {
   const dur = getDur(chord)
   tos.push(setTimeout(() => {
     // console.log(`play: ${chord}`)
+
     chord.onplay()
     chord.pitches.forEach(pitch => {
-      oscPlay(0, pitch.frequency, dur, () => chord.onstop(), context)
+      if (pitch.tie) {
+        if (pitch.tie.type === 'begin') {
+          pitch.onplay()
+        }
+      } else {
+        pitch.onplay()
+        oscPlay(0, pitch.frequency, dur, () => pitch.onstop(), context)
+      }
     })
+    setTimeout(chord.onstop, dur * 1000)
+
+    // chord.onplay()
+    // chord.pitches.forEach(pitch => {
+    //   oscPlay(0, pitch.frequency, dur, () => chord.onstop(), context)
+    // })
   }, chord.t * 1000))
 }

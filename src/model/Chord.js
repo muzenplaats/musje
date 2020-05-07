@@ -59,7 +59,7 @@ export default class Chord {
   }
 
   defaultOnplay() {
-    this.pitches.forEach(pitch => pitch.onplay())
+    // this.pitches.forEach(pitch => pitch.onplay())
     this.duration.onplay()
     if (this.tie) this.tie.onplay()
     if (this.tuplet) this.tuplet.onplay()
@@ -68,7 +68,7 @@ export default class Chord {
   }
 
   defaultOnstop() {
-    this.pitches.forEach(pitch => pitch.onstop())
+    // this.pitches.forEach(pitch => pitch.onstop())
     this.duration.onstop()
     if (this.tie) this.tie.onstop()
     if (this.tuplet) this.tuplet.onstop()

@@ -11,8 +11,10 @@ export default function chordElement(chordLayout) {
           tieLayout, tupletLayout,
           beginSlursLayouts, endSlursLayouts, lyricsLayouts } = chordLayout
 
+  const showChordwiseTie = false
+
   const showTie = tieLayout => {
-    if (!tieLayout) return false
+    if (!showChordwiseTie || !tieLayout) return false
     const { tie } =  tieLayout
     return tie.type !== 'end' || tieLayout.showPrev
   }

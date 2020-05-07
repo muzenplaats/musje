@@ -1,7 +1,7 @@
 import AbstractLayout from './AbstractLayout'
 import Layout from './Layout'
-import { getSize } from '../utils/helpers'
-import { range } from '../utils/helpers'
+import TieLayout from './TieLayout'
+import { range, getSize } from '../utils/helpers'
 
 const ACCIDENTAL_FONT_MAP = {
   '#': '\ue10f', '##': '\ue126', n: '\ue117', b: '\ue11b', bb: '\ue124'
@@ -13,9 +13,12 @@ export default class PitchLayout extends AbstractLayout {
     this.name = 'pitch-layout'
     this.pitch = pitch
     this.style = style
-    this.stepLayout = new StepLayout(pitch.step, style)
-    this.accidentalLayout = new AccidentalLayout(pitch.accidental, style)
-    this.octavesLayout = new OctavesLayout(pitch.octave, style)
+    const { step, accidental, octave, tie } = pitch
+
+    this.stepLayout = new StepLayout(step, style)
+    this.accidentalLayout = new AccidentalLayout(accidental, style)
+    this.octavesLayout = new OctavesLayout(octave, style)
+    if (tie) this.tieLayout = new TieLayout(tie, style)
     this.setSize()
   }
 
@@ -37,7 +40,7 @@ export default class PitchLayout extends AbstractLayout {
   }
 
   set position(pos) {
-    const { accidental, octave } = this.pitch
+    const { accidental, octave, tie } = this.pitch
     const { stepOctaveSep } = this.style.pitch
     const { lift } = this.style.accidentalFont
 
@@ -58,11 +61,17 @@ export default class PitchLayout extends AbstractLayout {
                               : { cx: scx, y: sy2 + stepOctaveSep }
       this.octavesLayout.position = opos
     }
+
+    if (tie) {
+      const { cx: x, y } = this.stepLayout
+      this.tieLayout.position = { x, y }
+    }
   }
 
   toJSON() {
-    const { stepLayout, accidentalLayout, octavesLayout } = this
-    return { ...super.toJSON(), stepLayout, accidentalLayout, octavesLayout }
+    const { stepLayout, accidentalLayout, octavesLayout, tieLayout } = this
+    return { ...super.toJSON(),
+             stepLayout, accidentalLayout, octavesLayout, tieLayout }
   }
 }
 
