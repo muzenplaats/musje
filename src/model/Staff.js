@@ -148,10 +148,13 @@ export default class Staff {
             next.tie = new Tie({
               type: next.tie ? 'continue' : 'end', cell: ncell
             })
+
             curr.tie.cell = cell
+            curr.tie.note = dt
             curr.tie.nextNote = ndt
             if (next.name === 'pitch') curr.tie.nextPitch = next
             curr.tie.next = next.tie
+            next.tie.note = ndt
             next.tie.prevNote = dt
             if (curr.name === 'pitch') next.tie.prevPitch = curr
             next.tie.prev = curr.tie
@@ -159,22 +162,23 @@ export default class Staff {
 
             // chord~note
             if (curr.name === 'pitch' && next.name === 'note') {
-              console.log('chord~note', dt.tie)
+              // console.log('chord~note', dt.tie)
               dt.tie.cell = cell
+              dt.tie.note = dt
               dt.tie.nextNote = ndt
               dt.tie.next = ndt.tie
 
             // note~chord
             } else if (curr.name === 'note' && next.name === 'pitch') {
-              console.log('note~chord', ndt.tie)
+              // console.log('note~chord', ndt.tie)
 
               // Todo
-              dt.nextCT = ndt.tie
-              ndt.tie = new Tie({
-                type: ndt.tie ? 'continue' : 'end', cell: ncell
-              })
-              ndt.tie.prevNote = dt
-              ndt.tie.prev = dt.tie
+              // dt.nextCT = ndt.tie
+              // ndt.tie = new Tie({
+              //   type: ndt.tie ? 'continue' : 'end', cell: ncell
+              // })
+              // ndt.tie.prevNote = dt
+              // ndt.tie.prev = dt.tie
             }
           }
 
@@ -373,8 +377,10 @@ const hasMatchedPitch = (dt, ndt) => {
           return dt.pitches.some(pitch =>
                                  pitch.midiNumber === ndt.pitch.midiNumber)
         case 'chord':
-          return dt.pitches.some((pitch, p) =>
-                                 pitch.midiNumber === ndt.pitches[p].midiNumber)
+          return dt.pitches.some((pitch, p) => {
+            return ndt.pitches.some(npitch =>
+                                      pitch.midiNumber === npitch.midiNumber)
+          })
       }
   }
 }

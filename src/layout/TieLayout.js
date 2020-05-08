@@ -12,6 +12,17 @@ export default class TieLayout extends AbstractLayout {
     this.strokeWidth = strokeWidth
   }
 
+  get nextTie() {
+    const { tieMode } = this.style.chord
+    const { note, nextNote } = this.tie
+
+    if (tieMode === 'single' &&
+        note.name === 'note' && nextNote.name === 'chord') {
+      return nextNote.tie
+    }
+    return this.tie.next
+  }
+
   get showPrev() {
     const { prev } = this.tie
     return prev && prev.layout.sys !== this.sys
@@ -19,7 +30,7 @@ export default class TieLayout extends AbstractLayout {
 
   get endPoints() {
     const { x1, y1 } = this
-    const { next } = this.tie
+    const next = this.nextTie
     let x2, y2
 
     // Incorrect tie

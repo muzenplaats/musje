@@ -26,7 +26,6 @@ The rendering is based on a funny `el.js` by-product.
 ### Roadmap toward musje 2.0.0-beta
 
 Features to be implemented:
-- Chord and note ties inter-playing.
 - System align justify (default); currently left
 - Fix some direction issues (low priority).
 
