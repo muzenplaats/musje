@@ -27,6 +27,16 @@ export default class MeasureLayout extends AbstractLayout {
     this.staves = staves
   }
 
+  reflow(width) {
+    // console.log('reflow measure..')
+     width += 30
+    this.width = width
+    this.cellsLayouts.forEach(cellLayout => cellLayout.reflow(width))
+    const dataLayoutWidth = this.cellsLayouts[0].dataLayout.width
+    reflowSticks(this.sticks, dataLayoutWidth)
+    this.setCellsSticks()
+  }
+
   set position(pos) {
     super.position = pos
     const { x, x2, y } = this
@@ -276,5 +286,16 @@ const updateCurrXs = (currXs, stick) => {
     if (lyrics) lyrics.forEach((lyric, l) => {
       cellCurrXs.lyrics[l] = stick.x + lyric.dx2
     })
+  })
+}
+
+const reflowSticks = (sticks, dataLayoutWidth) => {
+  const lastStick = lastItem(sticks)
+  const oldRange = lastStick.minX
+  const newRange = dataLayoutWidth - sticks[0].dx - lastStick.dx2
+  const ratio = newRange / oldRange
+  console.log(oldRange, newRange, ratio)
+  sticks.forEach(stick => {
+    stick.x = ratio * stick.minX
   })
 }

@@ -7,7 +7,8 @@ export default function measureElement(measureLayout) {
   const { cellsLayouts, leftBarLayouts, rightBarLayouts } = measureLayout
 
   return el.create('g', [
-    // box(measureLayout, 'green'),
+    box(measureLayout, 'green'),
+
     cellsLayouts.map(layout => cellElement(layout)),
     leftBarLayouts ? leftBarLayouts.map(layout => barElement(layout)) : [],
     rightBarLayouts ? rightBarLayouts.map(layout => barElement(layout)) : []

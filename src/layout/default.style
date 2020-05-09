@@ -98,7 +98,7 @@ body {
 }
 
 system {
-  align: justify  // justify|left
+  align: justify  // justify|left|equal
   staves-sep: 100%
   part-name-padding-right: 30%
 }
@@ -119,8 +119,8 @@ cell {
 
 bar {
   line-height: 100%
-  light-width: 5%
-  heavy-width: 15%
+  light-width: 20% // 5%
+  heavy-width: 50% // 15%
   dot-size: 12%
   lines-sep: 15%
   dots-sep: 20%

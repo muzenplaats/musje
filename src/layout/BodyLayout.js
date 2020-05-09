@@ -42,7 +42,13 @@ export default class BodyLayout extends AbstractLayout {
   }
 
   makeSystemsLayouts() {
+    const { align } = this.style.system
     const flowData = this.flowSystems()
+
+    if (align === 'justify') {
+      this.ballanceSystems(flowData)
+      this.optimizeMeasureWidths(flowData)
+    }
 
     this.systemsLayouts = []
 
@@ -54,6 +60,15 @@ export default class BodyLayout extends AbstractLayout {
       systemLayout.width = this.width
       this.systemsLayouts.push(systemLayout)
     })
+
+    if (align === 'justify') {
+      this.systemsLayouts.forEach((systemLayout, sys) => {
+        systemLayout.measuresLayouts.forEach((measureLayout, m) => {
+          const width = flowData.lines[sys].ws[m]
+          measureLayout.reflow(width)
+        })
+      })
+    }
   }
 
   flowSystems() {
@@ -98,6 +113,14 @@ export default class BodyLayout extends AbstractLayout {
     console.log(data.lens)
 
     return data
+  }
+
+  ballanceSystems(flowData) {
+
+  }
+
+  optimizeMeasureWidths(flowData) {
+
   }
 
   markCurvesSys() {

@@ -29,8 +29,7 @@ export default class CellLayout extends AbstractLayout {
 
     // this.setMinWidth()
 
-    // Tmp
-    // this.width = this.minWidth
+    // this.width = this.minWidth and will be reflowed at align: justify
     this.height = Math.max(this.dataLayout.dy, this.rightBarLayout.height) +
                   this.dataLayout.dy2
     this.dy2 = this.dataLayout.dy2
@@ -62,23 +61,31 @@ export default class CellLayout extends AbstractLayout {
                                     this.leftBarLayout.width / 2) +
                     (shownRightBarLayout ? shownRightBarLayout.width :
                                      this.rightBarLayout.width / 2)
-    this.width = this.minWidth
+
+    if (!this.width || this.width < this.minWidth) this.width = this.minWidth
+  }
+
+  reflow(width) {
+    const dw = width - this.width
+    console.log('reflow cell', dw)
+    this.width = width
+    this.dataLayout.width += dw
   }
 
   set position(pos) {
     super.position = pos
     let { x, x2, by } = this
     const { paddingLeft, paddingRight } = this.style.cell
-    const { shownLeftBar, shownRightBar } = this.cell
-    if (shownLeftBar) {
-      this.shownLeftBarLayout.position = { x, by }
-      x += this.shownLeftBarLayout.width + paddingLeft
+    const { shownLeftBarLayout, shownRightBarLayout } = this
+    if (shownLeftBarLayout) {
+      shownLeftBarLayout.position = { x, by }
+      x += shownLeftBarLayout.width + paddingLeft
       this.dataLayout.position = { x, by }
     }
 
-    if (shownRightBar) {
-      this.shownRightBarLayout.position = { x2, by }
-      x2 = this.shownRightBarLayout.x - paddingRight
+    if (shownRightBarLayout) {
+      shownRightBarLayout.position = { x2, by }
+      x2 = shownRightBarLayout.x - paddingRight
       this.dataLayout.position = { x2, by }
     } else {
       this.rightBarLayout.position = { cx: x2, by }
@@ -128,6 +135,7 @@ class DataLayout extends AbstractLayout {
     })
   }
 
+  // Set by MeasureLayout
   setMinWidth() {
     const firstStick = this.sticks[0]
     const lastStick = lastItem(this.sticks)

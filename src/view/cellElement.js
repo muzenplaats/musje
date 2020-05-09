@@ -13,8 +13,9 @@ export default function cellElement(cellLayout) {
           rightBarLayout, shownRightBarLayout } = cellLayout
 
   return el.create('g', [
-    // box(cellLayout, 'orange'),
-    // box(dataLayout, 'blue'),
+    box(cellLayout, 'orange'),
+    box(dataLayout, 'blue'),
+
     dataLayout.layouts.map(layout => {
       // return box(layout, 'orange')
       if ('note' in layout) return noteElement(layout)

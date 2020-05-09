@@ -23,12 +23,15 @@ export default class FlowData {
     })
     this.set('mws', 'measureMinWidths', list)
     this.set('measures')
+    this.set('ws')
   }
 
   set(abbr, name, lens) {
     name = name || abbr
 
-    if (abbr === 'ws') this.lines.forEach(line => { line.ws = line.mws.slice() })
+    if (abbr === 'ws') {
+      this.lines.forEach(line => { line.ws = line.mws.slice() }); return
+    }
 
     let begin = 0, end
     (lens || this.lens).forEach((len, l) => {
