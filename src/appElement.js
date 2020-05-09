@@ -13,7 +13,7 @@ import './appElement.css'
 import jsonElement from './utils/jsonElement'
 import xmlElement from './utils/xmlElement'
 
-const defaultUrl = 'scores/003.musje'
+const defaultUrl = 'scores/007.musje'
 
 const scoresUrls = (function () {
   const fnames = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012']

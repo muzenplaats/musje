@@ -2,6 +2,7 @@ import AbstractLayout from './AbstractLayout'
 import SystemHeadLayout from './SystemHeadLayout'
 import SystemLayout from './SystemLayout'
 import MeasureLayout from './MeasureLayout'
+import FlowData from './FlowData'
 import { lastItem, sum } from '../utils/helpers'
 
 export default class BodyLayout extends AbstractLayout {
@@ -41,48 +42,62 @@ export default class BodyLayout extends AbstractLayout {
   }
 
   makeSystemsLayouts() {
+    const flowData = this.flowSystems()
+
+    this.systemsLayouts = []
+
+    flowData.lines.forEach((line, sys) => {
+      const headLayout =
+              this.createSystemHeadLayout(sys ? 'abbreviation' : 'full')
+      const { measures } = line
+      const systemLayout = new SystemLayout(headLayout, measures, this.style)
+      systemLayout.width = this.width
+      this.systemsLayouts.push(systemLayout)
+    })
+  }
+
+  flowSystems() {
     const systemWidth = this.width
-    const minWidths = this.measures
-          .map(measure => new MeasureLayout(measure, this.style))
-          .map(MeasureLayout => MeasureLayout.minWidth)
     const fullHeadWidth = this.createSystemHeadLayout('full').width
     const abbrHeadWidth = this.createSystemHeadLayout('abbreviation').width
+    const data = new FlowData({
+      measures: this.measures,
+      fhsw: systemWidth - fullHeadWidth,
+      ahsw: systemWidth - abbrHeadWidth,
+      style: this.style
+    })
+    const { measureMinWidths } = data
 
-    const sysWidths = []
+    const sysLengths = []
     let currW = fullHeadWidth
 
-    minWidths.forEach((minW, m) => {
+    measureMinWidths.forEach((minW, m) => {
       currW += minW
       if (currW === systemWidth) {
-        sysWidths.push(m + 1)
+        sysLengths.push(m + 1)
         currW = abbrHeadWidth
       } else if (currW > systemWidth) {
-        sysWidths.push(m)
+        sysLengths.push(m)
         currW = abbrHeadWidth + minW
       }
     })
 
-    if (lastItem(sysWidths) !== minWidths.length) {
-      sysWidths.push(minWidths.length)
-    }
-    for (let i = sysWidths.length - 1; i > 0; i--) {
-      sysWidths[i] = sysWidths[i] - sysWidths[i - 1]
+    if (lastItem(sysLengths) !== measureMinWidths.length) {
+      sysLengths.push(measureMinWidths.length)
     }
 
-    console.log(sysWidths)
+    for (let i = sysLengths.length - 1; i > 0; i--) {
+      sysLengths[i] = sysLengths[i] - sysLengths[i - 1]
+    }
 
-    this.systemsLayouts = []
-    let begin = 0, end
-    sysWidths.forEach((sysWidth, sys) => {
-      end = begin + sysWidth
-      const measures = this.measures.slice(begin, end)
-      const headLayout =
-              this.createSystemHeadLayout(sys ? 'abbreviation' : 'full')
-      const systemLayout = new SystemLayout(headLayout, measures, this.style)
-      systemLayout.width = this.width
-      this.systemsLayouts.push(systemLayout)
-      begin = end
-    })
+    // console.log(sysLengths)
+    // return sysLengths
+
+    data.lens = sysLengths
+    // console.log(data)
+    console.log(data.lens)
+
+    return data
   }
 
   markCurvesSys() {
