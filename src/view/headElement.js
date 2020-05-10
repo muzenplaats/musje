@@ -13,7 +13,8 @@ export default function headElement(headLayout) {
   `
 
   return el.create('g', [
-    box(headLayout, 'green'),
+    // box(headLayout, 'green'),
+
     title ? el('text', {
       ...titleLayout.cxby,
       style: getStyle({ ...titleLayout, anchor: 'middle' })

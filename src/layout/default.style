@@ -80,10 +80,10 @@ lyrics-font {
 
 score {
   width: 450px
-  margin-left: 15px
-  margin-top: 15px
-  margin-right: 15px
-  margin-bottom: 15px
+  margin-left: 20px
+  margin-top: 20px
+  margin-right: 20px
+  margin-bottom: 20px
   head-body-sep: 20px
 }
 
@@ -119,8 +119,8 @@ cell {
 
 bar {
   line-height: 100%
-  light-width: 20% // 5%
-  heavy-width: 50% // 15%
+  light-width: 5%
+  heavy-width: 15%
   dot-size: 12%
   lines-sep: 15%
   dots-sep: 20%

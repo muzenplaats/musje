@@ -67,7 +67,7 @@ export default class CellLayout extends AbstractLayout {
 
   reflow(width) {
     const dw = width - this.width
-    console.log('reflow cell', dw)
+    // console.log('reflow cell', dw)
     this.width = width
     this.dataLayout.width += dw
   }

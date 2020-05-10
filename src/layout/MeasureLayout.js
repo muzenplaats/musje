@@ -29,7 +29,7 @@ export default class MeasureLayout extends AbstractLayout {
 
   reflow(width) {
     // console.log('reflow measure..')
-     width += 30
+     // width += 50
     this.width = width
     this.cellsLayouts.forEach(cellLayout => cellLayout.reflow(width))
     const dataLayoutWidth = this.cellsLayouts[0].dataLayout.width
@@ -43,11 +43,8 @@ export default class MeasureLayout extends AbstractLayout {
     const { stavesSep } = this.style.system
 
     this.cellsLayouts.forEach((layout, c) => {
-      if (this.atSysBegin) {
-        layout.addShownLeftBar()
-      } else if (this.atSysEnd) {
-        layout.addShownRightBar()
-      }
+      if (this.atSysBegin) layout.addShownLeftBar()
+      if (this.atSysEnd) layout.addShownRightBar()
       layout.position = { x, by: y + this.staves.by0s[c] }
     })
 
@@ -290,12 +287,17 @@ const updateCurrXs = (currXs, stick) => {
 }
 
 const reflowSticks = (sticks, dataLayoutWidth) => {
-  const lastStick = lastItem(sticks)
-  const oldRange = lastStick.minX
-  const newRange = dataLayoutWidth - sticks[0].dx - lastStick.dx2
+  if (sticks.length <= 1) return
+
+  const { dx, minX: firstMinX } = sticks[0]
+  const { dx2, minX: lastMinX } = lastItem(sticks)
+  const oldRange = lastMinX - firstMinX
+  const newRange = dataLayoutWidth - dx - dx2
   const ratio = newRange / oldRange
-  console.log(oldRange, newRange, ratio)
+  // console.log(firstMinX, lastMinX, dx, dx2, oldRange, newRange, ratio)
   sticks.forEach(stick => {
-    stick.x = ratio * stick.minX
+    stick.x = ratio * (stick.minX - dx) + dx
   })
+
+  // Todo: take timing (tcQ) into consideration.
 }

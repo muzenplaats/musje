@@ -7,8 +7,9 @@ export default function scoreElement(scoreLayout) {
   const { innerLayout, headLayout, bodyLayout } = scoreLayout
 
   return el.create('svg', scoreLayout.wh, [
-    box(scoreLayout, 'green'),
+    box(scoreLayout, 'gray'),
     // box(innerLayout, 'blue'),
+
     headElement(headLayout),
     bodyElement(bodyLayout)
   ])

@@ -3,7 +3,7 @@ import SystemHeadLayout from './SystemHeadLayout'
 import SystemLayout from './SystemLayout'
 import MeasureLayout from './MeasureLayout'
 import FlowData from './FlowData'
-import { lastItem, sum } from '../utils/helpers'
+import { lastItem, sum, range } from '../utils/helpers'
 
 export default class BodyLayout extends AbstractLayout {
   constructor(body, style) {
@@ -105,9 +105,6 @@ export default class BodyLayout extends AbstractLayout {
       sysLengths[i] = sysLengths[i] - sysLengths[i - 1]
     }
 
-    // console.log(sysLengths)
-    // return sysLengths
-
     data.lens = sysLengths
     // console.log(data)
     console.log(data.lens)
@@ -120,7 +117,27 @@ export default class BodyLayout extends AbstractLayout {
   }
 
   optimizeMeasureWidths(flowData) {
+    flowData.lines.forEach(line => {
+      const { sw } = line
+      const idxWs = line.ws.map((w, i) => ({ i, w }))
+      const sumWs = () => sum(idxWs.map(idxW => idxW.w))
+      const setGroupWidth = i => {
+        const restWith = sum(idxWs.slice(i + 1).map(idxW => idxW.w).concat(0))
+        let width = (sw - restWith) / (i + 1)
+        if (i < idxWs.length - 1) width = Math.min(width, idxWs[i + 1].w)
+        range(i + 1).forEach(n => { idxWs[n].w = width })
+      }
 
+      idxWs.sort((a, b) => a.w - b.w)
+
+      for (let i = 0; i < idxWs.length; i++) {
+        setGroupWidth(i)
+        if (sumWs(idxWs) >= sw) break
+      }
+
+      idxWs.sort((a, b) => a.i - b.i)
+      line.ws = idxWs.map(idxW => idxW.w)
+    })
   }
 
   markCurvesSys() {
