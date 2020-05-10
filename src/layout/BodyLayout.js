@@ -48,6 +48,8 @@ export default class BodyLayout extends AbstractLayout {
     if (align === 'justify') {
       this.ballanceSystems(flowData)
       this.optimizeMeasureWidths(flowData)
+    } else if (align === 'equal') {
+      this.equalizeMeasureWidths(flowData)
     }
 
     this.systemsLayouts = []
@@ -138,6 +140,10 @@ export default class BodyLayout extends AbstractLayout {
       idxWs.sort((a, b) => a.i - b.i)
       line.ws = idxWs.map(idxW => idxW.w)
     })
+  }
+
+  equalizeMeasureWidths(flowData) {
+
   }
 
   markCurvesSys() {

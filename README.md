@@ -23,9 +23,18 @@ and http://localhost:9000/.
 
 The rendering is based on a funny `el.js` by-product.
 
+
 ### Roadmap toward musje 2.0.0-beta
 
-Features to be implemented:
-- System align justify (default); currently left
-- Fix some direction issues (low priority).
+#### Features to be implemented
+They are for system align: justify|equal|left.
 
+- justify: ballanceSystems(flowData): optimize the measure lengths across systems, toward the ballance goal, `max(mlenghs) - min(mlengths) <= 1`.
+
+- equal: equalizeMeasureWidths(flowData), find a proper length of measures in a system in which the widths of measures are the same in this system.
+
+#### Improvement
+
+- reflowSticks(sticks, dataLayoutWidth)
+
+Incorporate timing (tcQ) with spacings (minX) -> x = transform(minX, tcQ).

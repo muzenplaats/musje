@@ -11,7 +11,8 @@ export default function directionElement(directionLayout) {
   `
 
   return el.create('g', [
-    box(directionLayout, 'green'),
+    // box(directionLayout, 'green'),
+
     textLayout ? el('text', {
       ...textLayout.xby, style: getStyle(textLayout)
     }, words || dynamics) : []

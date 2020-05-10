@@ -94,7 +94,7 @@ head {
 }
 
 body {
-  systems-sep: 150%
+  systems-sep: 200%
 }
 
 system {
