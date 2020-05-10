@@ -1,8 +1,29 @@
-title: 音階
+title: Ballancing of the Measure Lengths by Systems
 
-1,2,3,4,5,6,7, | 1234567 | 1'2'3'4'5'6'7'1'' ||
-1#12#234#45#56#67n1' | 1 #1 1 ##1 1 n1 1 b1 1 bb1 1 n1 ||
+1-1-| 1-1-| 1-1-| 1-1-| 1-1-||
+\Obstacle Long Measure 1-1-1-1-1-1-1-1-1-1-1-||
 
-3/4 1_2=3= 4_5_ 6 |
+1-1-| 1-1-| 1-1-| 1-1-| 1-1-| 1-1-1-1-||
 
-6/8 1_2_3=4= 5_6=7=1'_ |]
+\Another Obstacle 1-1-1-1-1-1-1-1-| 1-1-||
+
+1-1-| 1-1-| 1-1-| 1-1-| 1-1-| 1-1-| 1-1-| 1-1-|
+1-1-| 1-1-|]
+
+// Obstacles might happen for the presantation in hand-held devices.
+/*
+- section   Goal
+4             3
+1             2
+-
+1 Obstacle
+- section --------
+4             3
+2             3
+-
+2 Obstacle
+- section --------
+4             4
+4             3
+2             3
+*/
