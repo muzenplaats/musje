@@ -46,7 +46,7 @@ export default class BodyLayout extends AbstractLayout {
     const flowData = this.flowSystems()
 
     if (align === 'justify') {
-      this.ballanceSystems(flowData)
+      this.balanceSystems(flowData)
       this.optimizeMeasureWidths(flowData)
     } else if (align === 'equal') {
       this.equalizeMeasureWidths(flowData)
@@ -114,15 +114,11 @@ export default class BodyLayout extends AbstractLayout {
     return data
   }
 
-  ballanceSystems(flowData) {
-    if (flowData.ballanceIsDone) return
-
-console.log('flowData before', flowData.lines.map(line => ({ mws: line.mws, len: line.len })))
+  balanceSystems(flowData) {
+    if (flowData.isBalanced) return
 
     const sections = flowData.obstacleSectioning()
-    sections.forEach(section => section.ballanceReflow())
-
-console.log('flowData after', flowData.lines)// flowData.lines.map(line => ({ mws: line.mws, ws: line.ws, len: line.len })))
+    sections.forEach(section => section.balanceReflow())
   }
 
   optimizeMeasureWidths(flowData) {

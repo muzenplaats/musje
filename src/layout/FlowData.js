@@ -2,7 +2,7 @@ import MeasureLayout from './MeasureLayout'
 import { lastItem, max, min, sum, findIndexRight } from '../utils/helpers'
 
 class FlowDataSectionInterface {
-  get ballanceIDone() { return this.maxLen - this.minLen <= 1 }
+  get isBalanced() { return this.maxLen - this.minLen <= 1 }
   get maxLen() { return max(this.lines.map(line => line.len)) }
   get minLen() { return min(this.lines.map(line => line.len)) }
 }
@@ -37,10 +37,6 @@ export default class FlowData extends FlowDataSectionInterface {
 
   obstacleSectioning() {
     const sections = []
-
-    // this.lines.forEach(line => {
-    //   console.log(line.sys, line.len, line.isObstacle)
-    // })
     let begin = 0, end, prevIsObstacle = false
     this.lines.forEach((line, sys) => {
       if (prevIsObstacle) { begin = sys; prevIsObstacle = false; return }
@@ -53,15 +49,11 @@ export default class FlowData extends FlowDataSectionInterface {
     if (!prevIsObstacle) {
       sections.push(new Section(this.lines.slice(begin, this.lines.length)))
     }
-
-    // console.log(sections)
-
     return sections
   }
 
   set(abbr, name, lens) {
     name = name || abbr
-
     if (abbr === 'ws') {
       this.lines.forEach(line => { line.ws = line.mws.slice() }); return
     }
@@ -106,13 +98,13 @@ class Section extends FlowDataSectionInterface {
     this.lines = lines
   }
 
-  ballanceReflow() {
+  balanceReflow() {
     const { lines } = this
     const flowOneDown = (tmpMwss, idx) =>
                               tmpMwss[idx + 1].unshift(tmpMwss[idx].pop())
 
     // Flow down from the maxLenLine
-    while (!this.ballanceIDone) {
+    while (!this.isBalanced) {
       const mlIdx = this.findMaxLenLineIndex()
       const tmpMwss = lines.map(line => line.mws.slice())
 
@@ -136,7 +128,10 @@ class Section extends FlowDataSectionInterface {
   // Update mws & ws & measures by tmpMwss.
   updateLines(tmpMwss) {
     const { lines } = this
-    lines.forEach((line, i) => { line.mws = line.ws = tmpMwss[i] })
+    lines.forEach((line, i) => {
+      line.mws = tmpMwss[i]
+      line.ws = line.mws.slice()
+    })
     for (let i = 0; i < lines.length - 1; i++) {
       const line = lines[i], nextLine = lines[i + 1]
       while (line.measures.length > line.mws.length) {
