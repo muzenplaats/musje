@@ -1,5 +1,6 @@
 import MeasureLayout from './MeasureLayout'
-import { lastItem, max, min, sum, findIndexRight } from '../utils/helpers'
+import { lastItem, max, min, sum, findIndexRight,
+         flatten, range } from '../utils/helpers'
 
 class FlowDataSectionInterface {
   get isBalanced() { return this.maxLen - this.minLen <= 1 }
@@ -27,7 +28,7 @@ export default class FlowData extends FlowDataSectionInterface {
     this.lines = []
     list.forEach((len, sys) => {
       const sw = sys ? this.ahsw : this.fhsw
-      this.lines.push(new FlowDataLine(sw, sys))
+      this.lines.push(new FlowDataLine(sw))
     })
     this.set('mws', 'measureMinWidths', list)
     this.set('measures')
@@ -50,6 +51,19 @@ export default class FlowData extends FlowDataSectionInterface {
       sections.push(new Section(this.lines.slice(begin, this.lines.length)))
     }
     return sections
+  }
+
+  mergeSections(sections) {
+    sections = sections.slice()
+    let newLines = sections.shift().lines
+    this.lines.forEach(line => {
+      if (line.isObstacle) {
+        newLines.push(line)
+        const section = sections.shift()
+        if (section) newLines = newLines.concat(section.lines)
+      }
+    })
+    this.lines = newLines
   }
 
   set(abbr, name, lens) {
@@ -83,13 +97,36 @@ export default class FlowData extends FlowDataSectionInterface {
 }
 
 class FlowDataLine {
-  constructor(sw, sys) {
+  constructor(sw) {
     this.mws = []           // minWidths of measures in the system
+    this.ws = []
+    this.measures = []
     this.sw = sw            // system width
-    this.sys = sys          // system index
   }
 
   get len() { return this.mws.length }
+
+  optimizeMeasureWidths() {
+    const { sw } = this
+    const idxWs = this.ws.map((w, i) => ({ i, w }))
+    const sumWs = () => sum(idxWs.map(idxW => idxW.w))
+    const setGroupWidth = i => {
+      const restWith = sum(idxWs.slice(i + 1).map(idxW => idxW.w).concat(0))
+      let width = (sw - restWith) / (i + 1)
+      if (i < idxWs.length - 1) width = Math.min(width, idxWs[i + 1].w)
+      range(i + 1).forEach(n => { idxWs[n].w = width })
+    }
+
+    idxWs.sort((a, b) => a.w - b.w)
+
+    for (let i = 0; i < idxWs.length; i++) {
+      setGroupWidth(i)
+      if (sumWs(idxWs) >= sw) break
+    }
+
+    idxWs.sort((a, b) => a.i - b.i)
+    this.ws = idxWs.map(idxW => idxW.w)
+  }
 }
 
 class Section extends FlowDataSectionInterface {
@@ -118,6 +155,46 @@ class Section extends FlowDataSectionInterface {
       if (lastItem(tmpMwss).length > othersMaxLen) break   // failed (overflow)
       this.updateLines(tmpMwss)
     }
+  }
+
+  equalReflow(len = Infinity) {
+    const { lines } = this
+    if (!lines.length) return
+
+    const sw = min(lines.map(line => line.sw))
+    const maxOfMws = max(flatten(lines.map(line => line.mws)))
+    const maxLen = Math.floor(sw / maxOfMws)
+    const avgLen = Math.ceil(sum(lines.map(line => line.len)) / lines.length)
+    len = Math.min(len, maxLen, avgLen)
+
+    // Note: the section lines might grow..
+    let i = 0, line, nextLine
+    const updateLine = () => {
+      line = lines[i], nextLine = lines[i + 1]
+      if (line.len > len && !nextLine) {
+        nextLine = new FlowDataLine(line.sw)
+        lines.push(nextLine)
+      }
+    }
+    const flowOneDown = line => {
+      nextLine.mws.unshift(line.mws.pop())
+      nextLine.ws.unshift(line.ws.pop())
+      nextLine.measures.unshift(line.measures.pop())
+    }
+
+    updateLine()
+    while (nextLine) {
+      while (line.len > len) flowOneDown(line)
+      i++
+      updateLine()
+    }
+
+    // Set ws.
+    lines.forEach(line => {
+      const len = max(lines.map(line => line.len))
+      const width = line.sw / len
+      line.ws = line.ws.map(() => width)
+    })
   }
 
   findMaxLenLineIndex() {

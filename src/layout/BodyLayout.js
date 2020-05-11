@@ -47,9 +47,9 @@ export default class BodyLayout extends AbstractLayout {
 
     if (align === 'justify') {
       this.balanceSystems(flowData)
-      this.optimizeMeasureWidths(flowData)
+      flowData.lines.forEach(line => line.optimizeMeasureWidths())
     } else if (align === 'equal') {
-      this.equalizeMeasureWidths(flowData)
+      this.equalizeSystems(flowData)
     }
 
     this.systemsLayouts = []
@@ -63,7 +63,7 @@ export default class BodyLayout extends AbstractLayout {
       this.systemsLayouts.push(systemLayout)
     })
 
-    if (align === 'justify') {
+    if (align === 'justify' || align === 'equal') {
       this.systemsLayouts.forEach((systemLayout, sys) => {
         systemLayout.measuresLayouts.forEach((measureLayout, m) => {
           const width = flowData.lines[sys].ws[m]
@@ -108,8 +108,8 @@ export default class BodyLayout extends AbstractLayout {
     }
 
     data.lens = sysLengths
-    // console.log(data)
-    console.log(data.lens)
+
+    // console.log(data.lens)
 
     return data
   }
@@ -121,32 +121,15 @@ export default class BodyLayout extends AbstractLayout {
     sections.forEach(section => section.balanceReflow())
   }
 
-  optimizeMeasureWidths(flowData) {
+  // Make the systems with the same amount of measures; leave the last unclosed.
+  equalizeSystems(flowData) {
+    const length = Infinity   // for future usage
+    const sections = flowData.obstacleSectioning()
+    sections.forEach(section => section.equalReflow(length))
+    flowData.mergeSections(sections)
     flowData.lines.forEach(line => {
-      const { sw } = line
-      const idxWs = line.ws.map((w, i) => ({ i, w }))
-      const sumWs = () => sum(idxWs.map(idxW => idxW.w))
-      const setGroupWidth = i => {
-        const restWith = sum(idxWs.slice(i + 1).map(idxW => idxW.w).concat(0))
-        let width = (sw - restWith) / (i + 1)
-        if (i < idxWs.length - 1) width = Math.min(width, idxWs[i + 1].w)
-        range(i + 1).forEach(n => { idxWs[n].w = width })
-      }
-
-      idxWs.sort((a, b) => a.w - b.w)
-
-      for (let i = 0; i < idxWs.length; i++) {
-        setGroupWidth(i)
-        if (sumWs(idxWs) >= sw) break
-      }
-
-      idxWs.sort((a, b) => a.i - b.i)
-      line.ws = idxWs.map(idxW => idxW.w)
+      if (line.isObstacle) line.optimizeMeasureWidths()
     })
-  }
-
-  equalizeMeasureWidths(flowData) {
-
   }
 
   markCurvesSys() {
