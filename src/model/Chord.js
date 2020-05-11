@@ -5,9 +5,11 @@ import Duration from './Duration'
 import Tie from './Tie'
 import Tuplet from './Tuplet'
 import Slur from './Slur'
+import PlayStopHandleInterface from './PlayStopHandleInterface'
 
-export default class Chord {
+export default class Chord extends PlayStopHandleInterface {
   constructor(chord) {
+    super()
     this.name = 'chord'
     if (chord.name === 'lexer') {
       this.parse(chord)
@@ -45,17 +47,6 @@ export default class Chord {
       this.endSlurs = this.endSlurs || []
       this.endSlurs.push(new Slur(lexer))
     }
-  }
-
-  get onplay() { return this._onplay || this.defaultOnplay.bind(this) }
-  set onplay(newf) {
-    const oldf = this.onplay
-    this._onplay = () => { oldf(); newf() }
-  }
-  get onstop() { return this._onstop || this.defaultOnstop.bind(this) }
-  set onstop(newf) {
-    const oldf = this.onstop
-    this._onstop = () => { oldf(); newf() }
   }
 
   defaultOnplay() {

@@ -138,9 +138,11 @@ const playChord = (chord, context) => {
 
     // Call dt.onplay() for tied chords and notes.
     if (chord.tie && chord.tie.type === 'begin') {
-      console.log(chord.tie.type)
       const pairs = getTiedDtPitchPairs({ dt: chord })
       chordOnplay(pairs)
+    } else {
+      chord.onplay()
+      setTimeout(() => chord.onstop(), getDur(chord) * 1000)
     }
 
     // Play pitches.

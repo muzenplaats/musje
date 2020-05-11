@@ -1,6 +1,7 @@
 import Lexer from './Lexer'
 import { repeat, range, swapObject, makeToJSON } from '../utils/helpers'
 import { Q } from './constants'
+import PlayStopHandleInterface from './PlayStopHandleInterface'
 
 const STR_TO_TYPE = {
   '---': 1, '-': 2, '': 4, '_': 8, '=': 16, '=_': 32, '==': 64,
@@ -9,8 +10,9 @@ const STR_TO_TYPE = {
 const TYPE_TO_STR = swapObject(STR_TO_TYPE)
 const DOTS_MULTIPLIERS = [1, 1.5, 1.75]
 
-export default class Duration {
+export default class Duration extends PlayStopHandleInterface {
   constructor(duration) {
+    super()
     this.name = 'duration'
     if (duration.name === 'lexer') {
       this.parse(duration)
@@ -43,17 +45,7 @@ export default class Duration {
 
   get quarters() { return this.quartersQ / Q }
 
-  get onplay() { return this._onplay || (() => {}) }
-  set onplay(newf) {
-    const oldf = this.onplay
-    this._onplay = () => { oldf(); newf() }
-  }
-  get onstop() { return this._onstop || (() => {}) }
-  set onstop(newf) {
-    const oldf = this.onstop
-    this._onstop = () => { oldf(); newf() }
-  }
-
   toString() { return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` }
+
   toJSON = makeToJSON('type', 'dots', 'modification')
 }

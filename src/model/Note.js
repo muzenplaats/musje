@@ -6,9 +6,11 @@ import Tie from './Tie'
 import Slur from './Slur'
 import Tuplet from './Tuplet'
 import Lyric from './Lyric'
+import PlayStopHandleInterface from './PlayStopHandleInterface'
 
-export default class Note {
+export default class Note extends PlayStopHandleInterface {
   constructor(note) {
+    super()
     this.name = 'note'
     if (note.name === 'lexer') {
       this.parse(note)
@@ -43,17 +45,6 @@ export default class Note {
       this.endSlurs = this.endSlurs || []
       this.endSlurs.push(new Slur(lexer))
     }
-  }
-
-  get onplay() { return this._onplay || this.defaultOnplay.bind(this) }
-  set onplay(newf) {
-    const oldf = this.onplay
-    this._onplay = () => { oldf(); newf() }
-  }
-  get onstop() { return this._onstop || this.defaultOnstop.bind(this) }
-  set onstop(newf) {
-    const oldf = this.onstop
-    this._onstop = () => { oldf(); newf() }
   }
 
   defaultOnplay() {

@@ -1,8 +1,10 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
+import PlayStopHandleInterface from './PlayStopHandleInterface'
 
-export default class Tuplet {
+export default class Tuplet extends PlayStopHandleInterface {
   constructor(tuplet) {
+    super()
     this.name = 'tuplet'
     if (tuplet.name === 'lexer') {
       this.parse(tuplet)
@@ -24,17 +26,7 @@ export default class Tuplet {
     }
   }
 
-  get onplay() { return this._onplay || (() => {}) }
-  set onplay(newf) {
-    const oldf = this.onplay
-    this._onplay = () => { oldf(); newf() }
-  }
-  get onstop() { return this._onstop || (() => {}) }
-  set onstop(newf) {
-    const oldf = this.onstop
-    this._onstop = () => { oldf(); newf() }
-  }
-
   toString() { return this.type }
+
   toJSON = makeToJSON('type')
 }

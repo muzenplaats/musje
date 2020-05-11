@@ -1,13 +1,15 @@
 import Lexer from './Lexer'
 import { makeToJSON, repeat } from '../utils/helpers'
+import PlayStopHandleInterface from './PlayStopHandleInterface'
 
 const STEP_TO_SEMITONE = { 1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11 }
 const ACCIDENTAL_TO_ALTER = {
   '#': 1, '##': 2, n: 0, '': 0, b: -1, bb: -2
 }
 
-export default class Pitch {
+export default class Pitch extends PlayStopHandleInterface {
   constructor(pitch) {
+    super()
     this.name = 'pitch'
     if (pitch.name === 'lexer') {
       this.parse(pitch)
@@ -41,16 +43,6 @@ export default class Pitch {
 
   get frequency() { return Math.pow(2, (this.midiNumber - 69) / 12) * 440 }
 
-  get onplay() { return this._onplay || this.defaultOnplay.bind(this) }
-  set onplay(newf) {
-    const oldf = this.onplay
-    this._onplay = () => { oldf(); newf() }
-  }
-  get onstop() { return this._onstop || this.defaultOnstop.bind(this) }
-  set onstop(newf) {
-    const oldf = this.onstop
-    this._onstop = () => { oldf(); newf() }
-  }
   defaultOnplay() { if (this.tie) this.tie.onplay() }
   defaultOnstop() { if (this.tie) this.tie.onstop() }
 
