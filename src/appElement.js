@@ -13,7 +13,7 @@ import './appElement.css'
 import jsonElement from './utils/jsonElement'
 import xmlElement from './utils/xmlElement'
 
-const defaultUrl = 'scores/011.musje'
+const defaultUrl = 'scores/006.musje'
 
 const scoresUrls = (function () {
   const fnames = ['001', '002', '003', '004', '005', '006', '007', '008', '009', '010', '011', '012']
@@ -25,7 +25,7 @@ export default function appElement() {
     scoreStr: '',
     score: {
       get() {
-        return new Score(this.scoreStr)
+        // return new Score(this.scoreStr)
         let score
         try {
           score = new Score(this.scoreStr); this.error = ''

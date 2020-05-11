@@ -45,6 +45,12 @@ export const arrayToSet = arr => {
   return result
 }
 
+export const findIndexRight = (arr, cb) => {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    if (cb(arr[i])) return i
+  }
+}
+
 export const setToArray = set => Object.keys(set)
 
 export const unique = arr => setToArray(arrayToSet(arr))

@@ -1,8 +1,15 @@
 import MeasureLayout from './MeasureLayout'
-import { lastItem, max, min } from '../utils/helpers'
+import { lastItem, max, min, sum, findIndexRight } from '../utils/helpers'
 
-export default class FlowData {
+class FlowDataSectionInterface {
+  get ballanceIDone() { return this.maxLen - this.minLen <= 1 }
+  get maxLen() { return max(this.lines.map(line => line.len)) }
+  get minLen() { return min(this.lines.map(line => line.len)) }
+}
+
+export default class FlowData extends FlowDataSectionInterface {
   constructor({ measures, fhsw, ahsw, style }) {
+    super()
     this.measures = measures
     this.measureMinWidths = measures
           .map(measure => new MeasureLayout(measure, style))
@@ -27,9 +34,6 @@ export default class FlowData {
     this.set('ws')
     this.setIsObstacles()
   }
-
-
-  get ballanceIDone() { return ballanceIDone(this.lines) }
 
   obstacleSectioning() {
     const sections = []
@@ -96,22 +100,48 @@ class FlowDataLine {
   get len() { return this.mws.length }
 }
 
-class Section {
+class Section extends FlowDataSectionInterface {
   constructor(lines) {
+    super()
     this.lines = lines
   }
 
-  get ballanceIDone() { return ballanceIDone(this.lines) }
-
   ballanceReflow() {
-    console.log(this.ballanceIDone)
+    const { lines } = this
+    const flowOneDown = (tmpMwss, idx) =>
+                              tmpMwss[idx + 1].unshift(tmpMwss[idx].pop())
 
-    // Todo
+    // Flow down from the maxLenLine
+    while (!this.ballanceIDone) {
+      const mlIdx = this.findMaxLenLineIndex()
+      const tmpMwss = lines.map(line => line.mws.slice())
+
+      for (let i = mlIdx; i < lines.length - 1; i++){
+        flowOneDown(tmpMwss, i)
+        while (tmpMwss.length > 1 && sum(tmpMwss[i]) > lines[i].sw) {
+          flowOneDown(tmpMwss, i)
+        }
+      }
+      const othersMaxLen = new Section(lines.slice(0, lines.length - 1)).maxLen
+      if (lastItem(tmpMwss).length > othersMaxLen) break   // failed (overflow)
+      this.updateLines(tmpMwss)
+    }
   }
-}
 
-const ballanceIDone = lines => {
-  const maxLen = max(lines.map(line => line.len))
-  const minLen = min(lines.map(line => line.len))
-  return maxLen - minLen <= 1
+  findMaxLenLineIndex() {
+    const { maxLen } = this
+    return findIndexRight(this.lines, line => line.len === maxLen)
+  }
+
+  // Update mws & ws & measures by tmpMwss.
+  updateLines(tmpMwss) {
+    const { lines } = this
+    lines.forEach((line, i) => { line.mws = line.ws = tmpMwss[i] })
+    for (let i = 0; i < lines.length - 1; i++) {
+      const line = lines[i], nextLine = lines[i + 1]
+      while (line.measures.length > line.mws.length) {
+        nextLine.measures.unshift(line.measures.pop())
+      }
+    }
+  }
 }

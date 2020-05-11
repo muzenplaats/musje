@@ -8,7 +8,8 @@ title: Ballancing of the Measure Lengths by Systems
 \Another Obstacle 1-1-1-1-1-1-1-1-| 1-1-||
 
 1-1-| 1-1-| 1-1-| 1-1-| 1-1-| 1-1-| 1-1-| 1-1-|
-1-1-| 1-1-|]
+1-1-| 1-1-| 1-1-| 1-1-|
+1-1-|]
 
 // Obstacles might happen for the presantation in hand-held devices.
 /*
@@ -25,5 +26,6 @@ title: Ballancing of the Measure Lengths by Systems
 - section --------
 4             4
 4             3
-2             3
+4             3
+1             3
 */
