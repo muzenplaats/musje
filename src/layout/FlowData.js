@@ -144,6 +144,8 @@ class Section extends FlowDataSectionInterface {
     while (!this.isBalanced) {
       const mlIdx = this.findMaxLenLineIndex()
       const tmpMwss = lines.map(line => line.mws.slice())
+      // console.log(this.isBalanced, mlIdx, lines.map(line => line.len))
+      if (mlIdx === lines.length - 1) break
 
       for (let i = mlIdx; i < lines.length - 1; i++){
         flowOneDown(tmpMwss, i)
