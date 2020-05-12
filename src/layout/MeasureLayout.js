@@ -2,7 +2,8 @@ import AbstractLayout from './AbstractLayout'
 import CellLayout from './CellLayout'
 import BarLayout from './BarLayout'
 import Bar from '../model/Bar'
-import { min, max, lastItem, range, zeros } from '../utils/helpers'
+import { min, max, lastItem, range, zeros,
+         forEachRight } from '../utils/helpers'
 
 export default class MeasureLayout extends AbstractLayout {
   constructor(measure, style) {
@@ -293,11 +294,44 @@ const reflowSticks = (sticks, dataLayoutWidth) => {
   const { dx2, minX: lastMinX } = lastItem(sticks)
   const oldRange = lastMinX - firstMinX
   const newRange = dataLayoutWidth - dx - dx2
-  const ratio = newRange / oldRange
-  // console.log(firstMinX, lastMinX, dx, dx2, oldRange, newRange, ratio)
-  sticks.forEach(stick => {
-    stick.x = ratio * (stick.minX - dx) + dx
-  })
 
-  // Todo: take timing (tcQ) into consideration.
+  const spacingRatioReflow = () => {
+    const ratio = newRange / oldRange
+    // console.log(firstMinX, lastMinX, dx, dx2, oldRange, newRange, ratio)
+    sticks.forEach(stick => {
+      stick.x = ratio * (stick.minX - dx) + dx
+    })
+  }
+
+  const timingFavoredBackReflow = () => {
+    const lastTcQ = lastItem(sticks).tcQ
+    const slen = sticks.length
+    const getTimingX = stick => {
+      const ratio = lastTcQ ? stick.tcQ / lastTcQ : 1
+      return newRange * ratio + dx
+    }
+
+    forEachRight(sticks, (stick, i) => {
+      if (i === slen - 1) { stick.x = getTimingX(stick); return }
+      const nextStick = sticks[i + 1]
+      const timingX = getTimingX(stick)
+      const limDx = nextStick.minX - stick.minX
+      const spaceLimitX = nextStick.x - limDx
+      // console.log(i, newRange, lastTcQ, dx, timingX, spaceLimitX, stick, nextStick)
+      stick.x = Math.min(timingX, spaceLimitX)
+    })
+  }
+  const deoverflow = () => {
+    sticks.forEach((stick, s) => {
+      if (stick.tcQ === 0) { stick.x = stick.minX; return }
+      const prevStick = sticks[s - 1]
+      const limDx = stick.minX - prevStick.minX
+      if (stick.x - prevStick.x < limDx) stick.x = prevStick.x + limDx
+    })
+  }
+
+  // spacingRatioReflow()
+
+  timingFavoredBackReflow()
+  deoverflow()
 }

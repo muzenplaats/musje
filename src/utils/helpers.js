@@ -45,10 +45,12 @@ export const arrayToSet = arr => {
   return result
 }
 
+export const forEachRight = (arr, cb) => {
+  for (let i = arr.length - 1; i >= 0; i--) cb(arr[i], i)
+}
+
 export const findIndexRight = (arr, cb) => {
-  for (let i = arr.length - 1; i >= 0; i--) {
-    if (cb(arr[i])) return i
-  }
+  forEachRight(arr, (item, i) => { if (cb(item, i)) return i })
 }
 
 export const setToArray = set => Object.keys(set)
