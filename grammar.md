@@ -42,8 +42,8 @@ Rest := '0' Duratin?               // => Rest = { duration: Duration{} }
 Chord := '<' Pitch+ '>' Duration?  // => Chord = { pitches: [Pitch{}, ..], duration: Duration{} }
 
 // Multipart is designed for layers, partial implemented.
-Multipart := '<' Layer ('|' Layer)+ '>'       // => Multipart = { name: 'multipart', layers: [Layer{}, ..] }
-Layer := (Note | Rest | Chord | Direction)+   // => Layer = { data: [Note{}, Rest{}, Chord{}, or Direction{}]}
+Multipart := '<' Layer ('|' Layer)+ '>'            // => Multipart = { name: 'multipart', layers: [Layer{}, ..] }
+Layer := (Note | Rest | Chord | Direction)+        // => Layer = { data: [Note{}, Rest{}, Chord{}, or Direction{}]}
 
 // Experimental
 Direction := placement (dynamics | words | wedge)  // => Direction = { placement: str, words: str, wedge: str }
@@ -63,8 +63,8 @@ dots := '.' | '..'
 
 ## Lyrics
 ```
-Lyrics := 'lyrics:' (Lyric | LyricControl)*   // => Lyrics = [Lyric{}, or LyricControl{}, ..]
+Lyrics := 'lyrics:' (Lyric | LyricControl)*        // => Lyrics = [Lyric{}, or LyricControl{}, ..]
 Lyric := (western-word-punct | cjk-letter) '-'?
-LyricControl := instruction 'm'? digits   // m for measure, or note
-instruction := '@' | '+' | '-'    // at|forward|backward
+LyricControl := instruction 'm'? digits            // m for measure, or note
+instruction := '@' | '+' | '-'                     // at|forward|backward
 ```
