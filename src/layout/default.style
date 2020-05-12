@@ -98,7 +98,7 @@ body {
 }
 
 system {
-  align: equal  // left|justify|equal
+  align: justify  // left|justify|equal
   staves-sep: 100%
   part-name-padding-right: 30%
 }

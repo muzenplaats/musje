@@ -50,7 +50,7 @@ export const forEachRight = (arr, cb) => {
 }
 
 export const findIndexRight = (arr, cb) => {
-  forEachRight(arr, (item, i) => { if (cb(item, i)) return i })
+  for (let i = arr.length - 1; i >= 0; i--) { if (cb(arr[i], i)) return i }
 }
 
 export const setToArray = set => Object.keys(set)

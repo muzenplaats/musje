@@ -139,6 +139,7 @@ class Section extends FlowDataSectionInterface {
     const { lines } = this
     const flowOneDown = (tmpMwss, idx) =>
                               tmpMwss[idx + 1].unshift(tmpMwss[idx].pop())
+    // console.log(lines.map(line => line.len))
 
     // Flow down from the maxLenLine
     while (!this.isBalanced) {
@@ -153,8 +154,15 @@ class Section extends FlowDataSectionInterface {
           flowOneDown(tmpMwss, i)
         }
       }
+
+      // Fail if length overflow.
       const othersMaxLen = new Section(lines.slice(0, lines.length - 1)).maxLen
-      if (lastItem(tmpMwss).length > othersMaxLen) break   // failed (overflow)
+      if (lastItem(tmpMwss).length > othersMaxLen) break
+
+      // Fail if width overflow.
+      // console.log(tmpMwss, sum(lastItem(tmpMwss)), lastItem(lines).sw)
+      if (sum(lastItem(tmpMwss)) > lastItem(lines).sw) break // width-overflow
+
       this.updateLines(tmpMwss)
     }
   }
