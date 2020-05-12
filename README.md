@@ -13,8 +13,8 @@ The musje 123 is a music processor based on this notation.
 
 ## Language description
 
-- The grammar of musje 2.0.
-- The musje stylesheet.
+- The grammar of musje 2.0. (https://github.com/malcomwu/musje/blob/master/grammar.md)
+- The musje stylesheet. (https://github.com/malcomwu/musje/blob/master/stylesheet.md)
 
 ## Development
 This project was initiated about year 2015; however, several attempts
