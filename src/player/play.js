@@ -2,8 +2,10 @@ import { sum } from '../utils/helpers'
 
 const tos = []
 
-export function play(obj) {
+export function play() {
+  const obj = this.obj
   const { context } = this
+
   switch (obj.name) {
     case 'score': playScore(obj, context); break
     case 'part': playPart(obj, context); break
@@ -12,6 +14,8 @@ export function play(obj) {
     case 'note': playNote(obj, context); break
   }
 }
+
+export function pause() {}
 
 export function stop() {
   tos.forEach(clearTimeout)

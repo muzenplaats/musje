@@ -17,16 +17,30 @@ const Lexer = makeLexerClass({
   '}': '}'
 })
 
+class UnitVal {
+  constructor(value, unit, factors) {
+    this.value = value
+    this.unit = unit
+    this.factors = factors
+  }
+  get pxValue() {
+    if (this.unit === 'px') return this.value
+    return this.value * this.factors.baseSize / 100
+  }
+}
+
 export default class Style {
-  constructor(src) {
+  constructor(src, factors = {}) {
     this.name = 'style'
+    this.factors = factors
     this.rawValue = {}
     this.parse(new Lexer(src))
-    this.value = this.calcValue()
   }
 
   parse(lexer) {
     let names
+    lexer.skipWhite()
+
     while (!lexer.eof) {
       lexer.token('names', lexeme => {
         names = lexeme.replace(/ +/g, '').split(',').map(hyphenToCamel)
@@ -66,27 +80,29 @@ export default class Style {
     } else if (lexer.is('number')) {
       lexer.token('number', lexeme => { value = +lexeme })
       lexer.optional('unit', lexeme => { unit = lexeme })
-      value = unit === '%' ? value / 100
-                           : unit === '' ? value : value + unit
+      if (unit) value = new UnitVal(value, unit, this.factors)
     }
     lexer.skipSS()
     if (!lexer.eof) lexer.nextLine()
     return { name, value }
   }
 
-  calcValue() {
-    const baseSize = +(/[\d.]+/.exec(this.rawValue.base.size)[0])
-    const calc = val => {
-      if (typeof val === 'string') {
-        return /px$/.test(val) ? +val.slice(0, val.length - 2) : val
-      }
-      return val * baseSize
-    }
+  get value() {
     const raw = this.rawValue
+    this.factors.baseSize = raw.base.size.pxValue
+
+    const calc = val => {
+      if (typeof val === 'string') return val
+      if (val instanceof UnitVal) return val.pxValue
+      return val
+    }
     const result = {}
+
     for (let aname in raw) {
       result[aname] = {}
       let fontSize = raw[aname].size
+      if (fontSize) fontSize = fontSize.pxValue
+
       for (let name in raw[aname]) {
         switch (name) {
           case 'widthRatio':
@@ -107,5 +123,13 @@ export default class Style {
       }
     }
     return result
+  }
+
+  add(src) {
+    const newRawValue = new Style(src, this.factors).rawValue
+    Object.keys(newRawValue).forEach(name => {
+      const value = newRawValue[name]
+      Object.assign(this.rawValue[name], value)
+    })
   }
 }

@@ -3,11 +3,11 @@ import HeadLayout from './HeadLayout'
 import BodyLayout from './BodyLayout'
 
 export default class ScoreLayout extends AbstractLayout {
-  constructor(score, style) {
+  constructor(score) {
     super()
     this.name = 'score-layout'
     this.score = score
-    this.style = style
+    const style = this.style = score.style.value
     this.headLayout = new HeadLayout(score.head, style)
     this.bodyLayout = new BodyLayout(score.body, style)
     this.setSize()

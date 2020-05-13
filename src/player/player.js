@@ -1,13 +1,16 @@
-import { play, stop } from './play'
+import { play, pause, stop } from './play'
 
 const AudioContext = window.AudioContext || window.webkitAudioContext
 var _ctx
 
-class Player {
-  constructor() {}
+export default class Player {
+  constructor(obj) {
+    this.obj = obj
+  }
+
   get context() { return  _ctx || (_ctx = new AudioContext()) }
+
   play = play
+  pause = pause
   stop = stop
 }
-
-export default new Player()

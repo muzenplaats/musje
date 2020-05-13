@@ -1,13 +1,11 @@
 import Score from './model/Score'
 import ScoreLayout from './layout/ScoreLayout'
 import scoreElement from './view/scoreElement'
-import player from './player/player'
 import el from './utils/el'
 import { loadText } from './utils/helpers'
 
-import Style from './utils/Style'
-import defaultStyle from './layout/default.style'
-const style = new Style(defaultStyle).value
+import './test/testAddStyle'
+
 import './appElement.css'
 
 import jsonElement from './utils/jsonElement'
@@ -36,7 +34,7 @@ export default function appElement() {
         return score
       }
     },
-    scoreLayout: { get() { return new ScoreLayout(this.score, style) } },
+    scoreLayout: { get() { return new ScoreLayout(this.score) } },
     info: { get() { return this.score } },
     error: '',
     scoreElement: { el() { return scoreElement(this.scoreLayout) } },
@@ -59,9 +57,9 @@ export default function appElement() {
       el('span', scoresUrls.map((url, i) => {
         return el('button', { click() { loadScore(url) } }, i + 1)
       })), ' ',
-      el('button', { click: () => player.play(data.score) }, '>'),
-      el('button', { click: () => player.pause() }, '||'),
-      el('button', { click: () => player.stop() }, '[]'),
+      el('button', { click: () => data.score.play() }, '>'),
+      el('button', { click: () => data.score.pause() }, '||'),
+      el('button', { click: () => data.score.stop() }, '[]'),
       el('pre', { style: 'color: #d53' }, data.$error),
       el('pre', {
         style: 'border: 1px solid #ccc; padding: 5px; width: 100%; background-color: #eee; white-space: pre-wrap'
