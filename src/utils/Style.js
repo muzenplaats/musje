@@ -91,11 +91,7 @@ export default class Style {
     const raw = this.rawValue
     this.factors.baseSize = raw.base.size.pxValue
 
-    const calc = val => {
-      if (typeof val === 'string') return val
-      if (val instanceof UnitVal) return val.pxValue
-      return val
-    }
+    const calc = val => val instanceof UnitVal ? val.pxValue : val
     const result = {}
 
     for (let aname in raw) {

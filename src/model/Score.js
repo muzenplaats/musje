@@ -7,6 +7,8 @@ import toMxl from './toMxl'
 import Player from '../player/Player'
 import Style from '../utils/Style'
 import defaultStyle from '../layout/default.style'
+import ScoreLayout from '../layout/ScoreLayout'
+import scoreElement from '../view/scoreElement'
 
 export default class Score {
   constructor(score = {}) {
@@ -30,10 +32,11 @@ export default class Score {
   addStyle() {
     const styles = Array.from(arguments)
     styles.forEach(style => this.style.add(style))
+    return this
   }
 
   render() {
-
+    return scoreElement(new ScoreLayout(this))
   }
 
   play() { this.player.play() }

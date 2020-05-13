@@ -1,10 +1,8 @@
 import Score from './model/Score'
-import ScoreLayout from './layout/ScoreLayout'
-import scoreElement from './view/scoreElement'
+// import ScoreLayout from './layout/ScoreLayout'
+// import scoreElement from './view/scoreElement'
 import el from './utils/el'
 import { loadText } from './utils/helpers'
-
-import './test/testAddStyle'
 
 import './appElement.css'
 
@@ -34,10 +32,10 @@ export default function appElement() {
         return score
       }
     },
-    scoreLayout: { get() { return new ScoreLayout(this.score) } },
+    // scoreLayout: { get() { return new ScoreLayout(this.score) } },
     info: { get() { return this.score } },
     error: '',
-    scoreElement: { el() { return scoreElement(this.scoreLayout) } },
+    scoreElement: { el() { return this.score.render() } },
     // scoreJsonElement: { el() { return jsonElement('score', this.score) } },
     // scoreLayoutJsonElement: {
     //   el() { return jsonElement('scoreLayout', this.scoreLayout) }
