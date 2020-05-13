@@ -5,11 +5,42 @@
 A numbered musical notation in sheet music.
 
 ## Background
+
 Musje is sparrow in Dutch. The first numbered musical notation was
 presented by Jean-Jacques Rousseau to the French Academy of
 Sciences in 1742. It has been evolved and become popular in some
 areas of Asia. It is called jianpu, literally simple music score, in Chinese.
 The musje 123 is a music processor based on this notation.
+
+## Notion of jianpu
+
+In comparison of the western sheet music, jianpu is closely related.
+The design of musje is made for the greatest interception for this.
+The major difference is that the western one is graphical in pitch
+(vertical positioning) while the jianpu is symbolic.
+This is why many Chineses may like it because the ancient pitch scales
+were written in symbols, the five 宮 商 角 徵 羽 pure intonation,
+and the twelve 黃鐘 姑洗 .. equal temparament, and later on the 宮尺.
+One may think of to convert the 1, 2, .. 7 to C, D, .. B,
+or else for your interest.
+Due to the symbolic pitching, no clef is necessory.
+
+It is the same that there is not a natural place to draw the key signature.
+The rest are the same, so that we may see a lot of accidentals in most measures.
+This is a good consquence because it is aimed for the beginners.
+However, one can less easily see the key of this music.
+Therefore, some place an A, Dm, .. symbol or so to be shown as a key signature,
+but it does not alter anything.
+However, it is sometimes confused with the idea of transpose.
+This is normal for a transpose instrument and also important for the solfège.
+The idea is that C `1 2 3 4 5 6 7` and G `1 2 3 4 5 6 7` is a transpose,
+in which the latter is the same as C `5 6 7 1' 2' 3' #4'`.
+Some places a G transpose to be a direction above the `1`.
+The G means a transpose or `fifth: +1` in key signature?
+They can often be confused and will be considered in the later version of musje.
+
+For the rest, it is still considered to be very much the same for musje
+between jianpu and the western sheet music.
 
 ## Language description
 

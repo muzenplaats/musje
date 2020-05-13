@@ -18,7 +18,7 @@ value := without-newline
 
 ## Body
 ```
-                       
+
 Body := PartHead? Part (PartHead Part)*   // => Body = { parts: [Part{}, ..] }
 
 PartHead := '==' name? ('(' abbr ')')? (':' midi-desc)
@@ -37,9 +37,15 @@ Cell := MusicData* Bar?            // => Cell = { data: [MusicData{} including B
 MusicData := Time | Note | Rest | Chord | Multipart | Direction
 
 Time := beats '/' beat-type        // => Time = { beats: int, beatType: int }
-Note := Pitch Duration?            // => Note = { pitch: Pitch{}, duration: Duration }
+Note := '('* tuplet-begin? Pitch Duration? tuplet-end? ')'* '~'?
+                                   // => Note = { pitch: Pitch{}, duration: Duration }
 Rest := '0' Duratin?               // => Rest = { duration: Duration{} }
-Chord := '<' Pitch+ '>' Duration?  // => Chord = { pitches: [Pitch{}, ..], duration: Duration{} }
+Chord := '('* tuplet-begin? '<' Pitch+ '>' Duration? tuplet-end? ')'* '~'?
+                                   // => Chord = { pitches: [Pitch{}, ..], duration: Duration{} }
+
+tuplet-begin := '[' actual ':'     // not completed yet, should be the next
+tuplet-begin := '[' actual ':' (normal ':')
+tuplet-end := ':]'
 
 // Multipart is designed for layers, partial implemented.
 Multipart := '<' Layer ('|' Layer)+ '>'            // => Multipart = { name: 'multipart', layers: [Layer{}, ..] }
