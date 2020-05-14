@@ -2,7 +2,21 @@ const path = require('path');
 
 module.exports = {
   // mode: 'development',
-  entry: './src/index.js',
+
+  /* Dev I/O */
+  // entry: './src/index.js',
+  // output: {
+  //   filename: 'main.js',
+  //   path: path.resolve(__dirname, 'dist'),
+  // },
+
+  /* Build lib I/O - tmp */
+  entry: './src/musje.js',
+  output: {
+    filename: 'musje.js',
+    path: path.resolve(__dirname),
+  },
+
   module: {
     rules: [
       { test: /\.(style|mxl|musicxml)$/, use: 'raw-loader' },
@@ -48,12 +62,8 @@ module.exports = {
     compress: true,
     port: 9000
   },
-  devtool: 'inline-source-map',
-  output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
-  },
-};
+  devtool: 'inline-source-map'
+}
 
 
 

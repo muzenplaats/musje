@@ -1,0 +1,31 @@
+<!Doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Musje Demo</title>
+  </head>
+  <body>
+    <h1 style="font-size: 26px">Musje Demo</h1>
+
+    <script src="musje.js"></script>
+    <script>
+      var musjeSrc = 'title: The Pacific Song' + '\n' +
+                     '3/4 1 2 3 | #3 b2 n1 | ' +
+                     '1=2=3=4= 5=6=7=1\'= 0 | 5_0_ 1\'_0_ 1 |]' +
+                     'lyrics: You are great! I\'m O. K. ' +
+                     'C-O-C-O-N-U-T-E co-co-nut!'
+      var score = musje.parse(musjeSrc)
+      document.body.appendChild(score.render())
+
+      var playBtn = document.createElement('button')
+      playBtn.textContent = '>'
+      playBtn.addEventListener('click', function () { score.play() })
+      document.body.appendChild(playBtn)
+
+      var stopBtn = document.createElement('button')
+      stopBtn.textContent = '[]'
+      stopBtn.addEventListener('click', function () { score.stop() })
+      document.body.appendChild(stopBtn)
+    </script>
+  </body>
+</html>

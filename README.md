@@ -12,6 +12,41 @@ Sciences in 1742. It has been evolved and become popular in some
 areas of Asia. It is called jianpu, literally simple music score, in Chinese.
 The musje 123 is a music processor based on this notation.
 
+## Getting started
+
+https://github.com/malcomwu/musje/blob/master/demo.html
+
+## Install
+
+For npm module system:
+
+```shell
+npm install musje --save
+```
+
+## Usage
+
+```html
+<script src="path/to/musje.js"></script>
+<script>
+  var score = musje.parse(MusjeSrc)
+  // The rest are same as below.
+</script>
+```
+
+Or in ES6 module:
+
+```js
+import musje from 'musje'
+const score = musje.parse(MusjeSrc)
+score.addStyle(sty1, sty2)
+     .addStyle(sty3)
+document.body.appendChild(score.render())
+// or anElement.appendChild(score.render())
+score.play()
+score.stop()
+```
+
 ## Notion of jianpu
 
 In comparison of the western sheet music, jianpu is closely related.
