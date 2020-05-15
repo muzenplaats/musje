@@ -75,18 +75,18 @@ In general, the users of jianpu take this as a key signature,
 while the current iteration of musje still consider this as a transposition.
 It will be considered in the later version of musje.
 
-For the first class for a jianpu lesson, it start with the:
+For the first class for a jianpu lesson, it starts with:
 ```
  1  2  3  4  5   6  7  1'
 dol re mi fa sol la si dol
 ```
-This is the most intuitive of jianpu over the western sheet music.
-To advance in playing instruments, we learn:
+This is probably the most intuitive of jianpu over the western sheet music.
+To advance it in playing instruments, we learn:
 ```
-1   #1  2  #2  3  4 #4  5  #5  6 #6  7  1'
+ 1  #1  2  #2  3  4 #4  5  #5  6 #6  7  1'
 dol di re  ri mi fa fi sol si la li ti dol
 ```
-to sing. Why a jianpu user take the G in `/G 12` as a key rather than
+to sing. Why a jianpu user take the G in `/G 1 2` as a key rather than
 a transpose can be imagined.
 
 For the rest, it is still considered to be very much the same for musje
