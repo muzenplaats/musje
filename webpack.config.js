@@ -1,21 +1,27 @@
-const path = require('path');
+const path = require('path')
 
-module.exports = {
-  // mode: 'development',
+const devOpts = {
+  mode: 'development',
+  devtool: 'inline-source-map',
+  entry: './src/index.js',
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  }
+}
 
-  /* Dev I/O */
-  // entry: './src/index.js',
-  // output: {
-  //   filename: 'main.js',
-  //   path: path.resolve(__dirname, 'dist'),
-  // },
-
-  /* Build lib I/O - tmp */
+const deployOpts = {
+  mode: 'production',
   entry: './src/musje.js',
   output: {
     filename: 'musje.js',
     path: path.resolve(__dirname),
-  },
+  }
+}
+
+module.exports = {
+  ...deployOpts,
+  // ...devOpts,
 
   module: {
     rules: [
@@ -61,8 +67,7 @@ module.exports = {
     contentBase: path.join(__dirname, 'dist'),
     compress: true,
     port: 9000
-  },
-  devtool: 'inline-source-map'
+  }
 }
 
 
