@@ -1,12 +1,12 @@
 {
   "name": "musje",
   "description": "A numbered musical notation in sheet music.",
-  "version": "2.0.1-beta",
+  "version": "2.0.2-beta",
   "main": "musje.js",
   "scripts": {
     "serve": "webpack-dev-server --mode development",
     "watch": "webpack --mode development --watch",
-    "deploy": "webpack --mode production"
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",

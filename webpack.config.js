@@ -6,21 +6,23 @@ const devOpts = {
   entry: './src/index.js',
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist')
   }
 }
 
-const deployOpts = {
+const buildOpts = {
   mode: 'production',
   entry: './src/musje.js',
   output: {
     filename: 'musje.js',
     path: path.resolve(__dirname),
+    library: 'musje',
+    libraryTarget: 'umd'
   }
 }
 
 module.exports = {
-  ...deployOpts,
+  ...buildOpts,
   // ...devOpts,
 
   module: {
