@@ -75,22 +75,33 @@ In general, the users of jianpu take this as a key signature,
 while the current iteration of musje still consider this as a transposition.
 It will be considered in the later version of musje.
 
-For the first class for a jianpu lesson, it starts with:
+For the first class of a jianpu lesson, it starts with:
 ```
- 1  2  3  4  5   6  7  1'
-dol re mi fa sol la si dol
+ 1  2  3  4  5  6  7  1'
+do re mi fa sol la si do
 ```
 This is probably the most intuitive of jianpu over the western sheet music.
 To advance it in playing instruments, we learn:
 ```
- 1  #1  2  #2  3  4 #4  5  #5  6 #6  7  1'
-dol di re  ri mi fa fi sol si la li ti dol
+1  #1  2  #2  3  4 #4  5  #5  6 #6  7 n1'
+do di re  ri mi fa fi sol si la li ti do
 ```
 to sing. Why a jianpu user take the G in `/G 1 2` as a key rather than
-a transpose can be imagined.
+a transpose can be imagined. The 1..7 is naturally as solfège, but musje
+takes them as notes, i.e., steps, C..B, for the startup.
+It is referred to as 首調 (solfège) and 固定調 (note name) in Chinese.
 
-For the rest, it is still considered to be very much the same for musje
+For the rest, it is still considered to be very closely the same for musje
 between jianpu and the western sheet music.
+
+It may be thought that the western sheet music is like to play a Snooker,
+with so large table and tiny hole, and scattered by a lot of small balls.
+It is so difficul to master so that some play Pool such as the jianpu.
+But they are both billiards (sheet music).
+In general, the western sheet music has a steeper learning curve
+in the beginning, but easier to become professinal in the academic level.
+The jianpu has a shellow learning curve but generally it stops in the
+user's profession.
 
 ## Language description
 
