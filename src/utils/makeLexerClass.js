@@ -28,19 +28,31 @@ class Line {
     this.col += num
     this.rest = this.rest.substr(num)
   }
+
+  cutoff(length) {
+    this.cutoffRest = this.rest.substr(length)
+    this.rest = this.rest.substr(0, length)
+    this.isCutoff = true
+  }
+  joinCutoff() {
+    this.rest += this.cutoffRest
+    this.isCutoff = false
+  }
 }
 
 const defaultPatterns = {
   S: ' ',
-  SS: ' +'
+  SS: ' +',
+  ALL: '.+'
 }
 
 const getPatterns = patterns => {
   patterns = { ...defaultPatterns, ...patterns }
-  const result = [{}, {}]
+  const result = [{}, {}, {}]
   for (let key in patterns) {
     result[0][key] = new RegExp(patterns[key])
     result[1][key] = new RegExp('^' + patterns[key])
+    result[2][key] = new RegExp(patterns[key], 'g')
   }
   return result
 }
@@ -54,6 +66,7 @@ export default function makeLexerClass(patterns) {
       const ptrns = getPatterns(patterns)
       this.withoutPatterns = ptrns[0]
       this.patterns = ptrns[1]
+      this.globalPatterns = ptrns[2]
     }
 
     get line() { return this.lines.line }
@@ -74,10 +87,48 @@ export default function makeLexerClass(patterns) {
       this.error(`Undefined token [${token}]`)
     }
 
+    getGlobalPattern(token) {
+      if (token in this.globalPatterns) return this.globalPatterns[token]
+      this.error(`Undefined token [${token}]`)
+    }
+
+    // Look ahead boundary tmp-cutoff.
+    prevent(token) {
+      const matched = this.line.rest.match(this.getWithoutPattern(token))
+      if (matched) this.line.cutoff(matched.index)
+      return this
+    }
+
+    escprevent(token, escToken) {
+      const matched = this.line.rest.matchAll(this.getGlobalPattern(token))
+      const escMatched = this.line.rest.matchAll(this.getGlobalPattern(escToken))
+      if (!matched) return this
+
+      const escRanges = []
+      let index = 0
+
+      const withinEsc = idx => {
+        for (let i = 0; i < escRanges.length; i++) {
+          const range = escRanges[i]
+          if (idx >= range[0] && idx < range[1]) return true
+        }
+      }
+
+      for (const match of escMatched) {
+        escRanges.push([match.index, match.index + match[0].length])
+      }
+      for (const match of matched) {
+        if (!withinEsc(match.index)) { index = match.index; break }
+      }
+      this.line.cutoff(index)
+      return this
+    }
+
     eat(token) {
       const matched = this.line.rest.match(this.getPattern(token))
       if (!matched) this.error(`token [${token}]`)
       this.lexeme = matched[0]
+      if (this.line.isCutoff) this.line.joinCutoff()
       this.line.advance(this.lexeme.length)
     }
 
@@ -92,17 +143,29 @@ export default function makeLexerClass(patterns) {
 
     optional(token, act) {
       this.lexeme = ''
-      if (this.is(token)) this.eat(token)
+      if (this.is(token)) {
+        this.eat(token)
+      } else {
+        if (this.line.isCutoff) this.line.joinCutoff()
+      }
       if (act) act(this.lexeme)
     }
 
     without(token, act) {
-      const matched = this.line.rest.match(this.getWithoutPattern(token))
-      this.lexeme = matched ? this.line.rest.substr(0, matched.index) :
-                              this.line.rest
-      this.line.advance(this.lexeme.length)
-      if (act) act(this.lexeme)
+      this.prevent(token).token('ALL', lexeme => act(lexeme))
     }
+
+    escwithout(token, escToken, act) {
+      this.escprevent(token, escToken).token('ALL', lexeme => act(lexeme))
+    }
+
+    // without(token, act) {
+    //   const matched = this.line.rest.match(this.getWithoutPattern(token))
+    //   this.lexeme = matched ? this.line.rest.substr(0, matched.index) :
+    //                           this.line.rest
+    //   this.line.advance(this.lexeme.length)
+    //   if (act) act(this.lexeme)
+    // }
 
     mlwithout(token, act) {
       const pattern = this.getWithoutPattern(token)

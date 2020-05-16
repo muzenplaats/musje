@@ -22,8 +22,8 @@ const buildOpts = {
 }
 
 module.exports = {
-  ...buildOpts,
-  // ...devOpts,
+  // ...buildOpts,
+  ...devOpts,
 
   module: {
     rules: [

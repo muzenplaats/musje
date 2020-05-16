@@ -29,7 +29,8 @@ export default class Direction {
     } else if (lexer.is('dynamics')) {
       lexer.token('dynamics', lexeme => { this.dynamics = lexeme })
     } else if (lexer.is('words')) {
-      lexer.token('words', lexeme => { this.words = lexeme.trim() })
+      lexer.prevent('note')
+           .token('words', lexeme => { this.words = lexeme.trim() })
     }
   }
 
