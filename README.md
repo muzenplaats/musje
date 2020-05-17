@@ -18,7 +18,7 @@ https://github.com/malcomwu/musje/blob/master/demo.html
 
 ## Install
 
-For npm module system:
+For the npm module system:
 
 ```shell
 npm install musje --save
@@ -105,13 +105,15 @@ user's profession.
 
 ## Language description
 
-- The grammar of musje 2.0. (https://github.com/malcomwu/musje/blob/master/grammar.md)
-- The musje stylesheet. (https://github.com/malcomwu/musje/blob/master/stylesheet.md)
+- The grammar of musje 2.0 (https://github.com/malcomwu/musje/blob/master/grammar.md).
+- The musje stylesheet (https://github.com/malcomwu/musje/blob/master/stylesheet.md).
 
 ## Development
 This project was initiated about year 2015; however, several attempts
 has been missed or discontinued.
 This version is musje 2 (codename: gezondheid).
+
+For developers,
 
 ```sh
 npm run serve
@@ -123,8 +125,13 @@ and http://localhost:9000/.
 - Th language is derived from LilyPond, abc, pmx and the MusicTeX family.
 - The data structure is adapted from the MusicXML 3.0.
 - The idea of parsing is based on "Let's Build a Compiler - Jack Crenshaw".
-- The flow of layout start from the ideas of the css box model and stylesheets.
+- The flow of layout starts from the ideas of the css box model and stylesheets.
 - The rendering uses an `el.js` by-product, affected by
   "Eloquent JavaScript - Marijn Haverbeke".
   However, it can be easily reproduced by some other libraries or using canvas.
 - It uses the musical font of Cadence, LilyPond, and takes some from MuseScore.
+
+## Potential interest of applications
+1. Build a music library or wiki.
+2. Use in a professional music system to discuss the musical ideas, such as StackOverflow.
+3. Use in a social media, such as Facebook, to share the musical snippets to friends.
