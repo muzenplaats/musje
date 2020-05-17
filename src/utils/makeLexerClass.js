@@ -50,8 +50,8 @@ const getPatterns = patterns => {
   patterns = { ...defaultPatterns, ...patterns }
   const result = [{}, {}, {}]
   for (let key in patterns) {
-    result[0][key] = new RegExp(patterns[key])
-    result[1][key] = new RegExp('^' + patterns[key])
+    result[0][key] = new RegExp('^' + patterns[key])
+    result[1][key] = new RegExp(patterns[key])
     result[2][key] = new RegExp(patterns[key], 'g')
   }
   return result
@@ -64,8 +64,8 @@ export default function makeLexerClass(patterns) {
       this.src = src.replace(/\r\n/g, '\n')
       this.lines = new Lines(this.src)
       const ptrns = getPatterns(patterns)
-      this.withoutPatterns = ptrns[0]
-      this.patterns = ptrns[1]
+      this.patterns = ptrns[0]
+      this.aheadPatterns = ptrns[1]
       this.globalPatterns = ptrns[2]
     }
 
@@ -82,8 +82,8 @@ export default function makeLexerClass(patterns) {
       this.error(`Undefined token [${token}]`)
     }
 
-    getWithoutPattern(token) {
-      if (token in this.withoutPatterns) return this.withoutPatterns[token]
+    getAheadPattern(token) {
+      if (token in this.aheadPatterns) return this.aheadPatterns[token]
       this.error(`Undefined token [${token}]`)
     }
 
@@ -94,18 +94,17 @@ export default function makeLexerClass(patterns) {
 
     // Look ahead boundary tmp-cutoff.
     prevent(token) {
-      const matched = this.line.rest.match(this.getWithoutPattern(token))
+      const matched = this.line.rest.match(this.getAheadPattern(token))
       if (matched) this.line.cutoff(matched.index)
       return this
     }
 
     escprevent(token, escToken) {
       const matched = this.line.rest.matchAll(this.getGlobalPattern(token))
-      const escMatched = this.line.rest.matchAll(this.getGlobalPattern(escToken))
       if (!matched) return this
-
+      const escMatched = this.line.rest.matchAll(this.getGlobalPattern(escToken))
       const escRanges = []
-      let index = 0
+      let index
 
       const withinEsc = idx => {
         for (let i = 0; i < escRanges.length; i++) {
@@ -120,7 +119,7 @@ export default function makeLexerClass(patterns) {
       for (const match of matched) {
         if (!withinEsc(match.index)) { index = match.index; break }
       }
-      this.line.cutoff(index)
+      if (index >= 0) this.line.cutoff(index)
       return this
     }
 
@@ -160,7 +159,7 @@ export default function makeLexerClass(patterns) {
     }
 
     // without(token, act) {
-    //   const matched = this.line.rest.match(this.getWithoutPattern(token))
+    //   const matched = this.line.rest.match(this.getAheadPattern(token))
     //   this.lexeme = matched ? this.line.rest.substr(0, matched.index) :
     //                           this.line.rest
     //   this.line.advance(this.lexeme.length)
@@ -168,7 +167,7 @@ export default function makeLexerClass(patterns) {
     // }
 
     mlwithout(token, act) {
-      const pattern = this.getWithoutPattern(token)
+      const pattern = this.getAheadPattern(token)
       const strs = []
       let matched = this.line.rest.match(pattern)
 

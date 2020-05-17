@@ -6,6 +6,8 @@ import { loadText } from './utils/helpers'
 
 import './appElement.css'
 
+// import './test/testLexer'
+
 import jsonElement from './utils/jsonElement'
 import xmlElement from './utils/xmlElement'
 
