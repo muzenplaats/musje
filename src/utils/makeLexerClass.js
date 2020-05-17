@@ -92,6 +92,14 @@ export default function makeLexerClass(patterns) {
       this.error(`Undefined token [${token}]`)
     }
 
+    eat(token) {
+      const matched = this.line.rest.match(this.getPattern(token))
+      if (!matched) this.error(`token [${token}]`)
+      this.lexeme = matched[0]
+      if (this.line.isCutoff) this.line.joinCutoff()
+      this.line.advance(this.lexeme.length)
+    }
+
     // Look ahead boundary tmp-cutoff.
     prevent(token) {
       const matched = this.line.rest.match(this.getAheadPattern(token))
@@ -121,14 +129,6 @@ export default function makeLexerClass(patterns) {
       }
       if (index >= 0) this.line.cutoff(index)
       return this
-    }
-
-    eat(token) {
-      const matched = this.line.rest.match(this.getPattern(token))
-      if (!matched) this.error(`token [${token}]`)
-      this.lexeme = matched[0]
-      if (this.line.isCutoff) this.line.joinCutoff()
-      this.line.advance(this.lexeme.length)
     }
 
     is(token) {
