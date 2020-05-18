@@ -16,7 +16,7 @@ A token is by definition `{ name, lexeme }`.
 The token name is referred to as token in the APIs,
 because it is treated as the identifier of token.
 
-The default patterns as the following are used in some APIs and they can be overwritten,
+The default patterns as the following are used in some APIs, and they can be overwritten
 to specify the white-space-for-you or pattern-for-your-all.
 
 ```js
@@ -33,51 +33,36 @@ const lexer = new Lexer(src)
 ```
 
 ### Usage in parser
-The lexer is as a token string and it is stateless.
-A technical state is a cursor behind the next token.
+The lexer is sort of a token string and it is stateless.
+Technically, it has a cursor state, which is behind the next token, and some other properties shown below.
 ```js
-lexer.token(token, act = lexeme => { vale = lexeme })
+lexer.token(token, act)     // e.g., token(token, lexeme => { value = lexeme })
 lexer.optional(token, act)
 ````
 
-The predicate tells a look-ahead token:
+Look-ahead token predicate:
 ```js
 lexer.is(token)
 ```
-But the lexer has no other state to be switched,
-and said, the language is the state (0 -> eof).
-Or said, the stateless lexer cannot read the script at all, and it need the parser to go on.
-This lexer can be thought of as a context.
-It be think that the typical lexer does a state switch (e.g., German->English), while the parser using this lexer
-may do in the context switch (e.g. Topic domain, 1->2) means.
+This lexer can be thought of as a container of context states, but only the parser has knowledge to tell it.
+This is sometimes good for not letting the lexer (less knowlegable) to handle the states.
 
-The lexer can be compared as a stream and the parser the stream player.
-It may have some advantages that letting the parser maintain
-(higher-level branch) the lexing psuedo-states,
-and provides the wanted flexibilities for the parser.
-
-In summary, this lexer does not tokenize the source at once, but provides APIs for the parser.
-The parser generally does not want to produce an AST as in the parser generators do.
-However, for example, a list is hidden in a while-loop or a tree (graph) is readily a sub-parser
-calling a sub-parser. It could be said that a parser favoring distributed sub-parsers.
-
-For thinking, the idea from the "Let's Build a Compiler" apealed to some such as the author.
-It is intuitive, almost without any techincal jargons and led the topic here.
-The author always favors a parser genenrator, but the awkward musje language could not be easily parsed,
-at least, for severally ambiguities.
-
-One might think that the ?AST here is procedual-wise instead of data-wise.
-It can always perform resulted in data, but can not easily do backward.
-If this way had values, for example, how to do optimization, e.g., codegen(), or others?
+In summary, this lexer only do the tokenization one by one, and the parser decides when to do.
+The pratice is that a main parser inits and distributes the work to subparsers by means of the grammar.
+It can be seen as a lower-level AST; the AST is not a data structure but a control logic.
+The possible advantage is that one can easily convert this to data or incorporate extra data flow in the control logic.
+For example, a while-loop does a parallel list selection, and procedual subparser calls are in serial.
+Nontheless, any subpaser call is a branch-ret, and it naturally goes to the recursive walk and back to the
+caller to form, sort of, a syntax tree.
 
 ### Prevent
 ```js
 lexer.prevent(token)
 lexer.escprevent(token, escToken)  // escaped prevent
 ```
-These make a possible temporary boundary for a right token to prevent
-from the consuming of the left one.
-The temp. unbound state will be recovered by `lexer.token()` or `lexer.optional`.
+These make a possible and temporary boundary for a token at right to prevent it from
+the consuming by the left (next) token.
+The temporary unbound state will be recovered by `lexer.token()` or `lexer.optional()`.
 
 ### Error
 ```js
@@ -101,3 +86,22 @@ lexer.without(token)              // All but not token
 lexer.escwithout(token, escToken) // as above, escaped version
 lexer.mlwithout(token)            // multi-line without
 ```
+
+### Suggestions for praticing
+- Take the `lexer.error(message)` as a possible debugging tool.
+- If white space handling is confusing, it is readily in any grammar: do it in the end not in the front in any subparser,
+  but only do the main parser in the front.
+- Token abstraction, pretend a higher level "Token" in the following two cases:
+  ```
+  A := B | C | D
+  while (lexer.is('A'), ..) {  // in list A rather than within items B, C and D
+    ...
+  }
+  ```
+  ```
+  value := number | ident | paran
+  paran := '(' expr ')'
+  if (lexer.is(paran)) {/* go to the paran subparser */} // is preferred than if (lexer.is('(')) {} thought they are the same.
+  ```
+It is by definition of the grammar that 'A' or 'paran' will never be used to produce a lexeme, but only as a look-ahead token.
+But it can be subtle that one might want to play a trick to keep the error handling in or out.
