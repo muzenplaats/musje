@@ -1,0 +1,85 @@
+1. Parse .scl
+2. Reduce *.scl to scls.json
+3. extend the accidentals in Pitch.
+
+// Tool
+const parseScl = src => { return Array[Number] }
+const toCsv = arr => { return str }
+
+const saveScls = () => {
+  // rawScls = loop (numFiles) { fs.readfileSync().. }
+  scls = rawScls.map(raw => toCsv(parseScl(raw))
+  fs.writefileSync('./scls.csv', scls)  // row: sclName, column: value
+}
+
+// --
+class Scale {
+  constructor(scls) {
+    this.name = 'scale'
+    this.scls = scls
+  }
+  
+}
+
+
+class Pitch {
+  constructor(pitch, scale) {
+    this.name = 'pitch'
+    this.step = pitch.step
+    this.accidental = pitch.accidental    // # ## b bb n   b^ b #^ #v #/ #\ b/ b\..
+    this.octave = pitch.octave
+    this.scale = scale  // means the collection.
+  }
+  
+  get midiNumber() {}   // obsolate but is supported
+  
+  detune(sclName) { this.df = ..; return this }  // pitch.detune(sclName).frequency
+  tune(sclName) { this.df = ..; return this }    // pitch.tune(sclName).frequency
+  
+  get sclName?X     // sclName -> > frequency
+  
+  get frequency() { return super.frequency + this.df }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+import Scale from './Scale'
+
+player.play()
+player.pause()
+player.stop()
+
+player.scale = sclName
+
+--
+/*
+playNote(note) {
+  const { pitch } = note
+  const frequency = this.scale ? this.scale.tune(pitch) : pitch.frequency
+}
+*/
+
+--
+
+class Scale {
+  constructor(scl) {
+    this.name = 'scale'
+    this.scl = scl
+  }
+  parse(lexer) {}
+  tune(pitch) { return frequency }
+  detune(sclName) { return frequency }
+}
