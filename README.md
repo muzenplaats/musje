@@ -1,4 +1,4 @@
-# Musje 2.0.6rc
+# Musje 2.0
 
 ![alt musje 123](https://github.com/malcomwu/musje/blob/master/dist/assets/musje123-64x64.jpg)
 <br>
