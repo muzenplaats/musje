@@ -14,7 +14,16 @@ The musje 123 is a music processor based on this notation.
 
 ## Getting started
 
-https://github.com/malcomwu/musje/blob/master/demo.html
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# todos
+- apply gh-pages supports in musje for the follows:
+- add Demo page;
+- add Devel page.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Checkout the [Demo]().
+2. Or put the https://github.com/malcomwu/musje/blob/master/demo.html
+and https://github.com/malcomwu/musje/blob/master/musje.js in the same folder; double-click the demo.html.
 
 ## Install
 
@@ -112,6 +121,7 @@ user's profession.
 This project was initiated about year 2015; however, several attempts
 has been missed or discontinued.
 This version is musje 2 (codename: gezondheid).
+Please first checkout [Devel]() to get a glance.
 
 For developers,
 

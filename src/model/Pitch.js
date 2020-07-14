@@ -54,3 +54,12 @@ export default class Pitch extends PlayStopHandleInterface {
 
   toJSON = makeToJSON('step', 'accidental', 'octave')
 }
+
+// Current usage for a sequencer:
+// pitch.midiNumber
+// pitch.frequency
+// (possible addon)
+// pitch.sclName(step)
+// (my goal is let the midiNuber and sclName(step) branches..)
+// (result in the only pitch.frequency, by a preference of an instence.)
+// (My brain is Empty now; goed zo!)
