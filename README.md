@@ -16,6 +16,7 @@ The musje 123 is a music processor based on this notation.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # todos
+- npm publish
 - apply gh-pages supports in musje for the follows:
 - add Demo page;
 - add Devel page.
