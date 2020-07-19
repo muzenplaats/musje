@@ -5,7 +5,10 @@
 A numbered musical notation in sheet music.
 
 ## Current Status
-- 2020-07-20 The repository is hacked, please do not download for the fix.
+- 2020-07-20 The repository is hacked, please do not clone and download
+  for the fix.
+- However, you can still use `npm install musje` for the build if you
+  want to use it for the time being.
 
 ## Background
 
