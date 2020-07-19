@@ -4,6 +4,9 @@
 <br>
 A numbered musical notation in sheet music.
 
+## Current Status
+- 2020-07-20 The repository is hacked, please do not download for the fix.
+
 ## Background
 
 Musje is sparrow in Dutch. The first numbered musical notation was
