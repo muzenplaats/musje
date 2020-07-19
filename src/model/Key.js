@@ -1,6 +1,8 @@
 import { makeToJSON } from '../utils/helpers'
 import Lexer from './Lexer'
+import SolfegeKey from './SolfegeKey'
 
+/* Key Signature for the compatibily in the western sheet music */
 export default class Key {
   constructor(key) {
     this.name = 'key'
@@ -13,6 +15,8 @@ export default class Key {
       this.mode = key.mode
     }
   }
+
+  get solfedge() { return SolfegeKey.fromKey(this) }
 
   parse(lexer) {
 
