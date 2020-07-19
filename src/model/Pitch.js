@@ -44,7 +44,7 @@ export default class Pitch extends PlayStopHandleInterface {
   get midiNumber() {
     return STEP_TO_SEMITONE[this.step] + this.alter + this.octave * 12 + 60
   }
-  set midiNumber() {
+  set midiNumber(num) {
     // Todo
   }
 

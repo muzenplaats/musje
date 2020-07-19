@@ -25,11 +25,12 @@ export function stop() {
 const oscPlay = (t, freq, dur, onended, context) => {
   const currTime = context.currentTime
   const gn = context.createGain()
-  gn.connect(context.destination);
+  gn.connect(context.destination)
+  const gain = 1
 
   gn.gain.setValueAtTime(0, t + currTime)
-  gn.gain.linearRampToValueAtTime(0.5, t + currTime + 0.05)
-  gn.gain.linearRampToValueAtTime(0.5, t + currTime + dur - 0.05)
+  gn.gain.linearRampToValueAtTime(gain, t + currTime + 0.05)
+  gn.gain.linearRampToValueAtTime(gain, t + currTime + dur - 0.05)
   gn.gain.linearRampToValueAtTime(0, t + currTime + dur - 0.01)
 
   const osc = context.createOscillator()
@@ -120,7 +121,7 @@ const playCell = (cell, context) => {
 const playNote = (note, context) => {
   const { pitch, duration } = note
   tos.push(setTimeout(() => {
-    // console.log(`play: ${note}`, pitch.frequency)
+    console.log(`play: ${note}`, pitch.frequency)
     const { tie } = note
     if (tie) {
       if (tie.type !== 'begin') return
