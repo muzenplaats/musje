@@ -107,9 +107,9 @@ lexer.mlwithout(token)            // multi-line without
   But it can be subtle that one might want to play a trick to keep the error handling in or out.
   Or it could be taken as a tolarence metric to relax a strict grammar, to researve features or so.
 - The bottom up acending has an advantage to test a grammar line with a corresponding data structure.
-  It is shown here that it is often possible to exchange the `src`, `lexer` and `plainObject`, 
+  It is shown here that it is often possible to exchange the `src`, `lexer` and `plainObject`,
   and to flow in a 'constructor()' and out of the 'toString()' and 'toJSON()' fluently.
-- Not implement a `B := ( ... )? or *` in any subparser. Rule of thumb is a smallest subparser is to advance a token.
+- Not implement a `B := ( ... )? or *` in any subparser. The rule of thumb is that the subparser at least advance a token.
   Instead, do `A := ... B? ...` in the caller supparser. Only do it in the main parser in need.
 - Top-down descend iterations, pick up an interested language sub-domain, do it bottom-up (syntatic level) and
   test it top-down (sementic level). It is very normal that one changes a grammar in a top-down iteration, for human's taste.
