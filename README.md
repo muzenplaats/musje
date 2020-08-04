@@ -4,11 +4,22 @@
 <br>
 A numbered musical notation in sheet music.
 
-## Current Status
-- 2020-07-20 The repository is hacked, please do not clone and download
-  for the fix.
-- However, you can still use `npm install musje` for the build if you
-  want to use it for the time being.
+
+## Warning
+
+Since July 20, 2020, the repository had been hacked, DO NOT clone and download it.
+The hack is sever because the dev-dependances are, not sure, but likely be hacked,
+too. Due to the lack of man power. The fix does not have schedule.
+
+If you are interested to use this library, please use npm. The function is the
+same as here with the build. The usage is the same as described here. To install
+it:
+
+```sh
+npm install musje
+```
+(Update: Aug 5, 2020)
+
 
 ## Background
 
