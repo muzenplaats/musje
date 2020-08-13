@@ -12,24 +12,26 @@
     "type": "git",
     "url": "https://github.com/malcomwu/musje.git"
   },
-  "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/preset-env": "^7.8.4",
-    "babel-loader": "^8.0.6",
-    "css-loader": "^3.4.2",
-    "file-loader": "^6.0.0",
-    "raw-loader": "^4.0.0",
-    "style-loader": "^1.1.3",
-    "url-loader": "^4.0.0",
-    "webpack": "^4.41.6",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.10.3"
-  },
   "keywords": [
-    "music",
+    "music processor",
+    "sheet music",
+    "numbered musical notation"
     "jianpu"
   ],
   "author": "Malcom Wu <malcomwu@hotmail.com>",
-  "license": "Unlicensed"
+  "license": "Unlicensed",
+  "devDependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.11.0",
+    "babel-loader": "^8.1.0",
+    "css-loader": "^4.2.1",
+    "file-loader": "^6.0.0",
+    "raw-loader": "^4.0.1",
+    "style-loader": "^1.2.1",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
 }
