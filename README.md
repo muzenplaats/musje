@@ -32,13 +32,13 @@ notation.
 
 ## Getting started
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # todos
-  - npm publish
-  - apply gh-pages supports in musje for the follows:
-  - add Demo page;
-  - add Devel page.
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>  # todos
+>  - npm publish
+>  - apply gh-pages supports in musje for the follows:
+>  - add Demo page;
+>  - add Devel page.
+>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Checkout the [Demo]().
 2. Or put the https://github.com/malcomwu/musje/blob/master/demo.html
