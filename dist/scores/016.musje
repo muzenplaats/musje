@@ -1,0 +1,108 @@
+                                  title: Miracle
+
+composer: (name should be here)  // composer: a, b and c
+lyricist: (name(s) and remix (2020))
+player: Ilse de Lange
+arranger: S.-M. Wu
+
+/* names in header (example for test)
+  // singer: (same as above or different)
+  // word-and-music: (abc === lyricist: abc & composer: abc)
+
+  album: Incredible (2008)
+  genre: pop
+  source: /* free style */ [Google search](https://www.google.com/search?sxsrf=ALeKk01hAjUyyJGfdyjvNFoo_2UiJ4W7CQ%3A1608869598024&ei=3mblX86HAZC1mAX9ro6IBQ&q=miracle+ilse+de+lange+lyrics&oq=miracle+de+l+lyrics&gs_lcp=CgZwc3ktYWIQAxgAMggIABAIEAcQHjIICAAQCBAHEB4yCAgAEAgQBxAeMggIABAIEAcQHjIICAAQBxAFEB46BAgjECc6BggAEAcQHjoICAAQBxAKEB46BggAEAgQHlDB4wJYy5ADYLqvA2gBcAB4AIABbIgBuASSAQM1LjKYAQCgAQGqAQdnd3Mtd2l6wAEB&sclient=psy-ab)
+  source: the-second-source (unordered list)
+  remix: lyrics (25 dec 2020)  // free style
+  // Some names such as in this comment will not be shown to the sheet music (score)
+  // and it depends on the options of the score processor.
+  // It readily means that to some is the data and to hide is the meta-data.
+  // The meta-data is the data to describe the data. Sometimes we want it pop out
+  // to become data. It is normal in the daily life.
+ */
+
+/* Key signature analysis
+C 1 2 3 4 5 6  7 1 2 3 4
+G         1 2 #2 4 5 6 7
+Em            b3
+
+[Em] 3/4 (6_5_) 6_ 5_  6_  5_ |   6   1'  5   |
+*/
+
+
+
+// (Listen while you read!)
+
+[C] 3/4 (3_2_) 3_  2_  3_  2_ |   3   5   2   |  // transport instrument in C
+                                                // 3/4 time signature beats/beattype
+                                                // 2, 3, 5 solfege; (slur)
+                                                // key: Em 
+
+lyrics:
+
+   Someone put a  lock on   this old door.
+
+It's been beaten up and used and more.
+It's been kicked a hundred thousand times.
+Keeping all the memories behind.
+If you read the lines between the paint.
+Look beyond the cracks that store away.
+It's hidden in the windows of the walls.
+Right behind the eyes that saw it all.
+
+Given all the facts of circumstance.
+I did not believe that a romance.
+Should we with itself in all this dark and blue.  // remix test
+That's the only place I ever knew.
+You put me outside my safety-zone.
+Outside all the lines that made my home.
+To find out that no one really lives.
+Without giving what it is you give.
+
+              (Oh~ oh~ oh~)
+
+A miracle looking in my life.
+A mirror-ball showing me all these faces.
+A miracle looking in my life, after all.
+A miracle looking in my life.
+A mirror-ball showing me all these faces.
+
+              A miracle~
+
+I've been living underneath my skin.
+Everything I felt I kept it in.
+It carried all the words without a sound.
+It got me, it almost got too loud.
+But now that my arms are holding on.
+To someone as *sacred* as a song.
+To the one who wants to be my own.
+I have found that blood can come from stones.
+
+              (Oh~ oh~ oh~)
+
+A miracle looking in my life.
+A mirror-ball showing me all these faces.
+A miracle looking in my life, after all.
+A miracle looking in my life.
+A mirror-ball showing me all these faces.
+
+     A miracle~ A miracle~ A mircle~
+
+(music)
+
+A miracle looking in my life.
+A mirror-ball showing me all these faces.
+A miracle looking in my life, after all~
+A miracle looking in my life.
+A mirror-ball showing me all these faces.
+A miracle looking in my life, after all~
+Oh~ a miracle looking in my life.
+A mirror-ball showing me all these faces.
+
+     A miracle? A mircle? A miricle??
+
+Someone put a lock on this old door.
+
+It's been beaten up and used and more.
+It's been kicked a hundred thousand times.
+It's keeping all the memories behind. |]
