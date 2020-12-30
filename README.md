@@ -40,7 +40,7 @@ notation.
 >  - add Devel page.
 >~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Checkout the [Demo]().
+1. Checkout `./demo.html` or `./demo-2.html/`;
 2. Or put the https://github.com/malcomwu/musje/blob/master/demo.html
   and https://github.com/malcomwu/musje/blob/master/musje.js in the same folder;
   double-click the demo.html.
