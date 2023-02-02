@@ -24,8 +24,8 @@ npm install musje
 ## Background
 
 Musje is sparrow in Dutch. The first numbered musical notation was presented by
-Jean-Jacques Rousseau to the French Academy of Sciences in 1742. It has been en-
-volved and become popular in some areas of Asia. It is called jianpu, literally
+Jean-Jacques Rousseau to the French Academy of Sciences in 1742. It has been
+evolved and become popular in some areas of Asia. It is called jianpu, literally
 simple music score, in Chinese. The musje 123 is a music processor based on this
 notation.
 
