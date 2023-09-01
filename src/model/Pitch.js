@@ -1,7 +1,6 @@
 import Lexer from './Lexer'
 import { makeToJSON, repeat } from '../utils/helpers'
 import PlayStopHandleInterface from './PlayStopHandleInterface'
-import Scale from '../scale/Scale'
 
 const STEP_TO_SEMITONE = { 1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11 }
 const ACCIDENTAL_TO_ALTER = {
@@ -21,8 +20,6 @@ export default class Pitch extends PlayStopHandleInterface {
       this.accidental = pitch.accidental || ''
       this.octave = pitch.octave || 0
       this.midiNumber = pitch.midiNumber
-      // this.sclName = pitch.sclName || ''
-      // this.sclStep = pitch.sclStep
     }
   }
 
@@ -49,17 +46,8 @@ export default class Pitch extends PlayStopHandleInterface {
   }
 
   get frequency() {
-    // return this.sclName ?
-    //     (this.sclStep ? new Scale(this.sclName, this.sclStep).frequency :
-    //                     this.detune())
-    //   : Math.pow(2, (this.midiNumber - 69) / 12) * 440
+    return Math.pow(2, (this.midiNumber - 69) / 12) * 440
   }
-
-  // // Usage: with sclName but without sclStep.
-  // detune() { return new Scale().detune(this.midiNumber) }   // string~>piano
-
-  // // Tune scale.frequency to the 23-tone TET; to go with piano.
-  // tune() { return new Scale().tune(this.midiNumber) }   //
 
   defaultOnplay() { if (this.tie) this.tie.onplay() }
   defaultOnstop() { if (this.tie) this.tie.onstop() }
@@ -72,12 +60,3 @@ export default class Pitch extends PlayStopHandleInterface {
 
   toJSON = makeToJSON('step', 'accidental', 'octave')
 }
-
-// Current usage for a sequencer:
-// pitch.midiNumber
-// pitch.frequency
-// (possible addon)
-// pitch.sclName(step)
-// (my goal is let the midiNuber and sclName(step) branches..)
-// (result in the only pitch.frequency, by a preference of an instence.)
-// (My brain is Empty now; goed zo!)

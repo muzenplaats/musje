@@ -1,7 +1,9 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
+
 import Head from './Head'
 import Body from './Body'
+
 import fromMxl from './fromMxl'
 import toMxl from './toMxl'
 import Player from '../player/Player'

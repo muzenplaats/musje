@@ -1,0 +1,31 @@
+title: Velocity ideas in 123456
+subtitle: By three time signatures
+
+// timeSignature: beats/beatType
+// beats = 6 : 3 : 2
+// The idea is to show the same notes in different rhythms.
+// The strong weak (V v) is for exaggerations.
+
+6/8 1_2_3_ 4_5_6_||
+3/4 1_2_ 3_4_ 5_6_ ||
+2/4 \tuplet [3:1_2_3_:] [3:4_5_6_:] ||
+
+0--- ||
+
+6/8 /Primary 1_2_3_ /Secondary 4_5_6_||
+3/4 1_2_ 3_4_ 5_6_ ||
+2/4 [3:1_2_3_:] [3:4_5_6_:] |]
+
+lyrics:
++m3 Beat beat beat Beat beat beat
+Beat +1 beat +1 beat +1
+Beat +2 beat
+
+lyrics:
++m3 V v v V v v
+V +2 v +2 v +2  // bug
+V +3 v
+lyrics:
++m3
+strong weak weak strong weak weak
+

@@ -1,4 +1,4 @@
-import { play, pause, stop } from './play'
+import { play, pause, stop } from './playMIDI'
 
 const AudioContext = window.AudioContext || window.webkitAudioContext
 var _ctx
