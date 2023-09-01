@@ -13,7 +13,7 @@ based on this notation.
 
 
 ## Getting started
-Checkout `./demo.html`
+Checkout and open `./demo.html`
 
 
 ## Usage
