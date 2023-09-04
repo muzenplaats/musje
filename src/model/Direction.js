@@ -21,6 +21,7 @@ export default class Direction {
     lexer.token('/\\', lexeme => {
       this.placement = lexeme === '/' ? 'above' : 'below'
     })
+
     if (lexer.is('wedge')) {
       lexer.token('wedge')
       lexer.token('(')
@@ -28,12 +29,14 @@ export default class Direction {
       lexer.token(')')
     } else if (lexer.is('dynamics')) {
       lexer.token('dynamics', lexeme => { this.dynamics = lexeme })
-    } else if (lexer.is('words')) {
-      lexer.without('comment-or-space', lexeme => { this.words = lexeme.trim() })
     } else if (lexer.is('"')) {  // Testing feature
       lexer.token('"')
       lexer.escwithout('"', 'esc-dq', lexeme => { this.words = lexeme })
       lexer.token('"')
+    } else if (!lexer.is('comment-or-space')) {
+      lexer.without('comment-or-space', lexeme => { this.words = lexeme.trim() })
+    } else {
+      lexer.error('Unknown direction')
     }
   }
 

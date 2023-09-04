@@ -11,6 +11,7 @@ import './appElement.css'
 // import jsonElement from './utils/jsonElement'
 // import xmlElement from './utils/xmlElement'
 
+
 const defaultUrl = 'scores/003.musje'
 
 const scoresUrls = (function () {
@@ -25,6 +26,7 @@ const scoresUrls = (function () {
 
 export default function appElement() {
   const data = el.setData({
+    url: '',
     scoreStr: '',
     score: {
       get() {
@@ -36,6 +38,11 @@ export default function appElement() {
         } catch (e) {
           score = new Score(); this.error = e //.stack
         }
+        score.addStyle(`
+          score {
+            width: 800px
+          }
+        `)
         return score
       }
     },
@@ -49,7 +56,10 @@ export default function appElement() {
     // }
   })
 
-  const loadScore = url => loadText(url, txt => { data.scoreStr = txt })
+  const loadScore = url => {
+    data.url = url
+    loadText(url, txt => { data.scoreStr = txt })
+  }
 
   const main = el.create('div', { style: 'width: 90%; margin: 15px' }, [
     el('h1', { style: 'font-size: 26px' }, 'Musje 123'),
@@ -59,12 +69,15 @@ export default function appElement() {
         style: 'width: 100%; height: 300px',
         value: data.$scoreStr
       }),
+
       el('span', scoresUrls.map((url, i) => {
-        return el('button', { click() { loadScore(url) } }, i + 1)
+        return el('button', { click() { loadScore(url); data.url = url } }, i + 1)
       })), ' ',
       el('button', { click: () => data.score.play() }, '>'),
       el('button', { click: () => data.score.pause() }, '||'),
       el('button', { click: () => data.score.stop() }, '[]'),
+      el('span', { style: 'padding: 3px; color: gray;' }, data.$url),
+
       el('pre', { style: 'color: #d53' }, data.$error),
       el('pre', {
         style: 'border: 1px solid #ccc; padding: 5px; width: 100%; background-color: #eee; white-space: pre-wrap'

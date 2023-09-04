@@ -1,34 +1,38 @@
-title: Scale
-subtitle: 音階
+title: Scale with Note Name and Solfège
+subtitle: 音階與音名與唱名
 
-/C 1, /D 2, /E 3, /F 4, /G 5, /A 6, /B 7, |
-1 2 3 4 5 6 7 |
-1' 2' 3' 4' 5' 6' 7' 1'' ||
+/C, 1, /D, 2, /E, 3, /F, 4, /G, 5, /A, 6, /B, 7, |
+/C 1 /D 2 /E 3 /F 4 /G 5 /A 6 /B 7 |
+/C' 1' /D' 2' /E' 3' /F' 4' /G' 5' /A' 6' /B' 7' /C'' 1'' ||
 
-1 #1 2 #2 3 4 #4 5 #5 6 #6 7 n1' |
-/C 1 /Db b2 /D n2 /Eb b3 /E n3 /F 4 /Gb b5 /G n5
-/Ab b6 /A n6 /Bb b7 /B n7 /C 1' |
+1 /C# #1 2 /D# #2 3 4 /F# #4 5 /G# #5 6 /A# #6 7 n1' |
+
+1 /Db b2 n2 /Eb b3 n3 4 /Gb b5 n5
+/Ab b6 n6 /Bb b7 n7 /C 1' ||
+
 1 #1 1 n1 ##1 1 n1 b1 1 n1 bb1 1 n1 |]
+
 
 // #: sharp, b: flat, n: natural
 
+
+
 lyrics: 
-dol re mi fa sol la ti
-dol re mi fa sol la ti
-dol re mi fa sol la ti dol
+Do Re Mi Fa Sol La Ti
+Do Re Mi Fa Sol La Ti
+Do Re Mi Fa Sol La Ti Do
 
-dol di re ri mi fa fi sol si la li ti dol
+Do Di Re Ri Mi Fa Fi Sol Si La Li Ti Do
+Do Ra Re Me Mi Fa Se Sol Le La Te Ti Do
 
+lyrics:
++m4
++4 (Ma) +5 (Lo) +2 (Ta)
 
 /*
- C  D  E  F   G  A  B   C (note name)
- 1  2  3  4   5  6  7   1'
-dol re mi fa sol la ti dol' (solfege, sing the note)
-                    si
-  v  v  /   v   v  v
-
-  Db   Eb     Gb   Ab   Bb
-C C# D D# E F F# G G# A A# B C'
-1 #1 2 #2 3 4 #4 5 #5 6 #6 7 n1'
-dol di re ri fa fi sol si la li ti dol'
+ C  D  E  F   G  A  B  C (Note Name)
+ 1  2  3  4   5  6  7  1'
+Do Re Mi Fa Sol La Ti Do' (Solfège)
+               (or Si)
+  v  v  /  v   v  v  /
 */

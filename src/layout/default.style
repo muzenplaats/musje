@@ -84,7 +84,7 @@ score {
   margin-top: 20px
   margin-right: 20px
   margin-bottom: 20px
-  head-body-sep: 20px
+  head-body-sep: 30px
 }
 
 head {

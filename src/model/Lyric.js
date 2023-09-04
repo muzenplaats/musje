@@ -29,6 +29,7 @@ export default class Lyric {
         default: this.syllabic = 'begin'
       }
     }
+
     const setUnhyphened = () => {
       switch (this.prev && this.prev.syllabic) {
         case 'begin':
@@ -38,7 +39,8 @@ export default class Lyric {
         default: this.syllabic = 'single'
       }
     }
-    if (lexer.is('-') && !lexer.is('--')  && !lexer.is('lyric-control')) {
+
+    if (lexer.is('-') && !lexer.is('staff-head')  && !lexer.is('lyric-control')) {
       setHyphened(); lexer.token('-'); lexer.skipWhite()
     } else {
       setUnhyphened()
