@@ -1,27 +1,28 @@
 title: Some Chords
+// Ref: https://en.wikipedia.org/wiki/Chord_(music)
 
 4/4
 \Major
 1- /C          <135>-      |
-1- /C six      <1356>-     |
-1- /C seven    <135b7>-    |
-1- /CM seven   <1357>-     |
-1- /C nine     <13572'>-   ||
+1- /C6      <1356>-     |
+1- /C7    <135b7>-    |
+1- /CM7   <1357>-     |
+1- /C9     <13572'>-   ||
 
 \Augmented
 1- /Caug       <13#5>-     |
-1- /Caug seven <13#5b7>-   ||
+1- /Caug7 <13#5b7>-   ||
 
 0--- ||
 
 \Minor
 1- /Cm          <1b35>-     |
-1- /Cm six      <1b356>-    |
-1- /Cm seven    <1b35b7>-   |
-1- /CmM seven   <1b357>-    |
-1- /Cm nine     <1b35b72'>- ||
+1- /Cm6      <1b356>-    |
+1- /Cm7    <1b35b7>-   |
+1- /CmM7   <1b357>-    |
+1- /Cm9     <1b35b72'>- ||
 
 \Diminished
 1- /Cdim        <1b3b5>-    |
-1- /Cdim seven  <1b3b5bb7>- |
-1- /Cdim phi    <1b3b5b7>-  |]
+1- /Cdim7  <1b3b5bb7>- |
+1- /CdimØ7    <1b3b5b7>-  |]

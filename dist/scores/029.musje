@@ -15,7 +15,7 @@ composer: J. S. Bach
 
 /// line 1
 // m1
-/Poco mosso comma ma tranquillo
+/"Poco mosso comma ma tranquillo"
 \mf [3:5,,_/*0_*/ (5_6_:] [3:7_2'_1'_:] [3:1'_3'_2'_:] |
 // m2
 [3:2'_5'_#4'_:] [3:5'_2'_7_:]) ([3:5_6_7_:] |

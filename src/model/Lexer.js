@@ -9,6 +9,8 @@ const pitch = '[#nb]*[1-7][,\']*'
 const Lexer = makeLexerClass({
   0: '0',
   ',': ',',
+  '"': '"',
+  'esc-dq': '\\\\"',
   '/': '\\/',
   '\\': '\\\\',
   '<': '<',
@@ -60,7 +62,7 @@ const Lexer = makeLexerClass({
   rest: '0',
   chord: `\\(*(\\[\\d+:)*<(${pitch})*>`,
   multipart: '<',
-  direction: `[\\/\\\\][${letter} ]+`,
+  direction: `[\\/\\\\]+`,
   bar: '(:\\|:?|\\|:|\\|[\\|\\]]?)',
 
   wedge: 'wedge',
@@ -78,6 +80,7 @@ const Lexer = makeLexerClass({
   'ml-comment': '\\/\\*',
   comment: '\\/[\\/\\*]',
   'comment-or-paren': '(\\/[\\/\\*]|[\\(\\)])',
+  'comment-or-space': '(\\/[\\/\\*]| )',
   'all': '.*'
 })
 

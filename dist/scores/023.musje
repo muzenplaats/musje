@@ -6,9 +6,9 @@ composer: Ludwig van Beethoven
 // source: https://musescore.com/hmscomp/beethoven-symphony-no-6-pastoral-1st-movement-piano-solo
 
 == Piano (Pia.): midi(channel: 2, program: 1, pan: 0)
-2/4 /Allegro ma non troppo \p 
+2/4 /"Allegro ma non troppo" \p 
 0_ 6_b7_2'_ | 1'_b7=6= 5_1_ |
-4_<35>_ /rito <46>_<5b7>=<46>= | <35>- |
+4_<35>_ /rit. <46>_<5b7>=<46>= | <35>- |
 
 /*
 // (1 #1 2 #2 3 4 #4 5 #5 6 #6 7 1')
