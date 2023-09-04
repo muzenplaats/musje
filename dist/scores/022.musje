@@ -1,22 +1,36 @@
-title: Happy Song
-subtitle: 快樂頌
+title: Ode to Joy
+subtitle: 歡樂頌
 
-|| 4/4 3 3 4 5 | 5 4 3 2 | 1 1 2 3 | 3.2_2 0 |
-       3 3 4 5 | 5 4 3 2 | 1 1 2 3 | 2.1_ 1- ||
-   2 2 3 1 | 2 (2_4_) 3 1 | 2 (2_4_) 3 2 | 1 2 5,- |
-   3 3 4 5 | 5 4 3 2 | 1 1 2 3 | 2.1_ 1 0 |]
+4/4
+3 3 4 5 | 5 4 3 2 | 1 1 2 3 | 3.2_2 0 |
+3 3 4 5 | 5 4 3 2 | 1 1 2 3 | 2.1_ 1- |
+2 2 3 1 | 2 (2_4_) 3 1 | 2 (2_4_) 3 2 | 1 2 5,- |
+3 3 4 5 | 5 4 3 2 | 1 1 2 3 | 2.1_ 1 0 |]
 
 lyrics:
-Blue sky thus high. White cloud thus flow.
-Sun shine at the sky with smiling.
-Birds stand on branch, and creak and creak.
-Fishs float in water and easily jump.
-Flowers are blowson and grass happi-ly bow.
-It looks like welcoming the guest coming.
-In our heart we have full of happiness.
-Every-body is happy and easy going.
+Joy-ful, joy-ful, we a-dore You.
+God of glo-ry. Lord of love;
+Hearts un-fold like flowers be-fore You.
+Open-ing to the sun a-bove.
+Melt the clouds of sin and sad-ness;
+Drive the dark of doubt a-way;
+Gi-ver o-f immor-tal glad-ness.
+Fill us with the light of thay.
+Amen!
+
+lyrics:
+快樂 快樂 我們敬拜
+榮耀慈愛大主宰
+奉獻心靈在主面前
+如同花朵像日開
+愁霧疑雲 罪惡憂驚
+懇求救主消除盡
+萬福之源 永樂之主
+賜下光明滿我心
+阿們
 
 
+/*
 lyrics:
 青天高高白雲飄飄
 太陽當空在微笑
@@ -26,3 +40,4 @@ lyrics:
 好像歡迎客人到
 我們心中充滿歡喜
 人人快樂又逍遙
+*/
