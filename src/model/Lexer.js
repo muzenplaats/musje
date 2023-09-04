@@ -35,14 +35,16 @@ const Lexer = makeLexerClass({
   word: `[${letter}]+`,
   words: `[${letter} ]+`,
 
-  abbreviation: `[${letter}\\.]+`,
-  midi: 'midi', channel: 'channel', program: 'program', pan: 'pan',
   title: 'title:',
   subtitle: 'subtitle:',
   composer: 'composer:',
   lyricist: 'lyricist:',
   arranger: 'arranger:',
   source: 'source:',
+
+  // abbreviation: `[${letter}\\.]+`,
+  midi: 'midi', channel: 'channel', program: 'program', pan: 'pan',
+
   beats: '[1-9]\\d{0,3}',
   beatType: '[1-9]\\d{0,3}',
   step: '[1-7]',
@@ -75,6 +77,7 @@ const Lexer = makeLexerClass({
   'sl-comment': '\\/\\/',
   'ml-comment': '\\/\\*',
   comment: '\\/[\\/\\*]',
+  'comment-or-paren': '(\\/[\\/\\*]|[\\(\\)])',
   'all': '.*'
 })
 

@@ -4,6 +4,12 @@ import Part from './Part'
 import Cell from './Cell'
 import Measure from './Measure'
 
+/**
+ * Body := Part*
+ * => Body {
+ *   parts: Array[Part {}, Part {}, ...]
+ * }
+ **/
 export default class Body {
   constructor(body = { parts: [] }) {
     this.name = 'body'

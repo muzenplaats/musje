@@ -4,18 +4,16 @@ The grammar is shown in a variation of BNF form with commented productions.
 
 ## Score
 ```
-Score := Head? Body?      // => Score = { head: Head{}, body: Body{} }
+Score := Head Body        // => Score = { head: Head{}, body: Body{} }
                           // Note that an empty string is in language.
 ```
 
 ## Head
 ```
-Head := name-value-pair+   // => Head = { title: str, subtitle: str, ... }
-name-value-pair := name ':' value
-name := 'title' | 'subtitle' | 'composer' | 'lyricist' | 'arranger'
-value := without-newline
+Head := (name value WS)*
+name := 'title:' | 'subtitle:' | 'composer:' | 'lyricist:' | 'arranger:'
+value := without-comment
 ```
-
 ## Body
 ```
 

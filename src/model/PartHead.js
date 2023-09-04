@@ -1,9 +1,14 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
+
+/**
+ * PartHead := '==' part-name SS? words
+ **/
 export default class PartHead {
   constructor(head = {}) {
     this.name = 'part-head'
+
     if (head.name === 'lexer') {
       this.parse(head)
     } else if (typeof head === 'string') {
@@ -17,14 +22,16 @@ export default class PartHead {
 
   parse(lexer) {
     lexer.token('==')
-    lexer.token('words', lexeme => { this.partName = lexeme.trim() })
+    lexer.without('comment-or-paren', lexeme => { this.partName = lexeme.trim() })
     lexer.skipSS()
+
     this.abbreviation = ''
     if (lexer.is('(')) {
       lexer.token('(')
-      lexer.token('abbreviation', lexeme => { this.abbreviation = lexeme })
+      lexer.without(')', lexeme => { this.abbreviation = lexeme })
       lexer.token(')')
     }
+
     if (lexer.is(':')) {
       lexer.token(':')
       lexer.skipSS()

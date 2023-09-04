@@ -1,6 +1,19 @@
 import Lexer from './Lexer'
 import { makeToJSON } from '../utils/helpers'
 
+/**
+ * Head := (name value WS)*
+ * name := 'title:' | 'subtitle:' | 'composer:' | 'lyricist:' | 'arranger:'
+ * value := without-comment
+ * => Head {
+ *   title: String,
+ *   subtitle: String,
+ *   composer: String,
+ *   lyricist: String,
+ *   arranger: String,
+ *   source: String
+ * }
+ **/
 export default class Head {
   constructor(head = {}) {
     this.name = 'head'
@@ -23,6 +36,7 @@ export default class Head {
       lexer.token(name)
       lexer.without('comment', lexeme => { this[name] = lexeme.trim() })
     }
+
     while (!lexer.eof) {
       if (lexer.is('title')) {
         process('title')
