@@ -117,22 +117,16 @@ class DataLayout extends AbstractLayout {
   }
 
   setLayouts() {
-    const { data, style } = this
-    this.layouts = []
-    data.forEach(dt => {
+    const { style } = this
+
+    this.layouts = this.data.map(dt => {
       switch (dt.name) {
-        case 'note':
-          this.layouts.push(new NoteLayout(dt, style)); break
-        case 'rest':
-          this.layouts.push(new RestLayout(dt, style)); break
-        case 'chord':
-          this.layouts.push(new ChordLayout(dt, style)); break
-        case 'multipart':
-          this.layouts.push(new MultipartLayout(dt, style)); break
-        case 'time':
-          this.layouts.push(new TimeLayout(dt, style)); break
-        case 'direction':
-          this.layouts.push(new DirectionLayout(dt, style)); break
+        case 'note':  return new NoteLayout(dt, style)
+        case 'rest':  return new RestLayout(dt, style)
+        case 'chord': return new ChordLayout(dt, style)
+        case 'multipart': return new MultipartLayout(dt, style)
+        case 'time':  return new TimeLayout(dt, style)
+        case 'direction': return new DirectionLayout(dt, style)
       }
     })
   }
@@ -172,12 +166,15 @@ class DataLayout extends AbstractLayout {
     this.sticks.forEach(stick => {
       const { dirsAbove, main, dirsBelow, x: sx } = stick
       const bx = x + sx
+
       if (main) main.position = { bx, by }
+
       // Tmp
       if (dirsAbove && dirsAbove.length) {
         const y2 = main.y - dataDirectionSep
         dirsAbove[0].position = { bx, y2 }
       }
+
       // Tmp
       if (dirsBelow && dirsBelow.length) {
         const y = by + dataDirectionSep

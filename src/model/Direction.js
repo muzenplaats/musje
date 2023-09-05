@@ -1,5 +1,9 @@
 import Lexer from './Lexer'
 
+/**
+ * Direction := placement (wedge | dynamics | db-quote | without-space)
+ * placement := '/' | '\'
+ **/
 export default class Direction {
   constructor(direction) {
     this.name = 'direction'

@@ -1,6 +1,12 @@
 import Lexer from './Lexer'
 import Layer from './Layer.js'
 
+// tmp
+import Duration from './Duration' 
+
+/**
+ * Multipart := '<<' WS? Layer ('|' Layer) '>>'
+ **/
 export default class Multipart {
   constructor(multipart) {
     this.name = 'multipart'
@@ -12,16 +18,27 @@ export default class Multipart {
     } else {
       this.layers = multipart.layers.map(mp => new Layer(mp))
     }
+
+    // tmp
+    this.duration = new Duration('---')
   }
 
   parse(lexer) {
     this.layers = []
-    lexer.token('<')
+    lexer.token('<<')
     lexer.skipWhite()
-    while(!lexer.is('>') && !lexer.eof) {
+
+    while(!lexer.eof) {
       this.layers.push(new Layer(lexer))
+      if (lexer.is('>>')) {
+        break
+      } else {
+        lexer.token('|')
+        lexer.skipWhite()
+      }
     }
-    lexer.token('>')
+
+    lexer.token('>>')
   }
 
   toString() {

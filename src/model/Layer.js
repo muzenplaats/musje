@@ -4,6 +4,9 @@ import Rest from './Rest'
 import Chord from './Chord'
 import Direction from './Direction'
 
+/**
+ * Layer := ((Note | Rest | Chord | Direction) WS?)*
+ **/
 export default class Layer {
   constructor(layer) {
     this.name = 'layer'
@@ -37,13 +40,10 @@ export default class Layer {
         this.data.push(new Chord(lexer))
       } else if (lexer.is('direction')) {
         this.data.push(new Direction(lexer))
-      } else if (lexer.is('|')) {
-        lexer.token('|')
-        lexer.skipWhite(); break
-      } else if (lexer.is('>')) {
+      } else if (lexer.is('|') || lexer.is('>>')) {
         break
       } else {
-        lexer.error('music data in layer')
+        lexer.error('unknown music data in layer')
       }
 
       lexer.skipWhite()

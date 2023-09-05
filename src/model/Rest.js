@@ -1,6 +1,9 @@
 import Lexer from './Lexer'
 import Duration from './Duration'
 
+/**
+ * Rest := '0' Duration
+ **/
 export default class Rest {
   constructor(rest) {
     this.name = 'rest'
@@ -19,7 +22,10 @@ export default class Rest {
     this.duration = new Duration(lexer)
   }
 
-  toString() { return '0' + this.duration }
+  toString() {
+    return '0' + this.duration
+  }
+
   toJSON() {
     const { duration } = this
     return { duration }

@@ -4,11 +4,11 @@ import restElement from './restElement'
 import chordElement from './chordElement'
 import box from './box'
 
-export default function cellElement(cellLayout) {
-  const { dataLayout } = cellLayout
+export default function multipartElement(multipartLayout) {
+  // const { dataLayout } = multipartLayout
 
   return el.create('g', [
-    // box(cellLayout, 'green'),
+    box(multipartLayout, 'green'),
     // box(dataLayout, 'blue'),
     // dataLayout.layouts.map(layout => {
     //   // return box(layout, 'orange')

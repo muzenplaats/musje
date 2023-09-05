@@ -25,6 +25,7 @@ export default function cellElement(cellLayout) {
       if ('direction' in  layout) return directionElement(layout)
       if ('multipart' in layout) return multipartElement(layout)
     }),
+
     shownLeftBarLayout ? barElement(shownLeftBarLayout) : [],
     shownRightBarLayout ? barElement(shownRightBarLayout) :
                           barElement(rightBarLayout)

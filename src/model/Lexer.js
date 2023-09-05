@@ -30,6 +30,8 @@ const Lexer = makeLexerClass({
   '//': '\\/\\/',
   '/*': '\\/\\*',
   '*/': '\\*\\/',
+  '<<': '<<',
+  '>>': '>>',
 
   digit: '\\d',
   digits: '\\d+',
@@ -58,11 +60,12 @@ const Lexer = makeLexerClass({
   pitch,
   duration: '[-_=]*\.{1,2}',
 
+  // Filters
   time: '[1-9]\\d{0,3}\\/',
   note: `\\(*(\\[\\d+:)*${pitch}`,
   rest: '0',
-  chord: `\\(*(\\[\\d+:)*<(${pitch})*>`,
-  multipart: '<',
+  chord: `\\(*(\\[\\d+:)*<`, // `\\(*(\\[\\d+:)*<(${pitch})*>`,
+  multipart: '<<',
   direction: `[\\/\\\\]+`,
   bar: '(:\\|:?|\\|:|\\|[\\|\\]]?)',
 

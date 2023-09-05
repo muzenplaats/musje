@@ -21,6 +21,7 @@ export default class Note extends PlayStopHandleInterface {
       const { pitch, duration, articulations, tie, beginSlurs, endSlurs, tuplet, lyrics } = note
       this.pitch = new Pitch(pitch)
       this.duration = new Duration(duration)
+
       if (articulations) this.articulations = articulations
       if (tie) this.tie = new Tie(tie)
       if (beginSlurs) this.beginSlurs = beginSlurs.map(slur => new Slur(slur))
@@ -36,14 +37,20 @@ export default class Note extends PlayStopHandleInterface {
       this.beginSlurs.push(new Slur(lexer))
     }
 
-    while (lexer.is('[')) this.tuplet = new Tuplet(lexer)
+    while (lexer.is('[')) {
+      this.tuplet = new Tuplet(lexer)
+    }
 
     this.pitch = new Pitch(lexer)
     this.duration = new Duration(lexer)
 
-    while (lexer.is('tuplet-end')) this.tuplet = new Tuplet(lexer)
+    while (lexer.is('tuplet-end')) {
+      this.tuplet = new Tuplet(lexer)
+    }
 
-    if (lexer.is('~')) this.tie = new Tie(lexer)
+    if (lexer.is('~')) {
+      this.tie = new Tie(lexer)
+    }
 
     while (lexer.is(')')) {
       this.endSlurs = this.endSlurs || []

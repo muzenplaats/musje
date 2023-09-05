@@ -1,5 +1,8 @@
 import Lexer from './Lexer'
 
+/**
+ * Bar := '(:\\|:?|\\|:|\\|[\\|\\]]?)'
+ **/
 export default class Bar {
   constructor(bar = { value: '|' }) {
     this.name = 'bar'

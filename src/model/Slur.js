@@ -1,6 +1,9 @@
 import Lexer from './Lexer'
 import PlayStopHandleInterface from './PlayStopHandleInterface'
 
+/**
+ * Slur := '(' | ')'
+ **/
 export default class Slur extends PlayStopHandleInterface {
   constructor(slur) {
     super()

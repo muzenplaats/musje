@@ -7,6 +7,12 @@ const ACCIDENTAL_TO_ALTER = {
   '#': 1, '##': 2, n: 0, '': 0, b: -1, bb: -2
 }
 
+/**
+ * Pitch := accidental? step octave?
+ * accidental := '(#{1,2}|n|b{1,2})'
+ * step := '[1-7]'
+ * octave := `('{1,5}|,{1,5})`
+ **/
 export default class Pitch extends PlayStopHandleInterface {
   constructor(pitch) {
     super()

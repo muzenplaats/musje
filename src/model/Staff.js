@@ -5,7 +5,9 @@ import Tie from './Tie'
 import Lyrics from './Lyrics'
 import Dummy from './Dummy'
 
-
+/**
+ * Staff := ('--' SS? NL)? WS? (Cell WS?)* Lyrics* 
+ **/
 export default class Staff {
   constructor(staff) {
     this.name = 'staff'
@@ -32,7 +34,9 @@ export default class Staff {
     if (lexer.is('--')) {
       lexer.token('--')
       lexer.skipSS()
-      if (!lexer.eol) lexer.error('Unexpected token')
+      if (!lexer.eol) {
+        lexer.error('Unexpected token in staff head')
+      }
     }
 
     lexer.skipWhite()
@@ -230,8 +234,10 @@ export default class Staff {
     this.cells.forEach((cell, c) => {
       cell.data.forEach((dt, d) => {
         if (!dt.beginSlurs) return
+
         const nextData = makeNextData(this.cells, c, d)
         let { ncell, ndt } = nextData()
+
         while (ndt) {
           if (ndt.endSlurs) {
             dt.beginSlurs[0].cell = cell
@@ -242,7 +248,10 @@ export default class Staff {
             ndt.endSlurs[0].prev = dt.beginSlurs[0]
             break
           }
-          let n = nextData(); ndt = n.ndt; ncell = n.ncell
+
+          let n = nextData()
+          ndt = n.ndt
+          ncell = n.ncell
         }
       })
     })
@@ -255,12 +264,13 @@ export default class Staff {
     this.cells.forEach(cell => {
       let tc = 0, tcQ = 0
       cell.data.forEach(dt => {
-        dt.t = t
-        dt.tQ = tQ
-        dt.tc = tc
-        dt.tcQ = tcQ
+        Object.assign(dt, { t, tQ, tc, tcQ })
         const { duration } = dt
-        if (!duration) return
+
+        if (!duration) {
+          return
+        }
+
         const dur = duration.quarters * tempo
         duration.seconds = dur
         t += dur
@@ -285,12 +295,14 @@ export default class Staff {
           if (dt.tie && dt.tie.type !== 'begin') continue
 
           const headLyric = lyrics.list[0]
+
           if (headLyric && headLyric.name === 'lyric-control') {
             const control = lyrics.list.shift()
             const dummy = new Dummy({ lyrics: []})  // used for toString()
             dummy.lyrics[lineIndex] = control
             cell.data.splice(d, 0, dummy)
             const { instruction, type, amount } = control
+
             if (instruction === 'at') {
               if (type === 'measure') {
                 c = amount - 2; break

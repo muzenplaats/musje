@@ -9,6 +9,7 @@ export default class MeasureLayout extends AbstractLayout {
   constructor(measure, style) {
     super()
     this.name = 'measure-layout'
+
     this.measure = measure
     this.style = style
     this.cellsLayouts = measure.cells.map(cell => new CellLayout(cell, style))
@@ -170,21 +171,32 @@ export default class MeasureLayout extends AbstractLayout {
 }
 
 const makeEmptyStick = () => {
-  return { dirsAbove: [], main: null, dirsBelow: [], lyrics: [] }
+  return { 
+    dirsAbove: [], 
+    main: null, 
+    dirsBelow: [], 
+    lyrics: [] 
+  }
 }
+
 const makeCellSticks = cellLayout => {
   const sticks = []
   let currStick = makeEmptyStick()
+
   cellLayout.dataLayout.layouts.forEach(layout => {
     const { note, rest, chord, time, direction, multipart } = layout
     // const dt = note || rest || chord || direction || multipart || time
     const main = note || rest || chord || time
+
     if (main) {
       currStick.tcQ = main.tcQ
       currStick.main = layout
-      if (main.lyrics) currStick.lyrics = layout.lyricsLayouts
+      if (main.lyrics) {
+        currStick.lyrics = layout.lyricsLayouts
+      }
       sticks.push(currStick)
       currStick = makeEmptyStick()
+
     } else if (direction) {
       currStick.tcQ = direction.tcQ
       if (direction.placement === 'above') {
@@ -192,10 +204,18 @@ const makeCellSticks = cellLayout => {
       } else {
         currStick.dirsBelow.push(layout)
       }
+
     } else if (multipart) {
-      // todo
+      // Todo:
+
+      currStick.tcQ = multipart.tcQ
+      currStick.main = layout
+      sticks.push(currStick)
+      currStick = makeEmptyStick()
+
     }
   })
+
   return sticks
 }
 

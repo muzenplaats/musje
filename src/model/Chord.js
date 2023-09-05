@@ -6,6 +6,9 @@ import Tuplet from './Tuplet'
 import Slur from './Slur'
 import PlayStopHandleInterface from './PlayStopHandleInterface'
 
+/**
+ * Chord := Slur* Tuplet* '<' WS? (Pitch WS?)+ '>'
+ **/
 export default class Chord extends PlayStopHandleInterface {
   constructor(chord) {
     super()
@@ -34,14 +37,22 @@ export default class Chord extends PlayStopHandleInterface {
       this.beginSlurs.push(new Slur(lexer))
     }
 
-    while (lexer.is('[')) this.tuplet = new Tuplet(lexer)
+    while (lexer.is('[')) {
+      this.tuplet = new Tuplet(lexer)
+    }
 
     lexer.token('<')
-    while (lexer.is('pitch')) this.pitches.push(new Pitch(lexer))
+    lexer.skipWhite()
+    while (lexer.is('pitch')) {
+      this.pitches.push(new Pitch(lexer))
+      lexer.skipWhite()
+    }
     lexer.token('>')
 
     this.duration = new Duration(lexer)
-    if (lexer.is('~')) this.tie = new Tie(lexer)
+    if (lexer.is('~')) {
+      this.tie = new Tie(lexer)
+    }
 
     while (lexer.is('tuplet-end')) {
       this.tuplet = new Tuplet(lexer)

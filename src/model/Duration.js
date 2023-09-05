@@ -10,7 +10,11 @@ const STR_TO_TYPE = {
 const TYPE_TO_STR = swapObject(STR_TO_TYPE)
 const DOTS_MULTIPLIERS = [1, 1.5, 1.75]
 
-
+/**
+ * Duration := type? dots?
+ * type := '(---|-|={0,5}_|={1,5})'
+ * dots := '\\.{1,2}'
+ **/
 export default class Duration extends PlayStopHandleInterface {
   constructor(duration) {
     super()

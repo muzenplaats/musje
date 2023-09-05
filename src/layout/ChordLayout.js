@@ -7,8 +7,7 @@ import TupletLayout from './TupletLayout'
 import SlurLayout from './SlurLayout'
 import TextLayout from './TextLayout'
 
-const { setSize, setTypeLt4Size, setType4Size, setTypeGt4Size } =
-      NoteLayout.prototype
+const { setSize, setTypeLt4Size, setType4Size, setTypeGt4Size } = NoteLayout.prototype
 
 
 export default class ChordLayout extends AbstractLayout {

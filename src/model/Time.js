@@ -1,5 +1,8 @@
 import Lexer from './Lexer'
 
+/**
+ * Time := beats '/' beatType
+ **/
 export default class Time {
   constructor(time) {
     this.name = 'time'

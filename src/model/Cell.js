@@ -12,7 +12,10 @@ import Key from './Key'
 
 const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
 
-
+/**
+ * Cell := (Bar WS?)? ((Time | Clef | Key |  Note | Rest |
+ *                     Multipart | Chord | Direction) WS?) (Bar WS?)?
+ **/
 export default class Cell {
   constructor(cell = { data: [] }) {
     this.name = 'cell'
@@ -33,7 +36,7 @@ export default class Cell {
           case 'bar': return new Bar(dt)
           case 'clef': return new Clef(dt)
           case 'key': return new Key(dt)
-          default: throw new Error(`Music data: ${dt}`)
+          default: throw new Error(`Unknown music data: ${dt}`)
         }
       })
     }
@@ -54,19 +57,22 @@ export default class Cell {
         this.data.push(new Note(lexer))
       } else if (lexer.is('rest')) {
         this.data.push(new Rest(lexer))
-      } else if (lexer.is('chord')) {
-        this.data.push(new Chord(lexer))
       } else if (lexer.is('multipart')) {
         this.data.push(new Multipart(lexer))
+      } else if (lexer.is('chord')) {
+        this.data.push(new Chord(lexer))
       } else if (lexer.is('direction')) {
         this.data.push(new Direction(lexer))
       } else if (lexer.is('bar')) {
         this.data.push(new Bar(lexer))
-        if (this.data.length > 1) { lexer.skipWhite(); break }
-      } else if (lexer.is('==') || lexer.is('--')) {
+        if (this.data.length > 1) {
+          lexer.skipWhite()
+          break
+        }
+      } else if (lexer.is('==') || lexer.is('--') || lexer.is('lyrics-head')) {
         break
       } else {
-        lexer.error('music data in cell')
+        lexer.error('unknown music data in cell')
       }
 
       lexer.skipWhite()

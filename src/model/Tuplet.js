@@ -1,6 +1,9 @@
 import Lexer from './Lexer'
 import PlayStopHandleInterface from './PlayStopHandleInterface'
 
+/**
+ * Tuplet := ('[' digits ':' | ':]'
+ **/
 export default class Tuplet extends PlayStopHandleInterface {
   constructor(tuplet) {
     super()
