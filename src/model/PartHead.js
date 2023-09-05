@@ -77,7 +77,7 @@ export default class PartHead {
   }
 
   toJSON() {
-    const { partName, midi } = this
-    return { partName, midi }
+    const { partName, abbreviation, midi } = this
+    return { partName, abbreviation, midi }
   }
 }

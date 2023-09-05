@@ -129,8 +129,9 @@ class DataLayout extends AbstractLayout {
         case 'multipart': return new MultipartLayout(dt, style)
         case 'time':  return new TimeLayout(dt, style)
         case 'direction': return new DirectionLayout(dt, style)
+        // default: throw new TypeError('Unknown layout: ' + dt.name)
       }
-    })
+    }).filter(dt => dt)
   }
 
   // Set by MeasureLayout

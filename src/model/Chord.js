@@ -43,10 +43,12 @@ export default class Chord extends PlayStopHandleInterface {
 
     lexer.token('<')
     lexer.skipWhite()
+
     while (lexer.is('pitch')) {
       this.pitches.push(new Pitch(lexer))
       lexer.skipWhite()
     }
+
     lexer.token('>')
 
     this.duration = new Duration(lexer)

@@ -35,6 +35,7 @@ export default function appElement() {
         try {
           score = new Score(this.scoreStr); this.error = ''
           // console.log('score', score)
+// console.log('part2,staff1,cells', score.body.parts[1].staves[0].cells)
         } catch (e) {
           score = new Score(); this.error = e //.stack
         }

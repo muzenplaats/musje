@@ -13,7 +13,7 @@ import scoreElement from '../view/scoreElement'
 
 
 /**
- * Score := WS? Head? Body?
+ * Score := WS? Head Body
  * => Score {
  *   head: Head {},
  *   body: Body {}

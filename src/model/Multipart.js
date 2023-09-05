@@ -18,9 +18,6 @@ export default class Multipart {
     } else {
       this.layers = multipart.layers.map(mp => new Layer(mp))
     }
-
-    // tmp
-    this.duration = new Duration('---')
   }
 
   parse(lexer) {

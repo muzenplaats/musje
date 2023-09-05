@@ -53,6 +53,7 @@ export default class Head {
       } else {
         break
       }
+
       lexer.skipWhite()
     }
   }

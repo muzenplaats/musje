@@ -7,8 +7,11 @@ const STR_TO_TYPE = {
   '---': 1, '-': 2, '': 4, '_': 8, '=': 16, '=_': 32, '==': 64,
   '==_': 128, '===': 256, '===_': 512, '====': 1024
 }
+
 const TYPE_TO_STR = swapObject(STR_TO_TYPE)
+
 const DOTS_MULTIPLIERS = [1, 1.5, 1.75]
+
 
 /**
  * Duration := type? dots?
@@ -49,7 +52,9 @@ export default class Duration extends PlayStopHandleInterface {
            (mod ? mod.normal / mod.actual : 1)
   }
 
-  get quarters() { return this.quartersQ / Q }
+  get quarters() { 
+    return this.quartersQ / Q 
+  }
 
   toString() { 
     return `${TYPE_TO_STR[this.type]}${repeat('.', this.dots)}` 
