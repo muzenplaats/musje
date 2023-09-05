@@ -1,10 +1,10 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 export default class Lyric {
   constructor(lyric, prev) {
     this.name = 'lyric'
     this.prev = prev
+
     if (lyric.name === 'lexer') {
       this.parse(lyric)
     } else if (typeof lyric === 'string') {
@@ -54,8 +54,12 @@ export default class Lyric {
       case 'begin': // fall through
       case 'middle': return `${this.text} -`
     }
+
     return this.text
   }
 
-  toJSON = makeToJSON('syllabic', 'text')
+  toJSON() {
+    const { syllabic, text } = this
+    return { syllabic, text }
+  }
 }

@@ -1,4 +1,3 @@
-import { makeToJSON } from 'toolbox/helpers'
 // Error: file not found.
 
 export default class DummyPlayer {
@@ -12,5 +11,8 @@ export default class DummyPlayer {
   }
 
   toString() { return this.dummy }
-  toJSON = makeToJSON('dummy')
+  toJSON() {
+    const { dummy } = this
+    return { dummy }
+  }
 }

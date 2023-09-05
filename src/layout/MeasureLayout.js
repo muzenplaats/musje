@@ -12,12 +12,15 @@ export default class MeasureLayout extends AbstractLayout {
     this.measure = measure
     this.style = style
     this.cellsLayouts = measure.cells.map(cell => new CellLayout(cell, style))
+
     this.makeSticks()
     this.alignSticks()
     this.setCellsSticks()
+
     this.cellsLayouts.forEach(layout => {
       layout.dataLayout.setMinWidth(); layout.setMinWidth()
     })
+
     this.minWidth = max(this.cellsLayouts.map(layout => layout.minWidth))
     this.width = this.minWidth
   }

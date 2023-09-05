@@ -1,9 +1,9 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 export default class Direction {
   constructor(direction) {
     this.name = 'direction'
+
     if (direction.name === 'lexer') {
       this.parse(direction)
     } else if (typeof direction === 'string') {
@@ -50,5 +50,8 @@ export default class Direction {
     return strs.join('')
   }
 
-  toJSON = makeToJSON('placement', 'words', 'wedge', 'dynamics')
+  toJSON() {
+    const { placement, words, wedge, dynamics } = this
+    return { placement, words, wedge, dynamics }
+  }
 }

@@ -1,5 +1,5 @@
 import Lexer from './Lexer'
-import { makeToJSON, lastItem } from '../utils/helpers'
+import { lastItem } from '../utils/helpers'
 import Time from './Time'
 import Note from './Note'
 import Rest from './Rest'
@@ -12,9 +12,11 @@ import Key from './Key'
 
 const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
 
+
 export default class Cell {
   constructor(cell = { data: [] }) {
     this.name = 'cell'
+
     if (cell.name === 'lexer') {
       this.parse(cell)
     } else if (typeof cell === 'string') {
@@ -35,6 +37,7 @@ export default class Cell {
         }
       })
     }
+
     this.setAlters()
     this.setModifications()
     this.linkTuplets()
@@ -43,6 +46,7 @@ export default class Cell {
 
   parse(lexer) {
     this.data = []
+
     while(!lexer.eof) {
       if (lexer.is('time')) {
         this.data.push(new Time(lexer))
@@ -64,6 +68,7 @@ export default class Cell {
       } else {
         lexer.error('music data in cell')
       }
+
       lexer.skipWhite()
     }
   }
@@ -75,6 +80,7 @@ export default class Cell {
       if (accidental) currAccidental[step] = accidental
       pitch.alter = ACCIDENTAL_TO_ALTER[currAccidental[step]]
     }
+
     this.data.forEach(dt => {
       switch (dt.name) {
         case 'note': return setAlter(dt.pitch)
@@ -86,24 +92,36 @@ export default class Cell {
 
   setModifications() {
     let actual, normal
+
     this.data.forEach(dt => {
       const { tuplet, duration } = dt
+
       if (tuplet && tuplet.type === 'begin') {
         actual = tuplet.actual
         normal = tuplet.normal
       }
-      if (duration && actual) duration.modification = { actual, normal }
+
+      if (duration && actual) {
+        duration.modification = { actual, normal }
+      }
+
       if (tuplet && tuplet.type === 'end') {
-        actual = undefined; normal = undefined
+        actual = undefined
+        normal = undefined
       }
     })
   }
 
   linkTuplets() {
     let tupletBegin = {}
+
     this.data.forEach(dt => {
       const { tuplet } = dt
-      if (!tuplet) return
+
+      if (!tuplet) {
+        return
+      }
+
       if (tuplet.type === 'begin') {
         tupletBegin = tuplet
       } else {
@@ -114,6 +132,7 @@ export default class Cell {
 
   extractBars() {
     const { data } = this
+
     if (data.length) {
       this.rightBar = lastItem(data).name === 'bar' ?
                       data.pop() : new Bar('|')
@@ -131,6 +150,7 @@ export default class Cell {
 
     // Todo: leftBar for the first cell.
     const bardata = this.data.concat(this.rightBar)
+
     bardata.forEach(dt => {
       if (dt.name === 'dummy') return
 
@@ -153,5 +173,8 @@ export default class Cell {
     return data.join(' ')
   }
 
-  toJSON = makeToJSON('data', 'leftBar', 'rightBar')
+  toJSON() {
+    const { data, leftBar, rightBar } = this
+    return { data, leftBar, rightBar }
+  }
 }

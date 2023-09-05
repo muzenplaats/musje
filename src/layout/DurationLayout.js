@@ -10,17 +10,20 @@ export default class DurationLayout extends AbstractLayout {
     this.duration = duration
     this.style = style
     const { type, dots } = duration
+
     if (dots) this.dotsLayout = new DotsLayout(duration, style)
     if (type < 4) {
       this.linesLayout = new LinesLayout(duration, style)
     } else if (type > 4) {
       this.beamsLayout = new BeamsLayout(duration, this.dotsLayout, style)
     }
+
     this.setSize()
   }
 
   setSize() {
     const { type, dots } = this.duration
+
     if (type === 4) {
       this.setType4Size(dots)
     } else if (type > 4) {
@@ -34,6 +37,7 @@ export default class DurationLayout extends AbstractLayout {
   setTypeLt4Size(dots) {
     const lw = this.linesLayout.width
     const lh = this.linesLayout.height
+
     if (dots) {
       const { width, height } = this.linesLayout
       const dw = this.dotsLayout.width
@@ -54,6 +58,7 @@ export default class DurationLayout extends AbstractLayout {
   setTypeGt4Size(dots) {
     this.width = this.beamsLayout.width
     this.height = this.beamsLayout.height
+
     if (dots) {
       const { pitchBeamSep } = this.style.note
       const { dotLift } = this.style.durationGE4
@@ -66,6 +71,7 @@ export default class DurationLayout extends AbstractLayout {
     const { type, dots } = this.duration
     const { durationLE2, durationGE4 } = this.style
     const { x, x2, y, cy, y2 } = this
+
     if (type < 4) {
       this.linesLayout.position = { x, cy }
       if (dots) this.dotsLayout.position = { x2, cy }
@@ -87,6 +93,7 @@ class LinesLayout extends AbstractLayout {
     this.name = 'lines-layout'
     this.duration = duration
     this.style = style
+
     this.setLineSize()
     this.setSize(duration.type)
   }
@@ -122,12 +129,14 @@ class BeamsLayout extends AbstractLayout {
     this.style = style
     this.layouts = duration.beams.map(beam =>
                         new BeamLayout(beam, duration, dotsLayout, style))
+
     this.setSize()
   }
 
   setSize() {
     const { numBeams } = this.duration
     const { beamHeight, beamsSep } = this.style.durationGE4
+
     this.width = this.layouts[0].width
     this.height = numBeams * beamHeight + (numBeams - 1) * beamsSep
   }
@@ -136,6 +145,7 @@ class BeamsLayout extends AbstractLayout {
     super.position = pos
     let { x, y2 } = this
     const { beamHeight, beamsSep } = this.style.durationGE4
+
     this.layouts.forEach((layout, n) => {
       layout.position = { x, y2 }
       y2 -= beamHeight + beamsSep
@@ -173,6 +183,7 @@ class DotsLayout extends AbstractLayout {
   set position(pos) {
     super.position = pos
     const { type, dots } = this.duration
+
     if (type >= 4) {
       const { dotsSep } = this.style.durationGE4
       const { x2, y } = this

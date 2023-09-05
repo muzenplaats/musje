@@ -1,11 +1,11 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 import PlayStopHandleInterface from './PlayStopHandleInterface'
 
 export default class Tie extends PlayStopHandleInterface {
   constructor(tie) {
     super()
     this.name = 'tie'
+
     if (tie.name === 'lexer') {
       this.parse(tie)
     } else if (typeof tie === 'string') {
@@ -20,7 +20,12 @@ export default class Tie extends PlayStopHandleInterface {
     lexer.token('~', () => { this.type = 'begin' })
   }
 
-  toString() { return this.type === 'end' ? '' : '~' }
+  toString() {
+    return this.type === 'end' ? '' : '~'
+  }
 
-  toJSON = makeToJSON('type')
+  toJSON() {
+    const { type } = this
+    return { type }
+  }
 }

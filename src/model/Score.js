@@ -1,5 +1,4 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 import Head from './Head'
 import Body from './Body'
@@ -23,12 +22,14 @@ import scoreElement from '../view/scoreElement'
 export default class Score {
   constructor(score = {}) {
     this.name = 'score'
+
     if (typeof score === 'string') {
       this.parse(new Lexer(score))
     } else {
       this.head = new Head(score.head)
       this.body = new Body(score.body)
     }
+
     this.style = new Style(defaultStyle)
     this.player = new Player(this)
   }
@@ -53,8 +54,14 @@ export default class Score {
   pause() { this.player.pause() }
   stop() { this.player.stop() }
 
-  toString() { return [this.head, this.body].join('\n\n') }
-  toJSON = makeToJSON('head', 'body')
+  toString() {
+    return [this.head, this.body].join('\n\n')
+  }
+
+  toJSON() {
+    const { head, body } = this
+    return { head, body }
+  }
 
   toMxl = toMxl
 

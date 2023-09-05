@@ -1,5 +1,5 @@
 import Lexer from './Lexer'
-import { makeToJSON, swapObject } from '../utils/helpers'
+import { swapObject } from '../utils/helpers'
 
 const INSTRUCTION_NAMES = { '@': 'at', '+': 'forward', '-': 'backward' }
 const INSTRUCTION_SYMBOLS = swapObject(INSTRUCTION_NAMES)
@@ -9,6 +9,7 @@ const QUARTER_CONVERTER = { w: 4, h: 2, q: 1, e: 0.5 }
 export default class LyricControl {
   constructor(control) {
     this.name = 'lyric-control'
+
     if (control.name === 'lexer') {
       this.parse(control)
     } else if (typeof control === 'string') {
@@ -25,6 +26,7 @@ export default class LyricControl {
     lexer.token('lyric-control-symbol', lexeme => {
       this.instruction = INSTRUCTION_NAMES[lexeme]
     })
+
     if (lexer.is('digits')) {
       this.type = 'note'
       lexer.token('digits', lexeme => { this.amount = +lexeme})
@@ -39,13 +41,18 @@ export default class LyricControl {
 
   toString() {
     let str = INSTRUCTION_SYMBOLS[this.instruction]
+
     if (this.type === 'note') {
       str += this.amount
     } else if (this.type === 'measure') {
       str += `m${this.amount}`
     }
+
     return str
   }
 
-  toJSON = makeToJSON('measureAmount', 'typeData', 'noteAmount')
+  toJSON() {
+    const { measureAmount, typeData, noteAmount } = this
+    return { measureAmount, typeData, noteAmount }
+  }
 }

@@ -1,9 +1,10 @@
 import Bar from'./Bar'
-import { range, makeToJSON } from '../utils/helpers'
+import { range } from '../utils/helpers'
 
 export default class Measure {
   constructor(measure = { parts: [] }) {
     this.name = 'measure'
+
     this.parts = measure.parts
     this.cells = this.mapCell(cell => cell)
     this.partIndices = this.mapCell((cell, c, s, p) => p)
@@ -28,5 +29,8 @@ export default class Measure {
     return result
   }
 
-  toJSON = makeToJSON('parts', 'leftBar', 'rightBar')
+  toJSON() {
+    const { parts, leftBar, rightBar } = this
+    return { parts, leftBar, rightBar }
+  }
 }

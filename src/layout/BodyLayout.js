@@ -9,9 +9,11 @@ export default class BodyLayout extends AbstractLayout {
   constructor(body, style) {
     super()
     this.name = 'body-layout'
+
     this.parts = body.parts
     this.measures = body.measures
     this.style = style
+
     this.setWidth()
     this.makeSystemsLayouts()
     this.markCurvesSys()

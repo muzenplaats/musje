@@ -1,6 +1,8 @@
 import Document, { el } from '../utils/XmlDocument'
 
-const STEP_TO_ABC = { 1: 'C', 2: 'D', 3: 'E', 4: 'F', 5: 'G', 6: 'A', 7: 'B' }
+const STEP_TO_ABC = {
+  1: 'C', 2: 'D', 3: 'E', 4: 'F', 5: 'G', 6: 'A', 7: 'B'
+}
 
 const getPitch = pitch => {
   return el('pitch', [

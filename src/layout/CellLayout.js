@@ -12,10 +12,12 @@ import { max, lastItem } from '../utils/helpers'
 const CONVERT_LEFT_BAR = { '|:': '|:', ':|:': '|:', '||': '||' }
 const CONVERT_RIGHT_BAR = { ':|': ':|', ':|:': ':|', '||': '||', '|]': '|]' }
 
+
 export default class CellLayout extends AbstractLayout {
   constructor(cell, style) {
     super()
     this.name = 'cell-layout'
+
     this.cell = cell
     cell.layout = this  // used by tie
     this.style = style

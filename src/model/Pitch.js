@@ -1,5 +1,5 @@
 import Lexer from './Lexer'
-import { makeToJSON, repeat } from '../utils/helpers'
+import { repeat } from '../utils/helpers'
 import PlayStopHandleInterface from './PlayStopHandleInterface'
 
 const STEP_TO_SEMITONE = { 1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11 }
@@ -11,6 +11,7 @@ export default class Pitch extends PlayStopHandleInterface {
   constructor(pitch) {
     super()
     this.name = 'pitch'
+
     if (pitch.name === 'lexer') {
       this.parse(pitch)
     } else if (typeof pitch === 'string') {
@@ -36,7 +37,9 @@ export default class Pitch extends PlayStopHandleInterface {
     return typeof this._alter === 'number' ? this._alter :
            ACCIDENTAL_TO_ALTER[this.accidental]
   }
-  set alter(alt) { this._alter = alt }
+  set alter(alt) {
+    this._alter = alt
+  }
 
   get midiNumber() {
     return STEP_TO_SEMITONE[this.step] + this.alter + this.octave * 12 + 60
@@ -58,5 +61,8 @@ export default class Pitch extends PlayStopHandleInterface {
     return `${accidental}${step}${oct}`
   }
 
-  toJSON = makeToJSON('step', 'accidental', 'octave')
+  toJSON() {
+    const { step, accidental, octave } = this
+    return { step, accidental, octave }
+  }
 }

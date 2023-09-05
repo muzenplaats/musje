@@ -11,14 +11,22 @@ export default class NoteLayout extends AbstractLayout {
     super()
     this.name = 'note-layout'
     this.note = note
+
     this.style = style
     this.pitchLayout = new PitchLayout(note.pitch, style)
     this.durationLayout = new DurationLayout(note.duration, style)
     this.setSize(note.duration, this.pitchLayout)
 
     const { tie, tuplet, beginSlurs, endSlurs, lyrics } = note
-    if (tie) this.tieLayout = new TieLayout(tie, style)
-    if (tuplet) this.tupletLayout = new TupletLayout(tuplet, style)
+
+    if (tie) {
+      this.tieLayout = new TieLayout(tie, style)
+    }
+
+    if (tuplet) {
+      this.tupletLayout = new TupletLayout(tuplet, style)
+    }
+
     if (beginSlurs) {
       this.beginSlursLayouts =
                            beginSlurs.map(slur => new SlurLayout(slur, style))
@@ -26,6 +34,7 @@ export default class NoteLayout extends AbstractLayout {
     if (endSlurs) {
       this.endSlursLayouts = endSlurs.map(slur => new SlurLayout(slur, style))
     }
+
     if (lyrics) {
       this.lyricsLayouts = lyrics.map(lyric => {
         const textLayout = new TextLayout(lyric.text, style.lyricsFont)
@@ -39,6 +48,7 @@ export default class NoteLayout extends AbstractLayout {
 
   setSize(duration, pl) {
     const { type, dots } = duration
+
     if (type < 4) {
       this.setTypeLt4Size(pl)
     } else if (type === 4) {
@@ -46,8 +56,10 @@ export default class NoteLayout extends AbstractLayout {
     } else {
       this.setTypeGt4Size(dots, pl)
     }
+
     this.dx = pl.dx
     const { lyrics } = this.note || this.chord || this.rest
+
     if (lyrics) {
       const { length } = lyrics
       const { dataLyricSep, lyricsVSep} = this.style.note

@@ -5,10 +5,12 @@ export default class BarLayout extends AbstractLayout {
   constructor(bar, style) {
     super()
     this.name = 'bar-layout'
+
     this.bar = bar
     this.style = style
     this.displayLines = true
     this.displayDots = true
+
     this.setSize()
   }
 
@@ -78,6 +80,7 @@ export default class BarLayout extends AbstractLayout {
         this.linesLayouts.push(new Layout({ x: x0, y }, this.lightSize))
       }
     }
+
     if (value === '|:' || value === ':|:') {
       const dotYShift = (s.dotsSep + s.dotSize) / 2
       this.dotsLayouts = this.dotsLayouts || []

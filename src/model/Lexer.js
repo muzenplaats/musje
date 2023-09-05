@@ -23,7 +23,8 @@ const Lexer = makeLexerClass({
   '[': '\\[',
   ']': '\\]',
   ':': ':',
-  '/\\': '[\\/\\\\]',
+  '/\\': '[\\/\\\\]',  // direction / or \
+
   '==': '==',  // part-head
   '--': '--',  // staff-head
   '//': '\\/\\/',
@@ -69,19 +70,23 @@ const Lexer = makeLexerClass({
   dynamics: '(p{1,6}|f{1,6}|m[pf]|sfp{0,2}|fp|rfz?|sf{1,2}z|fz)',
   'tuplet-begin': '\\[\\d+:',
   'tuplet-end': ':\\]',
+
   'lyrics-head': 'lyrics.*:',
   lyric: `([\u0021-\u002C\u002E-\u007E\u00C0-\u024F\u1E00-\u1EFF]+|[${cjk}])`,
   'lyric-control': '[@\\+\\-]m?\\d',
   'lyric-control-symbol': '[@\\+\\-]',
   'm': 'm',
+
   cell: '([\\(\\[]*[#nb]?\\d|<|[\\:\\|]|[\\/\\\\])',
   'part-head': '==',
   'staff-head': '--',
+
   'sl-comment': '\\/\\/',
   'ml-comment': '\\/\\*',
   comment: '\\/[\\/\\*]',
   'comment-or-paren': '(\\/[\\/\\*]|[\\(\\)])',
   'comment-or-space': '(\\/[\\/\\*]| )',
+
   'all': '.*'
 })
 

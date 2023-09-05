@@ -1,4 +1,3 @@
-import { makeToJSON } from '../utils/helpers'
 import Lexer from './Lexer'
 import SolfegeKey from './SolfegeKey'
 
@@ -6,6 +5,7 @@ import SolfegeKey from './SolfegeKey'
 export default class Key {
   constructor(key) {
     this.name = 'key'
+
     if (key.name === 'lexer') {
       this.parse(key)
     } else if (typeof key === 'string') {
@@ -22,6 +22,12 @@ export default class Key {
 
   }
 
-  toString() { return `key(${this.fifths}${this.mode})` }
-  toJSON = makeToJSON('fifths', 'mode')
+  toString() { 
+    return `key(${this.fifths}${this.mode})` 
+  }
+
+  toJSON() {
+    const { fifths, mode } = this
+    return { fifths, mode }
+  }
 }

@@ -1,5 +1,4 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 import Note from './Note'
 import Rest from './Rest'
 import Chord from './Chord'
@@ -8,6 +7,7 @@ import Direction from './Direction'
 export default class Layer {
   constructor(layer) {
     this.name = 'layer'
+
     if (layer.name === 'lexer') {
       this.parse(layer)
     } else if (typeof layer === 'string') {
@@ -27,6 +27,7 @@ export default class Layer {
 
   parse(lexer) {
     this.data = []
+
     while(!lexer.eof) {
       if (lexer.is('note')) {
         this.data.push(new Note(lexer))
@@ -44,10 +45,17 @@ export default class Layer {
       } else {
         lexer.error('music data in layer')
       }
+
       lexer.skipWhite()
     }
   }
 
-  toString() { return this.data.join(' ') }
-  toJSON = makeToJSON('data')
+  toString() {
+    return this.data.join(' ')
+  }
+
+  toJSON() {
+    const { data } = this
+    return { data }
+  }
 }

@@ -1,9 +1,9 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 export default class Bar {
   constructor(bar = { value: '|' }) {
     this.name = 'bar'
+
     if (bar.name === 'lexer') {
       this.parse(bar)
     } else if (typeof bar === 'string') {
@@ -18,5 +18,9 @@ export default class Bar {
   }
 
   toString() { return this.value }
-  toJSON = makeToJSON('value')
+
+  toJSON() {
+    const { value } = this
+    return { value }
+  }
 }

@@ -1,4 +1,3 @@
-import { makeToJSON } from '../utils/helpers'
 import Lexer from './Lexer'
 
 export default class SolfegeKey {
@@ -18,7 +17,7 @@ export default class SolfegeKey {
   }
 
   toString() { return `` }
-  toJSON = makeToJSON()
+  toJSON() {}
 
   static fromKey(key) {
 

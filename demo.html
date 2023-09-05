@@ -8,45 +8,45 @@
     <h1 style="font-size: 26px">Musje Demo</h1>
 
     <script src="musje.js"></script>
+
     <script>
+      var musjeSrc =  (`
+        title: 我們都是一家人
+        subtitle: Naluwan
+        composer: Taiwanese folk song
 
-<!-- Begin of musjeSrc -->
-      var musjeSrc =  `
-title: Naluwan
-subtitle: 我們都是一家人
-composer: Taiwanese folk song
-arranger: Malcom Wu
-// issue: family; in lyrics
+        /Allegro 4/4
+        /mf 6. 6_ 6 6_6_ | 1' 6 (6_5_) 6 |
+        3. 3_ 3 3_3_ | 5 3 (3_2_) 3 |
+        /f 6 6_.6= 5_ 6 5_ | 5 3 (3_2_) 6, |
+        2 3 5. 3_ | (2_1_) 6, 6, 0 ||
 
-/Allegro 4/4 /mf 3. 3_ 3 3_3_ | 5 3 (3_2_) 3_.0= |
-7,. 7,_ 7, 7,_7,_ | 2 7, (7,_6,_) 7,_.0= ||
-/f 3 3_.3= 2_32_ |
+        6, 6,_6,_ 2 0 | 2 3_2_ 6, 0 |
+        3_ 3 1'_ (6_5_) 3 | 1'_ 6 6_ (6_5_) (3_5_) | 3-. 0 |
+        6 6 5_ 6 0_ | 2 2 3_ 3 0_ |
+        6.5_ 3 2 | 3_2_ 1_7,_ 6, 0 |
+        2 3 5.3_ | (2_1_) 6, 6,- |]
 
-lyrics:
-My hometown is in +1 Na-lu-wan ah.
-Your hometown is in +1 Na-lu-wan ah.
+        lyrics:
+        我的家鄉在那魯灣啊 你的家鄉在那魯灣啊
+        從前的時候是一家人嗯 現在還是一家人
 
-Once upon a time, we are a family.
-Nowadays we're still family.
+        手牽著手 肩並著肩 輕輕地唱出我們的歌兒聲
+        團結起來 相親相愛 因為我們都是一家人
+        現在還是一家人
 
-Hand-in-hand and shoulder-to-shoulder,
-Slightly sing in our song and voice.
+        lyrics:
+        My home-town is in Na-lu-wan ah.
+        Your home-town is in Na-lu-wan ah.
+        Once up-on a long ago, we are fami-ly.
+        Now-a-days still we're fami-ly.
 
-Once ever, we were family.
-Now we are still family.
-
-lyrics:
-我的家鄉在那魯灣啊 你的家鄉在那魯灣啊
-
-從前的時候是一家人嗯 現在還是一家人
-
-手牽著手 肩並著肩 輕輕地唱出我們的歌兒聲
-
-團結起來 相親相愛 因為我們都是一家人
-
-現在還是一家人
-`
-<!-- End of musjeSrc -->
+        Hand in the hand, shoulder to the shoulder,
+        Gen-t-ly sing in our +2 song and voice.
+        We are to-gether. With respects, with loves.
+        Be-cause we are all in fa-mi-ly.
+        Now we are still fa-mi-ly.
+      `)
 
       var score = musje.parse(musjeSrc)
       score.addStyle(`

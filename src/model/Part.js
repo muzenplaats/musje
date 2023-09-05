@@ -1,5 +1,4 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 import PartHead from './PartHead'
 import Staff from './Staff'
 
@@ -15,6 +14,7 @@ import Staff from './Staff'
 export default class Part {
   constructor(part = { staves: [] }) {
     this.name = 'part'
+
     if (part.name === 'lexer') {
       this.parse(part)
     } else if (typeof part === 'string') {
@@ -32,10 +32,13 @@ export default class Part {
   parse(lexer) {
     this.head = lexer.is('part-head') ? new PartHead(lexer) : new PartHead()
     this.staves = []
+
     lexer.skipWhite()
+
     do {
       this.staves.push(new Staff(lexer))
     } while (lexer.is('--'))
+
     lexer.skipWhite()
   }
 
@@ -45,7 +48,12 @@ export default class Part {
     return ('' + this.head) === '==' ? this.stavesStr() : this.toString()
   }
 
-  toString() { return this.head +'\n' + this.stavesStr() }
+  toString() {
+    return this.head +'\n' + this.stavesStr()
+  }
 
-  toJSON = makeToJSON('head', 'staves')
+  toJSON() {
+    const { head, staves } = this
+    return { head, staves }
+  }
 }

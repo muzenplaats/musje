@@ -1,5 +1,4 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 /**
  * Head := (name value WS)*
@@ -17,6 +16,7 @@ import { makeToJSON } from '../utils/helpers'
 export default class Head {
   constructor(head = {}) {
     this.name = 'head'
+
     if (head.name === 'lexer'){
       this.parse(head)
     } else if (typeof head === 'string') {
@@ -59,15 +59,19 @@ export default class Head {
 
   toString() {
     const strs = []
+
     if (this.title) strs.push(`title: ${this.title}`)
     if (this.subtitle) strs.push(`subtitle: ${this.subtitle}`)
     if (this.composer) strs.push(`composer: ${this.composer}`)
     if (this.lyricist) strs.push(`lyricist: ${this.lyricist}`)
     if (this.arranger) strs.push(`arranger: ${this.arranger}`)
     if (this.source) strs.push(`source: ${this.source}`)
+
     return strs.join('\n')
   }
 
-  toJSON = makeToJSON('title', 'subtitle', 'composer', 'lyricist',
-                      'arranger', 'source')
+  toJSON() {
+    const { title, subtitle, composer, lyricist, arranger, source } = this
+    return { title, subtitle, composer, lyricist, arranger, source }
+  }
 }

@@ -1,5 +1,5 @@
 import makeLexerClass from './makeLexerClass'
-import { makeToJSON, repeat, flatten } from './helpers'
+import { repeat, flatten } from './helpers'
 
 const Lexer = makeLexerClass({
   '<': '<',
@@ -51,7 +51,10 @@ export default class Document {
     return strs.join('\n')
   }
 
-  toJSON = makeToJSON('xmlDecl', 'doctype', 'root')
+  toJSON() {
+    const { xmlDecl, doctype, root } = this
+    return { xmlDecl, doctype, root }
+  }
 }
 
 export class XmlDecl {
@@ -75,7 +78,10 @@ export class XmlDecl {
   }
 
   toString() { return `<?xml ${this.attrs}?>` }
-  toJSON = makeToJSON('attrs')
+  toJSON() {
+    const { attrs } = this
+    return { attrs }
+  }
 }
 
 export class Doctype {
@@ -98,7 +104,10 @@ export class Doctype {
   }
 
   toString() { return `<!Doctype ${this.value}>` }
-  toJSON = makeToJSON('value')
+  toJSON() {
+    const { value } = this
+    return { value }
+  }
 }
 
 export class Element {
@@ -209,7 +218,10 @@ export class Element {
     return strs.join('')
   }
 
-  toJSON = makeToJSON('elName', 'attrs', 'content')
+  toJSON() {
+    const { elName, attrs, content } = this
+    return { elName, attrs, content }
+  }
 }
 
 export class Attrs {
@@ -268,7 +280,10 @@ export class Attrs {
     return strs.join(' ')
   }
 
-  toJSON = makeToJSON('value')
+  toJSON() {
+    const { value } = this
+    return { value }
+  }
 }
 
 export class Comment {
@@ -291,7 +306,10 @@ export class Comment {
   }
 
   toString() { return `<!--${this.value}-->` }
-  toJSON = makeToJSON('value')
+  toJSON() {
+    const { value } = this
+    return { value }
+  }
 }
 
 export const el = (elName, attrs, content) => {

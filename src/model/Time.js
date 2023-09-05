@@ -1,9 +1,9 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 export default class Time {
   constructor(time) {
     this.name = 'time'
+
     if (time.name === 'lexer') {
       this.parse(time)
     } else if (typeof time === 'string') {
@@ -20,6 +20,12 @@ export default class Time {
     lexer.token('beatType', lexeme => { this.beatType = +lexeme })
   }
 
-  toString() { return `${this.beats}/${this.beatType}` }
-  toJSON = makeToJSON('beats', 'beatType')
+  toString() {
+    return `${this.beats}/${this.beatType}`
+  }
+
+  toJSON() {
+    const { beats, beatType } = this
+    return { beats, beatType }
+  }
 }

@@ -1,4 +1,3 @@
-import { makeToJSON } from '../utils/helpers'
 
 export default class AbstractLayout {
   set x1(n) { this.x = n }

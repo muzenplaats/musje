@@ -1,4 +1,3 @@
-import { makeToJSON } from '../utils/helpers'
 import Lexer from './Lexer'
 
 /**
@@ -14,6 +13,7 @@ import Lexer from './Lexer'
 export default class Tranpose {
   constructor(tranpose) {
     this.name = 'tranpose'
+
     if (tranpose.name === 'lexer') {
       this.parse(tranpose)
     } else if (typeof tranpose === 'string') {
@@ -30,6 +30,12 @@ export default class Tranpose {
     // Todo
   }
 
-  toString() { return `` }
-  toJSON = makeToJSON('diatonic', 'chromatic', 'octaveChange', 'double')
+  toString() {
+    return `` 
+  }
+
+  toJSON() {
+    const { diatonic, chromatic, octaveChange, double } = this
+    return { diatonic, chromatic, octaveChange, double }
+  }
 }

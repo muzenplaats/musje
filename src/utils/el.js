@@ -11,16 +11,6 @@ const setToArray = set => Object.keys(set)
 
 const unique = arr => setToArray(arrayToSet(arr))
 
-const { slice } = []
-function makeToJSON() {
-  const list = ['name'].concat(slice.apply(arguments))
-  return function () {
-    const result = {}
-    list.forEach(key => { result[key] = this[key] })
-    return result
-  }
-}
-
 const { push, pop, shift, unshift, splice, reverse } = []
 const isElement = el => el && 'appendChild' in el && 'removeChild' in el
 const isEl = el => el && el.name === 'element' && 'elName' in el
@@ -201,7 +191,10 @@ class Element {
     return strs.join('')
   }
 
-  toJSON = makeToJSON('elName', 'attrs', 'content')
+  toJSON() {
+    const { elName, attrs, content } = this
+    return { elName, attrs, content }
+  }
 }
 
 class Attrs {
@@ -223,7 +216,10 @@ class Attrs {
     return strs.join(' ')
   }
 
-  toJSON = makeToJSON('value')
+  toJSON() {
+    const { value } = this
+    return { value }
+  }
 }
 
 export default function el(elName, attrs = {}, content = []) {

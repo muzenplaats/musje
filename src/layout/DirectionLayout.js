@@ -5,15 +5,18 @@ export default class DirectionLayout extends AbstractLayout {
   constructor(direction, style) {
     super()
     this.name = 'direction-layout'
+
     this.direction = direction
     this.style = style
 
     const { words, dynamics, wedge } = direction
+
     if (words) {
       this.textLayout = new TextLayout(words, style.directionFont)
     } else if (dynamics) {
       this.textLayout = new TextLayout(dynamics, style.dynamicsFont)
     }
+
     this.setSize()
   }
 

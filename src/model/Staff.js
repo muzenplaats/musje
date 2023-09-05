@@ -1,14 +1,15 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 import { Q } from './constants'
 import Cell from './Cell'
 import Tie from './Tie'
 import Lyrics from './Lyrics'
 import Dummy from './Dummy'
 
+
 export default class Staff {
   constructor(staff) {
     this.name = 'staff'
+
     if (staff.name === 'lexer') {
       this.parse(staff)
     } else if (typeof staff === 'string') {
@@ -16,6 +17,7 @@ export default class Staff {
     } else {
       this.cells = staff.cells.map(cell => new Cell(cell))
     }
+
     this.resetLeftBars()
     this.setBeams()
     this.linkTies()
@@ -26,16 +28,19 @@ export default class Staff {
 
   parse(lexer) {
     this.cells = []
+
     if (lexer.is('--')) {
       lexer.token('--')
       lexer.skipSS()
       if (!lexer.eol) lexer.error('Unexpected token')
     }
+
     lexer.skipWhite()
     while (lexer.is('cell')) {
       this.cells.push(new Cell(lexer))
       lexer.skipWhite()
     }
+
     while (lexer.is('lyrics-head')) {
       this.lyricsLines = this.lyricsLines || []
       this.lyricsLines.push(new Lyrics(lexer))
@@ -64,6 +69,7 @@ export default class Staff {
           }
         })
       })
+
       group.forEach((dt, i) => {
         dt.duration.beams.forEach((beam, j) => {
           if (beam.type !== 'begin') return
@@ -79,10 +85,12 @@ export default class Staff {
   makeBeamGroups() {
     let gDurQ = 0
     const groups = []
+
     this.cells.forEach(cell => {
       const dumpGroup = () => {
         if (group.length) { groups.push(group); group = [] }
       }
+
       let currQ = 0
       let group = []
       cell.data.forEach(dt => {
@@ -104,14 +112,17 @@ export default class Staff {
           if (currQ >= gDurQ) { currQ = 0; dumpGroup() }
         }
       })
+
       dumpGroup()
     })
+
     return groups
   }
 
   linkTies() {
     const getNextNote = (c, d) => {
       let ndt
+
       do {
         let ncell = this.cells[c]
         d++; ndt = ncell.data[d]
@@ -125,6 +136,7 @@ export default class Staff {
           if (ndt.name === 'rest') break
         }
       } while (ndt)
+
       return {}
     }
 
@@ -239,6 +251,7 @@ export default class Staff {
   setT() {
     const tempo = 60 / 90
     let t = 0, tQ = 0
+
     this.cells.forEach(cell => {
       let tc = 0, tcQ = 0
       cell.data.forEach(dt => {
@@ -337,8 +350,12 @@ export default class Staff {
     return strs.join('\n\n')
   }
 
-  toJSON = makeToJSON('cells')
+  toJSON() {
+    const { cells } = this
+    return { cells }
+  }
 }
+
 
 const timeToDurQ = time => {
   const { beats, beatType } = time
@@ -393,6 +410,7 @@ const getMatchedPitch = (pitches, pitch) => {
 
 const getMatchedPitches = (pitches, npitches) => {
   const result = []
+
   pitches.forEach(pitch => {
     npitches.forEach(npitch => {
       if (pitch.midiNumber === npitch.midiNumber) {
@@ -400,5 +418,6 @@ const getMatchedPitches = (pitches, npitches) => {
       }
     })
   })
+
   return result
 }

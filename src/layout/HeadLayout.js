@@ -5,9 +5,11 @@ export default class HeadLayout extends AbstractLayout {
   constructor(head, style) {
     super()
     this.name = 'head-layout'
+
     this.head = head
     this.style = style
     const { title, subtitle, composer, arranger, lyricist } = head
+
     if (title) {
       this.titleLayout = new TextLayout(title, this.style.titleFont)
     }
@@ -28,6 +30,7 @@ export default class HeadLayout extends AbstractLayout {
     const { width: scoreW, marginLeft, marginRight } = this.style.score
     const { titleSubtitleSep, titleCreatorSep, creatorsSep } = this.style.head
     let height = 0
+
     if (title) height += this.titleLayout.height
     if (title && subtitle) height += titleSubtitleSep
     if (subtitle) height += this.subtitleLayout.height

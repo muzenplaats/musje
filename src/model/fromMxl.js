@@ -15,6 +15,7 @@ const DUR_TYPE_CONVERT = {
 
 let divisions
 
+
 export default function fromMxl(src) {
   const doc = new Document(src)
   const score = { head: { name: 'head' }, body: { name: 'body' } }
@@ -52,6 +53,7 @@ const guessTitleCreator = (el, head) => {
 
 const makePartHead = el => {
   const parts = []
+
   el.actContent({
     'score-part': cel => {
       const part = { name: 'part', head: { name: 'part-head' } }
@@ -71,6 +73,7 @@ const makePartHead = el => {
       parts.push(part)
     }
   })
+
   return parts
 }
 
@@ -159,6 +162,7 @@ const makePart = (el, part) => {
 
 const makeBar = el => {
   const bar = { name: 'bar', value: '|' }
+
   el.actContent({
     'bar-style': cel => {
       switch (cel.content) {
@@ -173,6 +177,7 @@ const makeBar = el => {
       }
     }
   })
+
   return bar
 }
 
@@ -183,11 +188,13 @@ const setCellAccidentals = cell => {
       currAltersUpdater[pitch.step] = pitch.alter
     }
   }
+
   const currAlters = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }
   let currAltersUpdater
 
   cell.data.forEach(dt => {
     currAltersUpdater = {}
+
     switch (dt.name) {
       case 'note':
         setPitch(dt.pitch)
@@ -198,12 +205,14 @@ const setCellAccidentals = cell => {
       case 'multipart':
         break
     }
+
     Object.assign(currAlters, currAltersUpdater)
   })
 }
 
 const makeAttributes = el => {
   const result = {}
+
   el.actContent({
     divisions: cel => { result.divisions = +cel.content },
     clef: cel => { result.clefs = result.clefs || []; result.clefs.push(makeClef(cel)) },
@@ -211,39 +220,47 @@ const makeAttributes = el => {
     time: cel => { result.time = makeTime(cel) },
     staves: cel => { result.staves = +cel.content }
   })
+
   return result
 }
 
 const makeClef = el => {
   const result = { name: 'clef' }
+
   el.actContent({
     sign: cel => { result.sign = cel.content },
     line: cel => { result.line = +cel.content }
   })
+
   return result
 }
 
 const makeKey = el => {
   const result = { name: 'key' }
+
   el.actContent({
     fifths: cel => { result.fifths = +cel.content },
     mode: cel => { result.mode= cel.content }
   })
+
   return result
 }
 
 const makeTime = el => {
   const result = { name: 'time' }
+
   el.actContent({
     beats: cel => { result.beats = +cel.content },
     'beat-type': cel => { result.beatType = +cel.content }
   })
+
   return result
 }
 
 const makeNote = el => {
   const note = { name: 'note', duration: { name: 'duration', dot: 0 }, staff: 0 }
   const duration = note.duration
+
   el.actContent({
     rest: () => { note.name = 'rest' },
     chord: () => { note.chord = true },
@@ -266,43 +283,59 @@ const makeNote = el => {
     },
     staff: cel => { note.staff = cel.content - 1 }
   })
+
   return note
 }
 
 const makeArticulations = el => {
   const result = []
+
   el.actContent({
     staccato: cel => result.push(cel.elName)
   })
+
   return result
 }
 
 const makeLyric = el => {
   const lyric = {}
+
   el.actContent({
     syllabic: cel => lyric.syllabic = cel.content,
     text: cel => lyric.text = cel.content
   })
+
   return lyric
 }
 
 const makeTimeModification = el => {
   const mod = {}
+
   el.actContent({
     'actual-notes': cel => { mod.actual = +cel.content },
     'normal-notes': cel => { mod.normal = +cel.content }
   })
+
   return mod
 }
 
 const divisionToDuration = el => {
   const quarters = +el.content / divisions
   let type = 4 / quarters
-  if (VALID_TYPES[type]) return { type }
+
+  if (VALID_TYPES[type]) {
+    return { type }
+  }
+
   type = type * 1.5
-  if (VALID_TYPES[type]) return { type, dot: 1 }
+  if (VALID_TYPES[type]) {
+    return { type, dot: 1 }
+  }
+
   type = type * 1.75
-  if (VALID_TYPES[type]) return { type, dot: 2 }
+  if (VALID_TYPES[type]) {
+    return { type, dot: 2 }
+  }
 }
 
 const mergeChord = (base, note) => {
@@ -311,15 +344,18 @@ const mergeChord = (base, note) => {
     base.pitches = [base.pitch]
     delete base.pitch
   }
+
   base.pitches.push(note.pitch)
 }
 
 const makePitch = el => {
   const pitch = { name: 'pitch', accidental: '' }
+
   el.actContent({
     step: el => { pitch.step = STEP_CONVERT[el.content] },
     alter: el => { pitch.alter = +el.content },
     octave: el => { pitch.octave = el.content - 4 }
   })
+
   return pitch
 }

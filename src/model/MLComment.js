@@ -1,9 +1,9 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 export default class MLComment {
   constructor(comment) {
     this.name = 'ml-comment'
+
     if (comment.name === 'lexer') {
       this.parse(comment)
     } else if (typeof comment === 'string') {
@@ -19,6 +19,12 @@ export default class MLComment {
     lexer.token('*/')
   }
 
-  toString() { return `/*${this.value}*/` }
-  toJSON = makeToJSON('value')
+  toString() {
+    return `/*${this.value}*/`
+  }
+
+  toJSON() {
+    const { value } = this
+    return { value }
+  }
 }

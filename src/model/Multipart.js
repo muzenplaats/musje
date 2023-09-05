@@ -1,10 +1,10 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 import Layer from './Layer.js'
 
 export default class Multipart {
   constructor(multipart) {
     this.name = 'multipart'
+
     if (multipart.name === 'lexer') {
       this.parse(multipart)
     } else if (typeof multipart === 'string') {
@@ -28,5 +28,8 @@ export default class Multipart {
     return `<${this.layers.join(' | ')}>`
   }
 
-  toJSON = makeToJSON('layers')
+  toJSON() {
+    const { layers } = this
+    return { layers }
+  }
 }

@@ -10,18 +10,22 @@ import TextLayout from './TextLayout'
 const { setSize, setTypeLt4Size, setType4Size, setTypeGt4Size } =
       NoteLayout.prototype
 
+
 export default class ChordLayout extends AbstractLayout {
   constructor(chord, style) {
     super()
     this.name = 'chord-layout'
+
     this.chord = chord
     this.style = style
     this.pitchesLayout = new PitchesLayout(chord.pitches, style)
     this.durationLayout = new DurationLayout(chord.duration, style)
+
     this.setSize(chord.duration, this.pitchesLayout)
     this.tieMode = style.chord.tieMode
 
     const { tie, tuplet, beginSlurs, endSlurs, lyrics } = chord
+
     if (tie) this.tieLayout = new TieLayout(tie, style)
     if (tuplet) this.tupletLayout = new TupletLayout(tuplet, style)
     if (beginSlurs) {
@@ -50,6 +54,7 @@ export default class ChordLayout extends AbstractLayout {
   set position(pos) {
     super.position = pos
     const { x, y, x2, y2 } = this
+
     this.pitchesLayout.position = { x, y }
     const { octave } = this.chord.pitches[0]
     const { type, dots } = this.chord.duration

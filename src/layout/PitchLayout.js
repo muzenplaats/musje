@@ -20,6 +20,7 @@ export default class PitchLayout extends AbstractLayout {
     this.octavesLayout = new OctavesLayout(octave, style)
     if (tie) this.tieLayout = new TieLayout(tie, style)
     this.tieMode = style.chord.tieMode
+
     this.setSize()
   }
 
@@ -33,6 +34,7 @@ export default class PitchLayout extends AbstractLayout {
     const { lift } = this.style.accidentalFont
     const stepAccH = stepH // accidental ? Math.max(stepH, accH + lift) : stepH
     const stepOctH = stepH + (octave ? octH + stepOctaveSep : 0)
+
     this.width = stepW + (accidental ? accW + stepAccidentalSep : 0),
     this.height = octave >= 0 ? Math.max(stepAccH, stepOctH)
                               : stepAccH + stepOctaveSep + octH

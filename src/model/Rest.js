@@ -1,10 +1,10 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 import Duration from './Duration'
 
 export default class Rest {
   constructor(rest) {
     this.name = 'rest'
+
     if (rest.name === 'lexer') {
       this.parse(rest)
     } else if (typeof rest === 'string') {
@@ -20,5 +20,8 @@ export default class Rest {
   }
 
   toString() { return '0' + this.duration }
-  toJSON = makeToJSON('duration')
+  toJSON() {
+    const { duration } = this
+    return { duration }
+  }
 }

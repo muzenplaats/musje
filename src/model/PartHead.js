@@ -1,5 +1,4 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 
 
 /**
@@ -30,6 +29,7 @@ export default class PartHead {
     lexer.skipSS()
 
     this.abbreviation = ''
+
     if (lexer.is('(')) {
       lexer.token('(')
       lexer.without(')', lexeme => { this.abbreviation = lexeme })
@@ -40,6 +40,7 @@ export default class PartHead {
       lexer.token(':')
       lexer.skipSS()
       const midi = this.midi = {}
+
       lexer.token('midi')
       lexer.token('(')
       lexer.token('channel'); lexer.token(':'); lexer.skipSS()
@@ -58,6 +59,7 @@ export default class PartHead {
   toString() {
     const { partName, abbreviation, midi } = this
     const strs = ['==']
+
     if (partName) strs.push(partName)
     if (abbreviation) strs.push(`(${abbreviation})`)
     // if (strs.length > 1) strs[strs.length - 1] += ':'
@@ -70,8 +72,12 @@ export default class PartHead {
       if (typeof pan === 'number') midiStrs.push(`pan: ${pan}`)
       strs.push(`midi(${midiStrs.join(', ')})`)
     }
+
     return strs.join(' ')
   }
 
-  toJSON = makeToJSON('partName', 'midi')
+  toJSON() {
+    const { partName, midi } = this
+    return { partName, midi }
+  }
 }

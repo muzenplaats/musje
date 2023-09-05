@@ -1,5 +1,4 @@
 import Lexer from './Lexer'
-import { makeToJSON } from '../utils/helpers'
 import Lyric from './Lyric'
 import LyricControl from './LyricControl'
 
@@ -37,11 +36,14 @@ export default class Lyrics {
         this.list.push(lyric)
         prev = lyric
       }
+
       lexer.skipWhite()
     }
   }
 
   toString() {}
 
-  toJSON = makeToJSON()
+  toJSON() {
+
+  }
 }

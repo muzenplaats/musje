@@ -5,6 +5,7 @@ export default class TupletLayout extends AbstractLayout {
   constructor(tuplet, style) {
     super()
     this.name = 'tuplet-layout'
+
     this.tuplet = tuplet
     tuplet.layout = this
     this.style = style

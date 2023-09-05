@@ -1,8 +1,8 @@
 import Lexer from './Lexer'
-import { makeToJSON, range } from '../utils/helpers'
 import Part from './Part'
 import Cell from './Cell'
 import Measure from './Measure'
+import { range } from '../utils/helpers'
 
 /**
  * Body := Part*
@@ -13,6 +13,7 @@ import Measure from './Measure'
 export default class Body {
   constructor(body = { parts: [] }) {
     this.name = 'body'
+
     if (body.name === 'lexer') {
       this.parse(body)
     } else if (typeof body === 'string') {
@@ -21,6 +22,7 @@ export default class Body {
       if (!body.parts) body.parts = []
       this.parts = body.parts.map(part => new Part(part))
     }
+
     this.fillStaves()
     this.makeMeasures()
   }
@@ -28,6 +30,7 @@ export default class Body {
   parse(lexer) {
     this.parts = []
     let part
+
     do {
       part = new Part(lexer)
       if (!part.isEmpty) this.parts.push(part)
@@ -49,7 +52,10 @@ export default class Body {
   fillStaves() {
     const maxLen = Math.max.apply(null,
                    this.mapStaff(staff => staff.cells.length))
-    if (maxLen <= 0) return
+    if (maxLen <= 0) {
+      return
+    }
+
     this.eachStaff(staff => {
       if (staff.cells.length === maxLen) return
       const m = maxLen - staff.cells.length
@@ -58,9 +64,14 @@ export default class Body {
   }
 
   makeMeasures() {
-    if (!this.parts.length) { this.measures = []; return }
+    if (!this.parts.length) { 
+      this.measures = []
+      return
+    }
+
     const m = this.parts[0].staves[0].cells.length
     const measures = range(m).map(() => ({ parts: [] }))
+
     this.eachStaff((staff, s, p) => {
       measures.forEach((measure, m) => {
         measure.parts[p] = measure.parts[p] || {}
@@ -69,13 +80,20 @@ export default class Body {
         mpart.staves[s] = staff.cells[m]
       })
     })
+
     this.measures = measures.map(measure => new Measure(measure))
   }
 
   toString() {
-    if (this.parts.length === 1) return this.parts[0].singlePartToString()
+    if (this.parts.length === 1) {
+      return this.parts[0].singlePartToString()
+    }
+
     return this.parts.join('\n\n')
   }
 
-  toJSON = makeToJSON('parts', 'measures')
+  toJSON() {
+    const { parts } = this
+    return { parts }
+  }
 }

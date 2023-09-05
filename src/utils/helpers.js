@@ -63,16 +63,6 @@ export const swapObject = obj => {
   return result
 }
 
-const { slice } = []
-export function makeToJSON() {
-  const list = ['name'].concat(slice.apply(arguments))
-  return function () {
-    const result = {}
-    list.forEach(key => { result[key] = this[key] })
-    return result
-  }
-}
-
 const el = (name, attrs, content) => {
   const elm = document.createElementNS('http://www.w3.org/2000/svg', name)
   for (let aname in attrs) elm.setAttribute(aname, attrs[aname])
