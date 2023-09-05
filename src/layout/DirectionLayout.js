@@ -37,6 +37,9 @@ export default class DirectionLayout extends AbstractLayout {
   set position(pos) {
     super.position = pos
     const { x, y } = this
-    if (this.textLayout) this.textLayout.position = { x, y }
+
+    if (this.textLayout) {
+      this.textLayout.position = { x, y }
+    }
   }
 }

@@ -66,15 +66,19 @@ export default class BarLayout extends AbstractLayout {
     } else if (value === ':|' || value === ':|:') {
       let x0 = x + s.dotSize / 2
       const dotYShift = (s.dotsSep + s.dotSize) / 2
+
       this.dotsLayouts = [
         new Layout({ x, cy: cy - dotYShift }, this.dotSize),
         new Layout({ x, cy: cy + dotYShift }, this.dotSize)
       ]
+
       x0 = x + s.dotSize + s.lineDotSep
+
       this.linesLayouts = [
         new Layout({ x: x0, y }, this.lightSize),
         new Layout({ x: x0 + s.lightWidth + s.linesSep, y }, this.heavySize),
       ]
+
       if (value === ':|:') {
         x0 += s.lightWidth + 2 * s.linesSep + s.heavyWidth
         this.linesLayouts.push(new Layout({ x: x0, y }, this.lightSize))
@@ -84,10 +88,12 @@ export default class BarLayout extends AbstractLayout {
     if (value === '|:' || value === ':|:') {
       const dotYShift = (s.dotsSep + s.dotSize) / 2
       this.dotsLayouts = this.dotsLayouts || []
+
       this.dotsLayouts.push(
         new Layout({ x2, cy: cy - dotYShift }, this.dotSize),
         new Layout({ x2, cy: cy + dotYShift }, this.dotSize)
       )
+
       if (value === '|:') {
         this.linesLayouts = [
           new Layout({ x, y }, this.heavySize),
@@ -99,6 +105,8 @@ export default class BarLayout extends AbstractLayout {
 
   toJSON() {
     const { linesLayouts, dotsLayouts } = this
-    return { ...super.toJSON(), linesLayouts, dotsLayouts }
+    return { 
+      ...super.toJSON(), linesLayouts, dotsLayouts 
+    }
   }
 }

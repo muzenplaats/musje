@@ -143,9 +143,11 @@ export default class BodyLayout extends AbstractLayout {
             layout.sys = s
             layout.c = c
           }
+
           cellLayout.dataLayout.layouts.forEach(layout => {
             const { tieLayout, beginSlursLayouts, endSlursLayouts,
                     chord } = layout
+
             if (tieLayout) assignSys(tieLayout)
             if (beginSlursLayouts) {
               beginSlursLayouts.forEach(layout => assignSys(layout))
@@ -179,6 +181,7 @@ export default class BodyLayout extends AbstractLayout {
     super.position = pos
     const { systemsSep } = this.style.body
     let { x, y } = this
+
     this.systemsLayouts.forEach(layout => {
       layout.position = { x, y }
       y += layout.height + systemsSep
@@ -187,6 +190,8 @@ export default class BodyLayout extends AbstractLayout {
 
   toJSON() {
     const { systemsLayouts } = this
-    return { ...super.toJSON(), systemsLayouts }
+    return { 
+      ...super.toJSON(), systemsLayouts 
+    }
   }
 }

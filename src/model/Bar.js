@@ -20,7 +20,9 @@ export default class Bar {
     lexer.token('bar', lexeme => { this.value = lexeme })
   }
 
-  toString() { return this.value }
+  toString() { 
+    return this.value 
+  }
 
   toJSON() {
     const { value } = this

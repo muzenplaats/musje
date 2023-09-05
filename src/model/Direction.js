@@ -47,10 +47,12 @@ export default class Direction {
   toString() {
     const strs = []
     const { placement, words, wedge, dynamics } = this
+
     strs.push(placement === 'above' ? '/' : '\\')
     if (words) strs.push(words)
     if (wedge) strs.push(`wedge(${wedge})`)
     if (dynamics) strs.push(dynamics)
+
     return strs.join('')
   }
 

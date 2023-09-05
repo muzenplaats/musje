@@ -9,6 +9,7 @@ export default class RestLayout extends AbstractLayout {
   constructor(rest, style) {
     super()
     this.name = 'rest-layout'
+
     this.rest = rest
     this.style = style
     this.zeroLayout = new ZeroLayout(style)
@@ -26,6 +27,7 @@ export default class RestLayout extends AbstractLayout {
     const { x, y, x2, y2 } = this
     const { type } = this.rest.duration
     const { dotLift } = this.style.durationGE4
+
     this.zeroLayout.position = { x, y }
 
     this.durationLayout.position =
@@ -36,7 +38,9 @@ export default class RestLayout extends AbstractLayout {
 
   toJSON() {
     const { zeroLayout } = this
-    return { ...super.toJSON(), zeroLayout }
+    return { 
+      ...super.toJSON(), zeroLayout 
+    }
   }
 }
 

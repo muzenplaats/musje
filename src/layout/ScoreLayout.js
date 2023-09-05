@@ -6,6 +6,7 @@ export default class ScoreLayout extends AbstractLayout {
   constructor(score) {
     super()
     this.name = 'score-layout'
+
     this.score = score
     const style = this.style = score.style.value
     this.headLayout = new HeadLayout(score.head, style)
@@ -19,6 +20,7 @@ export default class ScoreLayout extends AbstractLayout {
     const { width, marginTop, marginBottom, headBodySep } = this.style.score
     const hh = this.headLayout.height
     const bh = this.bodyLayout.height
+
     this.width = width
     this.height = marginTop + marginBottom + hh + bh +
                   (hh && bh ? headBodySep : 0)
@@ -28,6 +30,7 @@ export default class ScoreLayout extends AbstractLayout {
     super.position = pos
     const { marginLeft: x, marginTop: y, headBodySep } = this.style.score
     const hh = this.headLayout.height
+
     this.headLayout.position = { x, y }
     this.bodyLayout.position = { x, y: y + hh + (hh ? headBodySep : 0) }
     this.innerLayout.position = { x, y }
@@ -35,7 +38,9 @@ export default class ScoreLayout extends AbstractLayout {
 
   toJSON() {
     const { innerLayout, headLayout, bodyLayout } = this
-    return { ...super.toJSON(), innerLayout, headLayout, bodyLayout }
+    return { 
+      ...super.toJSON(), innerLayout, headLayout, bodyLayout 
+    }
   }
 }
 
@@ -43,8 +48,9 @@ class InnerLayout extends AbstractLayout {
   constructor(scoreLayoutHeight, style) {
     super()
     this.name = 'inner-layout'
-    const { width, marginLeft, marginRight, marginTop, marginBottom } =
-          style.score
+
+    const { width, marginLeft, marginRight, marginTop, marginBottom } = style.score
+
     this.width = width - marginLeft - marginRight
     this.height = scoreLayoutHeight - marginTop - marginBottom
   }

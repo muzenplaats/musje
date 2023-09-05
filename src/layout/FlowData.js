@@ -26,10 +26,12 @@ export default class FlowData extends FlowDataSectionInterface {
     if (!list.length || list[0] === 0) return
 
     this.lines = []
+
     list.forEach((len, sys) => {
       const sw = sys ? this.ahsw : this.fhsw
       this.lines.push(new FlowDataLine(sw))
     })
+
     this.set('mws', 'measureMinWidths', list)
     this.set('measures')
     this.set('ws')
@@ -39,6 +41,7 @@ export default class FlowData extends FlowDataSectionInterface {
   obstacleSectioning() {
     const sections = []
     let begin = 0, end, prevIsObstacle = false
+
     this.lines.forEach((line, sys) => {
       if (prevIsObstacle) { begin = sys; prevIsObstacle = false; return }
       if (line.isObstacle) {
@@ -47,15 +50,18 @@ export default class FlowData extends FlowDataSectionInterface {
       }
       prevIsObstacle = line.isObstacle
     })
+
     if (!prevIsObstacle) {
       sections.push(new Section(this.lines.slice(begin, this.lines.length)))
     }
+
     return sections
   }
 
   mergeSections(sections) {
     sections = sections.slice()
     let newLines = sections.shift().lines
+
     this.lines.forEach(line => {
       if (line.isObstacle) {
         newLines.push(line)
@@ -63,6 +69,7 @@ export default class FlowData extends FlowDataSectionInterface {
         if (section) newLines = newLines.concat(section.lines)
       }
     })
+
     this.lines = newLines
   }
 
@@ -73,6 +80,7 @@ export default class FlowData extends FlowDataSectionInterface {
     }
 
     let begin = 0, end
+
     (lens || this.lens).forEach((len, l) => {
       end = begin + len
       this.lines[l][abbr] = this[name].slice(begin, end)
@@ -215,12 +223,15 @@ class Section extends FlowDataSectionInterface {
   // Update mws & ws & measures by tmpMwss.
   updateLines(tmpMwss) {
     const { lines } = this
+
     lines.forEach((line, i) => {
       line.mws = tmpMwss[i]
       line.ws = line.mws.slice()
     })
+
     for (let i = 0; i < lines.length - 1; i++) {
       const line = lines[i], nextLine = lines[i + 1]
+
       while (line.measures.length > line.mws.length) {
         nextLine.measures.unshift(line.measures.pop())
       }

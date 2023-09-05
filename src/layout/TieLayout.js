@@ -4,6 +4,7 @@ export default class TieLayout extends AbstractLayout {
   constructor(tie, style) {
     super()
     this.name = 'tie-layout'
+
     this.tie = tie
     tie.layout = this
     this.style = style
@@ -20,6 +21,7 @@ export default class TieLayout extends AbstractLayout {
         note.name === 'note' && nextNote.name === 'chord') {
       return nextNote.tie
     }
+
     return this.tie.next
   }
 
@@ -53,6 +55,7 @@ export default class TieLayout extends AbstractLayout {
 
     this.width = x2 - x1
     this.height = Math.abs(y2 - y1)
+
     return { x1, y1, x2, y2 }
   }
 
@@ -60,6 +63,7 @@ export default class TieLayout extends AbstractLayout {
   get prevEndPoints() {
     const { x: x1, y: y1 } = this
     const { x: x2, y: y2 } = this.tie.cell.layout.shownLeftBarLayout
+
     return { x1, y1, x2, y2 }
   }
 }

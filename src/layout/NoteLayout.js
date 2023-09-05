@@ -65,6 +65,7 @@ export default class NoteLayout extends AbstractLayout {
       const { dataLyricSep, lyricsVSep} = this.style.note
       const dy2 = dataLyricSep + lyricsVSep * (length - 1) +
                   this.style.lyricsFont.height * length
+
       this.height += dy2
       this.dy2 = dy2
     } else {
@@ -75,6 +76,7 @@ export default class NoteLayout extends AbstractLayout {
   setTypeLt4Size(pl) {
     const { durationLayout } = this
     const { pitchLineSep } = this.style.note
+
     this.width = pl.width + pitchLineSep + durationLayout.width
     this.height = pl.height
   }
@@ -82,6 +84,7 @@ export default class NoteLayout extends AbstractLayout {
   setType4Size(dots, pl) {
     const { pitchDotSep } = this.style.note
     const { durationLayout } = this
+
     this.width = pl.width +
                 (dots ? durationLayout.width + pitchDotSep : 0)
     this.height = pl.height
@@ -91,6 +94,7 @@ export default class NoteLayout extends AbstractLayout {
     const { pitchBeamSep } = this.style.note
     const { stepFont } = this.style
     const { durationLayout } = this
+
     this.width = pl.width + (dots ?
                  durationLayout.width - stepFont.width : 0)
     this.height = pl.height + pitchBeamSep +
@@ -104,6 +108,7 @@ export default class NoteLayout extends AbstractLayout {
     const { dotLift } = this.style.durationGE4
     const { x, y, x2, by } = this
     const { stepLayout, octavesLayout } = this.pitchLayout
+
     this.pitchLayout.position = { x, y }
 
     // Tweak for dots height
@@ -119,6 +124,7 @@ export default class NoteLayout extends AbstractLayout {
      /* type  <  4 */{ x2, cy: stepLayout.cy }
 
     const { tie, tuplet, beginSlurs, endSlurs, lyrics } = this.note
+
     if (tie || tuplet || beginSlurs || endSlurs) {
       const { cx: x, y } = this.pitchLayout.stepLayout
       if (tie) this.tieLayout.position = { x, y }
@@ -135,6 +141,7 @@ export default class NoteLayout extends AbstractLayout {
       const { dataLyricSep, lyricsVSep } = this.style.note
       const { dy, height } = this.style.lyricsFont
       const by0 = this.by + dataLyricSep + dy
+
       this.lyricsLayouts.forEach((layout, l) => {
         layout.position = { cx: this.bx, by: by0 + (lyricsVSep + height) * l }
       })
@@ -143,6 +150,8 @@ export default class NoteLayout extends AbstractLayout {
 
   toJSON() {
     const { pitchLayout, durationLayout } = this
-    return { ...super.toJSON(), pitchLayout, durationLayout }
+    return { 
+      ...super.toJSON(), pitchLayout, durationLayout 
+    }
   }
 }

@@ -16,6 +16,8 @@ export default function cellElement(cellLayout) {
     // box(cellLayout, 'orange'),
     // box(dataLayout, 'blue'),
 
+    shownLeftBarLayout ? barElement(shownLeftBarLayout) : [],
+
     dataLayout.layouts.map(layout => {
       // return box(layout, 'orange')
       if ('note' in layout) return noteElement(layout)
@@ -26,7 +28,6 @@ export default function cellElement(cellLayout) {
       if ('multipart' in layout) return multipartElement(layout)
     }),
 
-    shownLeftBarLayout ? barElement(shownLeftBarLayout) : [],
     shownRightBarLayout ? barElement(shownRightBarLayout) :
                           barElement(rightBarLayout)
   ])

@@ -58,6 +58,7 @@ export default class CellLayout extends AbstractLayout {
   setMinWidth() {
     const { paddingLeft, paddingRight } = this.style.cell
     const { shownLeftBarLayout, shownRightBarLayout } = this.cell
+
     this.minWidth = this.dataLayout.minWidth + paddingLeft + paddingRight +
                     (shownLeftBarLayout ? shownLeftBarLayout.width :
                                     this.leftBarLayout.width / 2) +
@@ -79,6 +80,7 @@ export default class CellLayout extends AbstractLayout {
     let { x, x2, by } = this
     const { paddingLeft, paddingRight } = this.style.cell
     const { shownLeftBarLayout, shownRightBarLayout } = this
+
     if (shownLeftBarLayout) {
       shownLeftBarLayout.position = { x, by }
       x += shownLeftBarLayout.width + paddingLeft
@@ -185,6 +187,8 @@ class DataLayout extends AbstractLayout {
 
   toJSON() {
     const { layouts } = this
-    return { ...super.toJSON(), layouts }
+    return { 
+      ...super.toJSON(), layouts 
+    }
   }
 }

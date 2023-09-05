@@ -5,6 +5,7 @@ export default class SlurLayout extends AbstractLayout {
   constructor(slur, style) {
     super()
     this.name = 'slur-layout'
+
     this.slur = slur
     slur.layout = this
     this.style = style
@@ -44,17 +45,21 @@ export default class SlurLayout extends AbstractLayout {
 
     this.width = x2 - x1
     this.height = Math.abs(y2 - y1)
+
     return { x1, y1, x2, y2 }
   }
 
   // Slur to previous system
   get prevEndPoints() {
     const { x: x1, y: y1 } = this
-    if (!this.slur.prev) return { x1, y1, x2: x1 - 30, y2: y1 - 20 }
+    if (!this.slur.prev) {
+      return { x1, y1, x2: x1 - 30, y2: y1 - 20 }
+    }
 
     const measureLayout = this.systemLayout.measuresLayouts[0]
     const clo = measureLayout.cellsLayouts[this.c]
     const { x: x2, y: y2 } = clo.shownLeftBarLayout
+
     return { x1, y1, x2, y2 }
   }
 }

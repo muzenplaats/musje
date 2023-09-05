@@ -13,15 +13,19 @@ export default class HeadLayout extends AbstractLayout {
     if (title) {
       this.titleLayout = new TextLayout(title, this.style.titleFont)
     }
+
     if (subtitle) {
       this.subtitleLayout = new TextLayout(subtitle, this.style.subtitleFont)
     }
+
     if (composer) {
       this.composerLayout = new TextLayout(composer, this.style.creatorFont)
     }
+
     if (lyricist) {
       this.lyricistLayout = new TextLayout(lyricist, this.style.creatorFont)
     }
+
     this.setSize()
   }
 
@@ -50,22 +54,26 @@ export default class HeadLayout extends AbstractLayout {
 
     const { cx, x2, y } = this
     let currY = y
+
     if (title) {
       this.titleLayout.position = { cx, y }
       currY = this.titleLayout.y2
     }
+
     if (subtitle) {
       this.subtitleLayout.position = {
         cx, y: title ? currY + titleSubtitleSep : y
       }
       currY = this.subtitleLayout.y2
     }
+
     if (composer) {
       this.composerLayout.position = {
         x2, y: currY > y ? currY + titleCreatorSep : y
       }
       currY = this.composerLayout.y2
     }
+
     if (lyricist) {
       this.lyricistLayout.position = {
         x2, y: composer ? currY + creatorsSep
@@ -76,6 +84,8 @@ export default class HeadLayout extends AbstractLayout {
 
   toJSON() {
     const { titleLayout, subtitleLayout, composerLayout } = this
-    return { ...super.toJSON(), titleLayout, subtitleLayout, composerLayout }
+    return { 
+      ...super.toJSON(), titleLayout, subtitleLayout, composerLayout 
+    }
   }
 }

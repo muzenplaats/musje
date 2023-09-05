@@ -52,6 +52,7 @@ export default class Body {
   fillStaves() {
     const maxLen = Math.max.apply(null,
                    this.mapStaff(staff => staff.cells.length))
+
     if (maxLen <= 0) {
       return
     }
@@ -59,6 +60,7 @@ export default class Body {
     this.eachStaff(staff => {
       if (staff.cells.length === maxLen) return
       const m = maxLen - staff.cells.length
+
       staff.cells = staff.cells.concat(range(m).map(() => new Cell()))
     })
   }
@@ -75,6 +77,7 @@ export default class Body {
     this.eachStaff((staff, s, p) => {
       measures.forEach((measure, m) => {
         measure.parts[p] = measure.parts[p] || {}
+
         const mpart = measure.parts[p]
         mpart.staves = mpart.staves || []
         mpart.staves[s] = staff.cells[m]

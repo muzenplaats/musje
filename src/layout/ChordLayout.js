@@ -73,6 +73,7 @@ export default class ChordLayout extends AbstractLayout {
      /* type  <  4 */{ x2, cy: stepLayout.cy }
 
     const { tie, tuplet, beginSlurs, endSlurs, lyrics } = this.chord
+
     if (tie || tuplet || beginSlurs || endSlurs) {
       const x = this.pitchesLayout.layouts[0].stepLayout.cx
       if (tie) this.tieLayout.position = { x, y }
@@ -89,6 +90,7 @@ export default class ChordLayout extends AbstractLayout {
       const { dataLyricSep, lyricsVSep } = this.style.chord
       const { dy, height } = this.style.lyricsFont
       const by0 = this.by + dataLyricSep + dy
+
       this.lyricsLayouts.forEach((layout, l) => {
         layout.position = { cx: this.bx, by: by0 + (lyricsVSep + height) * l }
       })
@@ -129,6 +131,8 @@ class PitchesLayout extends AbstractLayout {
 
   toJSON() {
     const { layouts } = this
-    return { ...super.toJSON(), layouts }
+    return { 
+      ...super.toJSON(), layouts 
+    }
   }
 }

@@ -102,6 +102,7 @@ class OctavesLayout extends AbstractLayout {
     this.name = 'octaves-layout'
     const oct = Math.abs(octave)
     const { octaveSize, octavesSep } = style.pitch
+
     this.octave = octave
     this.style = style
     this.width = octaveSize
@@ -114,11 +115,16 @@ class OctavesLayout extends AbstractLayout {
     const { octaveSize, octavesSep } = this.style.pitch
     this.layouts = []
     let { cx, y, width, r } = this
+
     range(Math.abs(this.octave)).forEach(() => {
       this.layouts.push(new Layout({ cx, y }, { width, height: width, r }))
       y += octaveSize + octavesSep
     })
   }
 
-  toJSON() { return { ...super.toJSON(), layouts: this.layouts }}
+  toJSON() {
+    return { 
+      ...super.toJSON(), layouts: this.layouts 
+    }
+  }
 }

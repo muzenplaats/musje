@@ -14,7 +14,9 @@ export default class BeamLayout extends AbstractLayout {
     this.setSize()
   }
 
-  get beamedWidth() { return this.beam.endBeam.layout.x2 - this.x }
+  get beamedWidth() {
+    return this.beam.endBeam.layout.x2 - this.x
+  }
 
   setSize() {
     const { stepFont, note, durationGE4 } = this.style

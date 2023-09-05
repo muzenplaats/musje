@@ -38,6 +38,7 @@ export default class MeasureLayout extends AbstractLayout {
     this.width = width
     this.cellsLayouts.forEach(cellLayout => cellLayout.reflow(width))
     const dataLayoutWidth = this.cellsLayouts[0].dataLayout.width
+
     reflowSticks(this.sticks, dataLayoutWidth)
     this.setCellsSticks()
   }
@@ -92,10 +93,12 @@ export default class MeasureLayout extends AbstractLayout {
 
       const barLineHeight = this.staves.by0s[cs[1]] - this.staves.by0s[cs[0]] +
                             this.style.bar.lineHeight
+
       if (side === 'left') {
         this.leftBarLayouts = this.leftBarLayouts || []
         const value = getLeftBarLayout(this.cellsLayouts[cs[0]]).bar.value
         const barLayout = new BarLayout(new Bar(value), this.style)
+
         barLayout.setHeight(barLineHeight)
         barLayout.displayDots = false
         barLayout.lastCellIndex = cs[1]
@@ -104,6 +107,7 @@ export default class MeasureLayout extends AbstractLayout {
         this.rightBarLayouts = this.rightBarLayouts || []
         const value = getRightBarLayout(this.cellsLayouts[cs[0]]).bar.value
         const barLayout = new BarLayout(new Bar(value), this.style)
+
         barLayout.setHeight(barLineHeight)
         barLayout.displayDots = false
         barLayout.lastCellIndex = cs[1]
@@ -143,6 +147,7 @@ export default class MeasureLayout extends AbstractLayout {
   alignSticks() {
     if (!this.sticks.length) return
     const firstStick = this.sticks[0]
+
     setStickDx(firstStick)
     firstStick.x = firstStick.minX = firstStick.dx
     setStickDx2(lastItem(this.sticks))
@@ -224,20 +229,25 @@ const hasCellsSticks = cellsSticks => {
     const cellSticks = cellsSticks[i]
     if (cellSticks.length) return true
   }
+
   return false
 }
 
 const peelSticksWithSmallestTcQ = cellsSticks => {
   const firstAtCells = cellsSticks.map(sticks => sticks[0])
   const minTcQ = min(firstAtCells.map(cstick => cstick ? cstick.tcQ : Infinity))
-  const cells = firstAtCells.map(cstick =>
-                               cstick && cstick.tcQ === minTcQ ? cstick : null)
+
+  const cells = firstAtCells.map(cstick => {
+    return  cstick && cstick.tcQ === minTcQ ? cstick : null
+  })
+                              
   cellsSticks.forEach((sticks, i) => { if (cells[i]) sticks.shift() })
   return { cells, tcQ: minTcQ }
 }
 
 const setStickDx = (stick, dxName = 'dx') => {
   let dx = 0
+
   stick.cells.forEach(cell => {
     if (!cell) return
     const { main, dirsAbove, dirsBelow, lyrics } = cell
@@ -247,6 +257,7 @@ const setStickDx = (stick, dxName = 'dx') => {
     if (lyrics) dx = max(lyrics.map(lyric => lyric[dxName]).concat(dx)
                                             .filter(dx => dx !== undefined))
   })
+
   stick[dxName] = dx
 }
 
@@ -254,8 +265,10 @@ const setStickDx2 = stick => setStickDx(stick, 'dx2')
 
 const initCurrXs = sticks => {
   const currXs = { cells: [] }
+
   const updateArr = (currXsCell, cell, name) => {
     const { length } = cell[name]
+
     if (!length) return
     if (currXsCell[name]) {
       if (currXsCell[name].length < length) currXsCell[name] = zeros(length)
@@ -263,15 +276,18 @@ const initCurrXs = sticks => {
       currXsCell[name] = zeros(length)
     }
   }
+
   sticks.forEach(stick => {
     stick.cells.forEach((cell, c) => {
       if (!cell) return
       const currXsCell = currXs.cells[c] = currXs.cells[c] || { main: 0 }
+
       if (cell.dirsAbove) updateArr(currXsCell, cell, 'dirsAbove')
       if (cell.dirsBelow) updateArr(currXsCell, cell, 'dirsBelow')
       if (cell.lyrics) updateArr(currXsCell, cell, 'lyrics')
     })
   })
+
   // console.log('currXs', currXs)
   return currXs
 }
@@ -281,6 +297,7 @@ const setStickX = (currXs, stick, prevStick, style) => {
   const { lyricsHSep } =  style.note
   // console.log('prevStick', prevStick)
   let x = prevStick.x + style.stepFont.width / 2 + dataSep / 2
+
   stick.cells.forEach((cell, c) => {
     if (!cell) return
     const cellCurrXs = currXs.cells[c]
@@ -292,6 +309,7 @@ const setStickX = (currXs, stick, prevStick, style) => {
       x = Math.max(x, cellCurrXs.lyrics[l] + lyricsHSep + lyric.dx)
     })
   })
+
   stick.x = x
   stick.minX = x
 }
@@ -301,12 +319,16 @@ const updateCurrXs = (currXs, stick) => {
     if (!cell) return
     const cellCurrXs = currXs.cells[c]
     const { main, dirsAbove, dirsBelow, lyrics } = cell
+
     if (main) cellCurrXs.main = stick.x + main.dx2
     // if (dirsAbove) dx = max(dirsAbove.map(dir => dir[dxName]).concat(dx))
     // if (dirsBelow) dx = max(dirsBelow.map(dir => dir[dxName]).concat(dx))
-    if (lyrics) lyrics.forEach((lyric, l) => {
-      cellCurrXs.lyrics[l] = stick.x + lyric.dx2
-    })
+
+    if (lyrics) {
+      lyrics.forEach((lyric, l) => {
+        cellCurrXs.lyrics[l] = stick.x + lyric.dx2
+      })
+    }
   })
 }
 
@@ -329,6 +351,7 @@ const reflowSticks = (sticks, dataLayoutWidth) => {
   const timingFavoredBackReflow = () => {
     const lastTcQ = lastItem(sticks).tcQ
     const slen = sticks.length
+
     const getTimingX = stick => {
       const ratio = lastTcQ ? stick.tcQ / lastTcQ : 1
       return newRange * ratio + dx
@@ -340,6 +363,7 @@ const reflowSticks = (sticks, dataLayoutWidth) => {
       const timingX = getTimingX(stick)
       const limDx = nextStick.minX - stick.minX
       const spaceLimitX = nextStick.x - limDx
+
       // console.log(i, newRange, lastTcQ, dx, timingX, spaceLimitX, stick, nextStick)
       stick.x = Math.min(timingX, spaceLimitX)
     })

@@ -11,7 +11,10 @@ export default class DurationLayout extends AbstractLayout {
     this.style = style
     const { type, dots } = duration
 
-    if (dots) this.dotsLayout = new DotsLayout(duration, style)
+    if (dots) {
+      this.dotsLayout = new DotsLayout(duration, style)
+    }
+
     if (type < 4) {
       this.linesLayout = new LinesLayout(duration, style)
     } else if (type > 4) {
@@ -31,6 +34,7 @@ export default class DurationLayout extends AbstractLayout {
     } else {
       this.setTypeLt4Size(dots)
     }
+
     this.dy = this.height
   }
 
@@ -114,6 +118,7 @@ class LinesLayout extends AbstractLayout {
     const { type, dots } = this.duration
     const { lineWidth, linesSep } = this.style.durationLE2
     const { x, cy } = this
+
     this.layouts = range(type === 2 ? 1 : 3).map(n => new Layout({
       x: x + n * (lineWidth + linesSep), cy
     }, this.lineSize))
@@ -124,6 +129,7 @@ class BeamsLayout extends AbstractLayout {
   constructor(duration, dotsLayout, style) {
     super()
     this.name = 'beams-layout'
+
     this.duration = duration
     this.dotsLayout = dotsLayout
     this.style = style
@@ -187,12 +193,14 @@ class DotsLayout extends AbstractLayout {
     if (type >= 4) {
       const { dotsSep } = this.style.durationGE4
       const { x2, y } = this
+
       this.layouts = range(dots).map(n => new Layout({
         x2: x2 - n * (this.dotSize.width + dotsSep), y
       }, this.dotSize))
     } else {
       const { dotsSep } = this.style.durationLE2
       const { x2, cy } = this
+
       this.layouts = range(dots).map(n => new Layout({
         x2: x2 - n * (this.dotSize.width + dotsSep), cy
       }, this.dotSize))
@@ -200,6 +208,8 @@ class DotsLayout extends AbstractLayout {
   }
 
   toJSON() {
-    return { ...super.toJSON(), layouts: this.layouts }
+    return { 
+      ...super.toJSON(), layouts: this.layouts 
+    }
   }
 }

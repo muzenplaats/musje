@@ -6,9 +6,12 @@ export default class SystemHeadLayout extends AbstractLayout {
   constructor(head, style) {
     super()
     this.name = 'system-head-layout'
+
     this.head = head
     this.style = style
+
     this.setBracesLayouts()
+
     this.partNamesLayouts = head.partHeads.map(partHead => {
       const text = head.nameType === 'full' ? partHead.partName :
                                               partHead.abbreviation
@@ -39,7 +42,11 @@ export default class SystemHeadLayout extends AbstractLayout {
   setWidth() {
     const { partNamePaddingRight } = this.style.system
     this.width = max(this.partNamesLayouts.map(layout => layout.width))
-    if (this.width) this.width += partNamePaddingRight
+
+    if (this.width) {
+      this.width += partNamePaddingRight
+    }
+
     if (this.bracesLayouts) {
       const { bracePaddingRight, braceWidth } = this.style.systemHead
       this.width += bracePaddingRight + braceWidth
@@ -62,6 +69,7 @@ export default class SystemHeadLayout extends AbstractLayout {
 
     const cellsBys = this.staves.by0s.map((by0, s) => y + by0)
     let pnX2 = x2 - this.style.system.partNamePaddingRight
+
     if (this.bracesLayouts) {
       const { bracePaddingRight, braceWidth } = this.style.systemHead
       pnX2 -= bracePaddingRight + braceWidth
@@ -69,12 +77,14 @@ export default class SystemHeadLayout extends AbstractLayout {
 
     const { partsToCellsIndices } = this.staves
     const { lineHeight } = this.style.bar
+
     this.partNamesLayouts.forEach((layout, p) => {
       const cellsIndices = partsToCellsIndices[p]
       const y1 = cellsBys[cellsIndices[0]] - lineHeight
       const y2 = cellsBys[lastItem(cellsIndices)]
       layout.position = { x2: pnX2, cy: (y1 + y2) / 2 }
     })
+
     if (this.bracesLayouts) {
       this.setBracesHeight()
       this.bracesLayouts.forEach(layout => {
@@ -87,7 +97,9 @@ export default class SystemHeadLayout extends AbstractLayout {
 
   toJSON() {
     const { partNamesLayouts, bracesLayouts } = this
-    return { ...super.toJSON(), partNamesLayouts, bracesLayouts }
+    return { 
+      ...super.toJSON(), partNamesLayouts, bracesLayouts 
+    }
   }
 }
 
