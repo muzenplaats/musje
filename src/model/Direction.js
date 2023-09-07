@@ -14,6 +14,7 @@ export default class Direction {
       this.parse(new Lexer(direction))
     } else {
       this.placement = direction.placement
+
       const { words, wedge, dynamics } = direction
       if (words) this.words = words
       if (wedge) this.wedge = wedge
@@ -49,6 +50,7 @@ export default class Direction {
     const { placement, words, wedge, dynamics } = this
 
     strs.push(placement === 'above' ? '/' : '\\')
+
     if (words) strs.push(words)
     if (wedge) strs.push(`wedge(${wedge})`)
     if (dynamics) strs.push(dynamics)

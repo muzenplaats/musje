@@ -21,11 +21,26 @@ export default class Chord extends PlayStopHandleInterface {
     } else {
       this.pitches = chord.pitches.map(pitch => new Pitch(pitch))
       this.duration = new Duration(chord.duration)
-      if (tie) this.tie = new Tie(tie)
-      if (beginSlurs) this.beginSlurs = beginSlurs.map(slur => new Slur(slur))
-      if (endSlurs) this.endSlurs = endSlurs.map(slur => new Slur(slur))
-      if (tuplet) this.tuplet = tuplet
-      if (lyrics) this.lyrics = lyrics.map(lyric => new Lyric(lyric))
+      
+      if (tie) {
+        this.tie = new Tie(tie)
+      }
+
+      if (beginSlurs) {
+        this.beginSlurs = beginSlurs.map(slur => new Slur(slur))
+      }
+
+      if (endSlurs) {
+        this.endSlurs = endSlurs.map(slur => new Slur(slur))
+      }
+
+      if (tuplet) {
+        this.tuplet = tuplet
+      }
+
+      if (lyrics) {
+        this.lyrics = lyrics.map(lyric => new Lyric(lyric))
+      }
     }
   }
 
@@ -61,6 +76,7 @@ export default class Chord extends PlayStopHandleInterface {
     }
 
     if (lexer.is('~')) this.tie = new Tie(lexer)
+
     while (lexer.is(')')) {
       this.endSlurs = this.endSlurs || []
       this.endSlurs.push(new Slur(lexer))
@@ -90,10 +106,13 @@ export default class Chord extends PlayStopHandleInterface {
     const { beginSlurs, endSlurs, tuplet, duration, tie } = this
 
     if (beginSlurs) strs.push(beginSlurs.join(''))
+
     if (tuplet && tuplet.type === 'begin') {
       strs.push(`[${duration.modification.actual}:`)
     }
+
     strs.push(`<${this.pitches.join('')}>${this.duration}`)
+
     if (tuplet && tuplet.type === 'end') strs.push(':]')
     if (endSlurs) strs.push(endSlurs.join(''))
     if (tie) strs.push(this.tie)

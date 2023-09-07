@@ -18,7 +18,11 @@ export default class PitchLayout extends AbstractLayout {
     this.stepLayout = new StepLayout(step, style)
     this.accidentalLayout = new AccidentalLayout(accidental, style)
     this.octavesLayout = new OctavesLayout(octave, style)
-    if (tie) this.tieLayout = new TieLayout(tie, style)
+
+    if (tie) {
+      this.tieLayout = new TieLayout(tie, style)
+    }
+
     this.tieMode = style.chord.tieMode
 
     this.setSize()
@@ -56,13 +60,20 @@ export default class PitchLayout extends AbstractLayout {
     const { cx: scx, y: sy } = this.stepLayout
 
     if (accidental) {
-      this.accidentalLayout.position = { x, y2: sy2 - lift }
+      this.accidentalLayout.position = { 
+        x, 
+        y2: sy2 - lift 
+      }
     }
 
     if (octave) {
-      const opos = octave > 0 ? { cx: scx, y2: sy - stepOctaveSep }
-                              : { cx: scx, y: sy2 + stepOctaveSep }
-      this.octavesLayout.position = opos
+      this.octavesLayout.position = octave > 0 ? { 
+        cx: scx, 
+        y2: sy - stepOctaveSep 
+      } : { 
+        cx: scx, 
+        y: sy2 + stepOctaveSep 
+      }
     }
 
     if (tie) {
@@ -73,6 +84,7 @@ export default class PitchLayout extends AbstractLayout {
 
   toJSON() {
     const { stepLayout, accidentalLayout, octavesLayout, tieLayout } = this
+
     return { ...super.toJSON(),
              stepLayout, accidentalLayout, octavesLayout, tieLayout }
   }
@@ -92,7 +104,10 @@ class AccidentalLayout extends AbstractLayout {
     this.name = 'accidental-layout'
     Object.assign(this, style.accidentalFont)
     this.char = ACCIDENTAL_FONT_MAP[accidental]
-    if (this.accidental === 'bb') this.dx = style.accidentalFont.dx * 0.66
+
+    if (this.accidental === 'bb') {
+      this.dx = style.accidentalFont.dx * 0.66
+    }
   }
 }
 
@@ -123,8 +138,10 @@ class OctavesLayout extends AbstractLayout {
   }
 
   toJSON() {
+    const { layouts } = this
+
     return { 
-      ...super.toJSON(), layouts: this.layouts 
+      ...super.toJSON(), layouts
     }
   }
 }

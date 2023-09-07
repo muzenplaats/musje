@@ -21,8 +21,10 @@ const scoresUrls = (function () {
    '021', '022', '023', '024', '025', '026', '027', '028', '029', '030', 
    '031', '032'
   ]
+
   return fnames.map(fname => `scores/${fname}.musje`)
 }())
+
 
 export default function appElement() {
   const data = el.setData({
@@ -32,25 +34,31 @@ export default function appElement() {
       get() {
         // return new Score(this.scoreStr)
         let score
+
         try {
           score = new Score(this.scoreStr); this.error = ''
           // console.log('score', score)
-// console.log('part2,staff1,cells', score.body.parts[1].staves[0].cells)
         } catch (e) {
           score = new Score(); this.error = e //.stack
         }
+
+        // Tmp
         score.addStyle(`
           score {
             width: 800px
           }
         `)
+
         return score
       }
     },
+
     // scoreLayout: { get() { return new ScoreLayout(this.score) } },
+
     info: { get() { return this.score } },
     error: '',
     scoreElement: { el() { return this.score.render() } },
+
     // scoreJsonElement: { el() { return jsonElement('score', this.score) } },
     // scoreLayoutJsonElement: {
     //   el() { return jsonElement('scoreLayout', this.scoreLayout) }
@@ -74,15 +82,18 @@ export default function appElement() {
       el('span', scoresUrls.map((url, i) => {
         return el('button', { click() { loadScore(url); data.url = url } }, i + 1)
       })), ' ',
+
       el('button', { click: () => data.score.play() }, '>'),
       el('button', { click: () => data.score.pause() }, '||'),
       el('button', { click: () => data.score.stop() }, '[]'),
       el('span', { style: 'padding: 3px; color: gray;' }, data.$url),
 
       el('pre', { style: 'color: #d53' }, data.$error),
+
       el('pre', {
         style: 'border: 1px solid #ccc; padding: 5px; width: 100%; background-color: #eee; white-space: pre-wrap'
       }, data.$info),
+
       // el('div', data.$scoreJsonElement)
     ]),
 

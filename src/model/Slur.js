@@ -22,7 +22,9 @@ export default class Slur extends PlayStopHandleInterface {
     lexer.token('paran', lexeme => { this.value = lexeme })
   }
 
-  toString() { return this.value }
+  toString() { 
+    return this.value 
+  }
 
   toJSON() {
     const { value } = this

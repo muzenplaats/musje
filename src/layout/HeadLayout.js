@@ -8,6 +8,7 @@ export default class HeadLayout extends AbstractLayout {
 
     this.head = head
     this.style = style
+
     const { title, subtitle, composer, arranger, lyricist } = head
 
     if (title) {
@@ -33,15 +34,36 @@ export default class HeadLayout extends AbstractLayout {
     const { title, subtitle, composer, lyricist, /*arranger*/ } = this.head
     const { width: scoreW, marginLeft, marginRight } = this.style.score
     const { titleSubtitleSep, titleCreatorSep, creatorsSep } = this.style.head
+
     let height = 0
 
-    if (title) height += this.titleLayout.height
-    if (title && subtitle) height += titleSubtitleSep
-    if (subtitle) height += this.subtitleLayout.height
-    if ((title || subtitle) && (composer || lyricist)) height += titleCreatorSep
-    if (composer) height += this.composerLayout.height
-    if (composer && lyricist) height += creatorsSep
-    if (lyricist) height += this.lyricistLayout.height
+    if (title) {
+      height += this.titleLayout.height
+    }
+    
+    if (title && subtitle) {
+      height += titleSubtitleSep
+    }
+
+    if (subtitle) {
+      height += this.subtitleLayout.height
+    }
+
+    if ((title || subtitle) && (composer || lyricist)) {
+      height += titleCreatorSep
+    }
+
+    if (composer) {
+      height += this.composerLayout.height
+    }
+
+    if (composer && lyricist) {
+      height += creatorsSep
+    }
+
+    if (lyricist) {
+      height += this.lyricistLayout.height
+    }
 
     this.width = scoreW - marginLeft - marginRight,
     this.height = height
@@ -62,28 +84,32 @@ export default class HeadLayout extends AbstractLayout {
 
     if (subtitle) {
       this.subtitleLayout.position = {
-        cx, y: title ? currY + titleSubtitleSep : y
+        cx, 
+        y: title ? currY + titleSubtitleSep : y
       }
       currY = this.subtitleLayout.y2
     }
 
     if (composer) {
       this.composerLayout.position = {
-        x2, y: currY > y ? currY + titleCreatorSep : y
+        x2, 
+        y: currY > y ? currY + titleCreatorSep : y
       }
       currY = this.composerLayout.y2
     }
 
     if (lyricist) {
       this.lyricistLayout.position = {
-        x2, y: composer ? currY + creatorsSep
-                        : (title || subtitle ? currY + titleCreatorSep : y)
+        x2, 
+        y: composer ? currY + creatorsSep :
+                      (title || subtitle ? currY + titleCreatorSep : y)
       }
     }
   }
 
   toJSON() {
     const { titleLayout, subtitleLayout, composerLayout } = this
+
     return { 
       ...super.toJSON(), titleLayout, subtitleLayout, composerLayout 
     }

@@ -46,8 +46,10 @@ export default class DurationLayout extends AbstractLayout {
       const { width, height } = this.linesLayout
       const dw = this.dotsLayout.width
       const dh = this.dotsLayout.height
+
       this.width = lw + this.style.durationLE2.lineDotSep + dw
       this.height = Math.max(lh, dh)
+
     } else {
       this.width = lw
       this.height = lh
@@ -79,6 +81,7 @@ export default class DurationLayout extends AbstractLayout {
     if (type < 4) {
       this.linesLayout.position = { x, cy }
       if (dots) this.dotsLayout.position = { x2, cy }
+
     } else {
       if (type > 4) this.beamsLayout.position = { x, y2 }
       if (dots) this.dotsLayout.position = { x2, y }
@@ -109,6 +112,7 @@ class LinesLayout extends AbstractLayout {
 
   setSize(type) {
     const { lineWidth, linesSep, lineHeight } = this.style.durationLE2
+
     this.width = type === 2 ? lineWidth : 3 * lineWidth + 2 * linesSep
     this.height = lineHeight
   }
@@ -159,7 +163,8 @@ class BeamsLayout extends AbstractLayout {
   }
 
   toJSON() {
-    return { ...super.toJSON(), layouts: this.layouts }
+    const { layouts } = this
+    return { ...super.toJSON(), layouts }
   }
 }
 
@@ -176,12 +181,17 @@ class DotsLayout extends AbstractLayout {
   setDotSize(type) {
     const { durationGE4: d4, durationLE2: d2 } = this.style
     const sz = type >= 4 ? d4.dotSize : d2.dotSize
-    this.dotSize = { width: sz, height: sz, r: sz / 2 }
+
+    this.dotSize = { 
+      width: sz, 
+      height: sz, r: sz / 2 
+    }
   }
 
   setSize(type, dots) {
     const { durationGE4: d4, durationLE2: d2 } = this.style
     const calcWidth = dsty => dots * dsty.dotSize + (dots - 1) * dsty.dotsSep
+
     this.width = type >= 4 ? calcWidth(d4) : calcWidth(d2)
     this.height = this.dotSize.height
   }
@@ -197,6 +207,7 @@ class DotsLayout extends AbstractLayout {
       this.layouts = range(dots).map(n => new Layout({
         x2: x2 - n * (this.dotSize.width + dotsSep), y
       }, this.dotSize))
+
     } else {
       const { dotsSep } = this.style.durationLE2
       const { x2, cy } = this
@@ -208,8 +219,9 @@ class DotsLayout extends AbstractLayout {
   }
 
   toJSON() {
+    const { layouts } = this
     return { 
-      ...super.toJSON(), layouts: this.layouts 
+      ...super.toJSON(), layouts
     }
   }
 }

@@ -84,7 +84,10 @@ export default class Cell {
 
     const setAlter = pitch => {
       const { step, accidental } = pitch
-      if (accidental) currAccidental[step] = accidental
+
+      if (accidental) {
+        currAccidental[step] = accidental
+      }
 
       pitch.alter = ACCIDENTAL_TO_ALTER[currAccidental[step]]
     }
@@ -142,10 +145,9 @@ export default class Cell {
     const { data } = this
 
     if (data.length) {
-      this.rightBar = lastItem(data).name === 'bar' ?
-                      data.pop() : new Bar('|')
-      this.leftBar = data.length === 0 || data[0].name !== 'bar' ?
-                     new Bar('|') : data.shift()
+      this.rightBar = lastItem(data).name === 'bar' ? data.pop() : new Bar('|')
+      this.leftBar = data.length === 0 || data[0].name !== 'bar' ? new Bar('|') : 
+                                                                   data.shift()
     } else {
       this.leftBar = new Bar('|')
       this.rightBar = new Bar('|')
@@ -163,21 +165,29 @@ export default class Cell {
       if (dt.name === 'dummy') return
 
       const { duration } = dt
-      if (!duration || duration.type < 8) return data.push(dt)
+
+      if (!duration || duration.type < 8) {
+        return data.push(dt)
+      }
+
       const { beams } = duration
+
       const isEnd = () => {
         return !beams.some(b => b.type === 'begin' || b.type === 'continue')
       }
+
       if (beams.some(beam => beam.type !== 'single')) {
         beamed.push(dt)
       } else {
         data.push(dt)
       }
+
       if (beamed.length > 0 && isEnd()) {
         data.push(beamed.join(''))
         beamed.length = 0
       }
     })
+
     return data.join(' ')
   }
 

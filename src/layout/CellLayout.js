@@ -40,6 +40,7 @@ export default class CellLayout extends AbstractLayout {
   addShownLeftBar() {
     const { cell } = this
     let { value } = cell.leftBar
+
     value = CONVERT_LEFT_BAR[value]
     cell.shownLeftBar = new Bar(value)
     this.shownLeftBarLayout = new BarLayout(cell.shownLeftBar, this.style)
@@ -49,6 +50,7 @@ export default class CellLayout extends AbstractLayout {
   addShownRightBar() {
     const { cell } = this
     let { value } = cell.rightBar
+
     value = CONVERT_RIGHT_BAR[value]
     cell.shownRightBar = new Bar(value)
     this.shownRightBarLayout = new BarLayout(cell.shownRightBar, this.style)
@@ -65,12 +67,15 @@ export default class CellLayout extends AbstractLayout {
                     (shownRightBarLayout ? shownRightBarLayout.width :
                                      this.rightBarLayout.width / 2)
 
-    if (!this.width || this.width < this.minWidth) this.width = this.minWidth
+    if (!this.width || this.width < this.minWidth) {
+      this.width = this.minWidth
+    }
   }
 
   reflow(width) {
     const dw = width - this.width
     // console.log('reflow cell', dw)
+
     this.width = width
     this.dataLayout.width += dw
   }
@@ -100,7 +105,10 @@ export default class CellLayout extends AbstractLayout {
 
   toJSON() {
     const { dataLayout, leftBarLayout, rightBarLayout } = this
-    return { ...super.toJSON(), dataLayout, leftBarLayout, rightBarLayout }
+
+    return { 
+      ...super.toJSON(), dataLayout, leftBarLayout, rightBarLayout 
+    }
   }
 }
 
@@ -138,6 +146,7 @@ class DataLayout extends AbstractLayout {
   setMinWidth() {
     const firstStick = this.sticks[0]
     const lastStick = lastItem(this.sticks)
+
     this.minWidth = firstStick.dx + lastStick.x + lastStick.dx2
     this.width = this.minWidth
   }

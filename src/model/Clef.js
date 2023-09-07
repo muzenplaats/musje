@@ -18,7 +18,10 @@ export default class Clef {
 
   }
 
-  toString() { return `clef(${this.sign}${this.line})` }
+  toString() { 
+    return `clef(${this.sign}${this.line})`
+  }
+
   toJSON() {
     const { sign, line } = this
     return { sign, line }

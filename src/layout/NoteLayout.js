@@ -38,9 +38,11 @@ export default class NoteLayout extends AbstractLayout {
     if (lyrics) {
       this.lyricsLayouts = lyrics.map(lyric => {
         const textLayout = new TextLayout(lyric.text, style.lyricsFont)
+
         textLayout.lyric =lyric
         lyric.layout = textLayout
         textLayout.dx = textLayout.width / 2
+
         return textLayout
       })
     }
@@ -95,10 +97,8 @@ export default class NoteLayout extends AbstractLayout {
     const { stepFont } = this.style
     const { durationLayout } = this
 
-    this.width = pl.width + (dots ?
-                 durationLayout.width - stepFont.width : 0)
-    this.height = pl.height + pitchBeamSep +
-                  durationLayout.beamsLayout.height
+    this.width = pl.width + (dots ? durationLayout.width - stepFont.width : 0)
+    this.height = pl.height + pitchBeamSep + durationLayout.beamsLayout.height
   }
 
   set position(pos) {
@@ -127,13 +127,25 @@ export default class NoteLayout extends AbstractLayout {
 
     if (tie || tuplet || beginSlurs || endSlurs) {
       const { cx: x, y } = this.pitchLayout.stepLayout
-      if (tie) this.tieLayout.position = { x, y }
-      if (tuplet) this.tupletLayout.position = { x, y: this.y }
-      if (beginSlurs) {
-        this.beginSlursLayouts.forEach(layout => { layout.position = { x, y } })
+
+      if (tie) {
+        this.tieLayout.position = { x, y }
       }
+
+      if (tuplet) {
+        this.tupletLayout.position = { x, y: this.y }
+      }
+
+      if (beginSlurs) {
+        this.beginSlursLayouts.forEach(layout => { 
+          layout.position = { x, y } 
+        })
+      }
+
       if (endSlurs) {
-        this.endSlursLayouts.forEach(layout => { layout.position = { x, y } })
+        this.endSlursLayouts.forEach(layout => { 
+          layout.position = { x, y } 
+        })
       }
     }
 
@@ -143,13 +155,17 @@ export default class NoteLayout extends AbstractLayout {
       const by0 = this.by + dataLyricSep + dy
 
       this.lyricsLayouts.forEach((layout, l) => {
-        layout.position = { cx: this.bx, by: by0 + (lyricsVSep + height) * l }
+        layout.position = { 
+          cx: this.bx, 
+          by: by0 + (lyricsVSep + height) * l 
+        }
       })
     }
   }
 
   toJSON() {
     const { pitchLayout, durationLayout } = this
+
     return { 
       ...super.toJSON(), pitchLayout, durationLayout 
     }

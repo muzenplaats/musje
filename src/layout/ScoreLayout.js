@@ -22,8 +22,7 @@ export default class ScoreLayout extends AbstractLayout {
     const bh = this.bodyLayout.height
 
     this.width = width
-    this.height = marginTop + marginBottom + hh + bh +
-                  (hh && bh ? headBodySep : 0)
+    this.height = marginTop + marginBottom + hh + bh + (hh && bh ? headBodySep : 0)
   }
 
   set position(pos) {
@@ -32,7 +31,12 @@ export default class ScoreLayout extends AbstractLayout {
     const hh = this.headLayout.height
 
     this.headLayout.position = { x, y }
-    this.bodyLayout.position = { x, y: y + hh + (hh ? headBodySep : 0) }
+
+    this.bodyLayout.position = { 
+      x, 
+      y: y + hh + (hh ? headBodySep : 0) 
+    }
+
     this.innerLayout.position = { x, y }
   }
 

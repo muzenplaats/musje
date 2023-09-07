@@ -38,8 +38,13 @@ export default class BodyLayout extends AbstractLayout {
       nameType,
       partHeads: this.parts.map(part => part.head)
     }
+
     const measure = this.measures[0]
-    if (measure) head.partsToCellsIndices = measure.partsToCellsIndices
+
+    if (measure) {
+      head.partsToCellsIndices = measure.partsToCellsIndices
+    }
+
     return new SystemHeadLayout(head, this.style)
   }
 
@@ -62,6 +67,7 @@ export default class BodyLayout extends AbstractLayout {
       const { measures } = line
       const systemLayout = new SystemLayout(headLayout, measures, this.style)
       systemLayout.width = this.width
+
       this.systemsLayouts.push(systemLayout)
     })
 
@@ -79,12 +85,14 @@ export default class BodyLayout extends AbstractLayout {
     const systemWidth = this.width
     const fullHeadWidth = this.createSystemHeadLayout('full').width
     const abbrHeadWidth = this.createSystemHeadLayout('abbreviation').width
+
     const data = new FlowData({
       measures: this.measures,
       fhsw: systemWidth - fullHeadWidth,
       ahsw: systemWidth - abbrHeadWidth,
       style: this.style
     })
+
     const { measureMinWidths } = data
 
     const sysLengths = []
@@ -92,6 +100,7 @@ export default class BodyLayout extends AbstractLayout {
 
     measureMinWidths.forEach((minW, m) => {
       currW += minW
+
       if (currW === systemWidth) {
         sysLengths.push(m + 1)
         currW = abbrHeadWidth
@@ -127,6 +136,7 @@ export default class BodyLayout extends AbstractLayout {
   equalizeSystems(flowData) {
     const length = Infinity   // for future usage
     const sections = flowData.obstacleSectioning()
+
     sections.forEach(section => section.equalReflow(length))
     flowData.mergeSections(sections)
     flowData.lines.forEach(line => {
@@ -145,19 +155,27 @@ export default class BodyLayout extends AbstractLayout {
           }
 
           cellLayout.dataLayout.layouts.forEach(layout => {
-            const { tieLayout, beginSlursLayouts, endSlursLayouts,
-                    chord } = layout
+            const { tieLayout, beginSlursLayouts, endSlursLayouts, chord } = layout
 
-            if (tieLayout) assignSys(tieLayout)
+            if (tieLayout) {
+              assignSys(tieLayout)
+            }
+
             if (beginSlursLayouts) {
               beginSlursLayouts.forEach(layout => assignSys(layout))
             }
+
             if (endSlursLayouts) {
               endSlursLayouts.forEach(layout => assignSys(layout))
             }
-            if (chord) layout.pitchesLayout.layouts.forEach(playout => {
-              if (playout.tieLayout) assignSys(playout.tieLayout)
-            })
+
+            if (chord) {
+              layout.pitchesLayout.layouts.forEach(playout => {
+                if (playout.tieLayout) {
+                  assignSys(playout.tieLayout)
+                }
+              })
+            }
           })
         })
       })
@@ -170,7 +188,10 @@ export default class BodyLayout extends AbstractLayout {
         measureLayout.cellsLayouts.forEach(cellLayout => {
           cellLayout.dataLayout.layouts.forEach(layout => {
             const { lyricsLayouts } = layout
-            if (lyricsLayouts) lyricsLayouts.forEach(lo => { lo.sys = s })
+
+            if (lyricsLayouts) {
+              lyricsLayouts.forEach(lo => { lo.sys = s })
+            }
           })
         })
       })
@@ -190,6 +211,7 @@ export default class BodyLayout extends AbstractLayout {
 
   toJSON() {
     const { systemsLayouts } = this
+
     return { 
       ...super.toJSON(), systemsLayouts 
     }

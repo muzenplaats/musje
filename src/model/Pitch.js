@@ -33,6 +33,7 @@ export default class Pitch extends PlayStopHandleInterface {
   parse(lexer) {
     lexer.optional('accidental', lexeme => { this.accidental = lexeme })
     lexer.token('step', lexeme => { this.step = +lexeme })
+
     lexer.optional('octave', lexeme => {
       this.octave = lexeme[0] === `'` ? lexeme.length :
                     lexeme[0] === ',' ? -lexeme.length : 0

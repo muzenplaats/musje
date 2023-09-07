@@ -59,6 +59,7 @@ export default class PartHead {
     if (partName) strs.push(partName)
     if (abbreviation) strs.push(`(${abbreviation})`)
     // if (strs.length > 1) strs[strs.length - 1] += ':'
+
     if (midi) {
       strs[strs.length - 1] += ':'
       const { channel, program, pan }  = midi

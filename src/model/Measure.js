@@ -13,19 +13,27 @@ export default class Measure {
 
   setPartsToCellsIndices() {
     this.partsToCellsIndices = range(this.parts.length).map(() => [])
-    this.eachCell((cell, c, s, p) => this.partsToCellsIndices[p].push(c))
+
+    this.eachCell((cell, c, s, p) => {
+      this.partsToCellsIndices[p].push(c)
+    })
   }
 
   eachCell(cb) {
     let c = 0
     this.parts.forEach((part, p) => {
-      part.staves.forEach((cell, s) => { cb(cell, c, s, p); c++ })
+      part.staves.forEach((cell, s) => { 
+        cb(cell, c, s, p)
+        c++ 
+      })
     })
   }
 
   mapCell(cb) {
     const result = []
-    this.eachCell((cell, c, s, p) => result.push(cb(cell, c, s, p)))
+    this.eachCell((cell, c, s, p) => {
+      result.push(cb(cell, c, s, p))
+    })
     return result
   }
 

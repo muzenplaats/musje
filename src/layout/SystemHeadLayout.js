@@ -82,7 +82,11 @@ export default class SystemHeadLayout extends AbstractLayout {
       const cellsIndices = partsToCellsIndices[p]
       const y1 = cellsBys[cellsIndices[0]] - lineHeight
       const y2 = cellsBys[lastItem(cellsIndices)]
-      layout.position = { x2: pnX2, cy: (y1 + y2) / 2 }
+
+      layout.position = { 
+        x2: pnX2, 
+        cy: (y1 + y2) / 2 
+      }
     })
 
     if (this.bracesLayouts) {
@@ -97,6 +101,7 @@ export default class SystemHeadLayout extends AbstractLayout {
 
   toJSON() {
     const { partNamesLayouts, bracesLayouts } = this
+
     return { 
       ...super.toJSON(), partNamesLayouts, bracesLayouts 
     }

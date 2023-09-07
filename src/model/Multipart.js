@@ -24,6 +24,7 @@ export default class Multipart {
 
     while(!lexer.eof) {
       this.layers.push(new Layer(lexer))
+
       if (lexer.is('>>')) {
         break
       } else {

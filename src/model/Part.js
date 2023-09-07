@@ -37,7 +37,9 @@ export default class Part {
     lexer.skipWhite()
   }
 
-  stavesStr() { return this.staves.join('\n\n--\n') }
+  stavesStr() { 
+    return this.staves.join('\n\n--\n') 
+  }
 
   singlePartToString() {
     return ('' + this.head) === '==' ? this.stavesStr() : this.toString()

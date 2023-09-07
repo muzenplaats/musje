@@ -15,8 +15,10 @@ export default class Note extends PlayStopHandleInterface {
 
     if (note.name === 'lexer') {
       this.parse(note)
+
     } else if (typeof note === 'string') {
       this.parse(new Lexer(note))
+
     } else {
       const { pitch, duration, articulations, tie, beginSlurs, endSlurs, tuplet, lyrics } = note
       this.pitch = new Pitch(pitch)

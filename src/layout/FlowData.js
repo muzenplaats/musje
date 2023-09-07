@@ -11,16 +11,20 @@ class FlowDataSectionInterface {
 export default class FlowData extends FlowDataSectionInterface {
   constructor({ measures, fhsw, ahsw, style }) {
     super()
+
     this.measures = measures
     this.measureMinWidths = measures
           .map(measure => new MeasureLayout(measure, style))
           .map(MeasureLayout => MeasureLayout.minWidth)
     this.fhsw = fhsw
     this.ahsw = ahsw
+
     this.lines = []
   }
 
-  get lens() { return this.lines.map(line => line.len)}
+  get lens() { 
+    return this.lines.map(line => line.len)
+  }
 
   set lens(list) {
     if (!list.length || list[0] === 0) return
@@ -43,11 +47,17 @@ export default class FlowData extends FlowDataSectionInterface {
     let begin = 0, end, prevIsObstacle = false
 
     this.lines.forEach((line, sys) => {
-      if (prevIsObstacle) { begin = sys; prevIsObstacle = false; return }
+      if (prevIsObstacle) { 
+        begin = sys
+        prevIsObstacle = false
+        return 
+      }
+
       if (line.isObstacle) {
         end = sys
         sections.push(new Section(this.lines.slice(begin, end)))
       }
+
       prevIsObstacle = line.isObstacle
     })
 
@@ -65,8 +75,11 @@ export default class FlowData extends FlowDataSectionInterface {
     this.lines.forEach(line => {
       if (line.isObstacle) {
         newLines.push(line)
+
         const section = sections.shift()
-        if (section) newLines = newLines.concat(section.lines)
+        if (section) {
+          newLines = newLines.concat(section.lines)
+        }
       }
     })
 
@@ -76,10 +89,12 @@ export default class FlowData extends FlowDataSectionInterface {
   set(abbr, name, lens) {
     name = name || abbr
     if (abbr === 'ws') {
-      this.lines.forEach(line => { line.ws = line.mws.slice() }); return
+      this.lines.forEach(line => { line.ws = line.mws.slice() })
+      return
     }
 
-    let begin = 0, end
+    let begin = 0
+    let end
 
     (lens || this.lens).forEach((len, l) => {
       end = begin + len
@@ -94,6 +109,7 @@ export default class FlowData extends FlowDataSectionInterface {
         line.isObstacle = false
       } else {
         const prevLine = this.lines[sys - 1]
+
         if (prevLine.isObstacle) {
           line.isObstacle = false
         } else {
@@ -118,11 +134,18 @@ class FlowDataLine {
     const { sw } = this
     const idxWs = this.ws.map((w, i) => ({ i, w }))
     const sumWs = () => sum(idxWs.map(idxW => idxW.w))
+
     const setGroupWidth = i => {
       const restWith = sum(idxWs.slice(i + 1).map(idxW => idxW.w).concat(0))
       let width = (sw - restWith) / (i + 1)
-      if (i < idxWs.length - 1) width = Math.min(width, idxWs[i + 1].w)
-      range(i + 1).forEach(n => { idxWs[n].w = width })
+
+      if (i < idxWs.length - 1) {
+        width = Math.min(width, idxWs[i + 1].w)
+      }
+
+      range(i + 1).forEach(n => {
+        idxWs[n].w = width
+      })
     }
 
     idxWs.sort((a, b) => a.w - b.w)
@@ -145,8 +168,7 @@ class Section extends FlowDataSectionInterface {
 
   balanceReflow() {
     const { lines } = this
-    const flowOneDown = (tmpMwss, idx) =>
-                              tmpMwss[idx + 1].unshift(tmpMwss[idx].pop())
+    const flowOneDown = (tmpMwss, idx) => tmpMwss[idx + 1].unshift(tmpMwss[idx].pop())
     // console.log(lines.map(line => line.len))
 
     // Flow down from the maxLenLine
@@ -158,6 +180,7 @@ class Section extends FlowDataSectionInterface {
 
       for (let i = mlIdx; i < lines.length - 1; i++){
         flowOneDown(tmpMwss, i)
+ 
         while (tmpMwss.length > 1 && sum(tmpMwss[i]) > lines[i].sw) {
           flowOneDown(tmpMwss, i)
         }
@@ -186,7 +209,10 @@ class Section extends FlowDataSectionInterface {
     len = Math.min(len, maxLen, avgLen)
 
     // Note: the section lines might grow..
-    let i = 0, line, nextLine
+    let i = 0
+    let line
+    let nextLine
+
     const updateLine = () => {
       line = lines[i], nextLine = lines[i + 1]
       if (line.len > len && !nextLine) {
@@ -194,6 +220,7 @@ class Section extends FlowDataSectionInterface {
         lines.push(nextLine)
       }
     }
+
     const flowOneDown = line => {
       nextLine.mws.unshift(line.mws.pop())
       nextLine.ws.unshift(line.ws.pop())
@@ -202,7 +229,9 @@ class Section extends FlowDataSectionInterface {
 
     updateLine()
     while (nextLine) {
-      while (line.len > len) flowOneDown(line)
+      while (line.len > len) {
+        flowOneDown(line)
+      }
       i++
       updateLine()
     }

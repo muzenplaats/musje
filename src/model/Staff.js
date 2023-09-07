@@ -61,7 +61,9 @@ export default class Staff {
     const { cells } = this
 
     cells.forEach((cell, c) => {
-      if (c > 0) cell.leftBar.value = cells[c - 1].rightBar.value
+      if (c > 0) {
+        cell.leftBar.value = cells[c - 1].rightBar.value
+      }
     })
   }
 
@@ -105,7 +107,8 @@ export default class Staff {
     this.cells.forEach(cell => {
       const dumpGroup = () => {
         if (group.length) { 
-          groups.push(group); group = [] 
+          groups.push(group)
+          group = [] 
         }
       }
 
@@ -194,11 +197,19 @@ export default class Staff {
             curr.tie.cell = cell
             curr.tie.note = dt
             curr.tie.nextNote = ndt
-            if (next.name === 'pitch') curr.tie.nextPitch = next
+
+            if (next.name === 'pitch') {
+              curr.tie.nextPitch = next
+            }
+
             curr.tie.next = next.tie
             next.tie.note = ndt
             next.tie.prevNote = dt
-            if (curr.name === 'pitch') next.tie.prevPitch = curr
+            
+            if (curr.name === 'pitch') {
+              next.tie.prevPitch = curr
+            }
+
             next.tie.prev = curr.tie
 
 
@@ -244,8 +255,11 @@ export default class Staff {
                   break
                 case 'chord':   // chord-chord
                   const paires = getMatchedPitches(dt.pitches, ndt.pitches)
-                  paires.forEach(({ curr, next }) =>
-                                          linkTiePair(curr, next, dt, ndt))
+
+                  paires.forEach(({ curr, next }) => {
+                    linkTiePair(curr, next, dt, ndt)
+                  })
+
                   linkTiePair(dt, ndt, dt, ndt)
                   break
               }
@@ -381,12 +395,14 @@ export default class Staff {
               } else if (type === 'note') {
                 d = amount - 1; continue
               }
+
             } else if (instruction === 'forward') {
               if (type === 'measure') {
                 c += amount - 1; break
               } else if (type === 'note') {
                 d += amount; continue
               }
+
             } else if (instruction === 'backward') {
               if (type === 'measure') {
                 c -= amount + 1; break
@@ -396,18 +412,23 @@ export default class Staff {
             }
           }
 
-          if ((!inSlur || tmpOmitSlur) &&
-              (dt.name === 'note' || dt.name === 'chord')) {
+          if ((!inSlur || tmpOmitSlur) && (dt.name === 'note' || dt.name === 'chord')) {
             tmpOmitSlur = false
             const lyric = lyrics.list.shift()
+
             if (lyric) {
               dt.lyrics = dt.lyrics || []
               dt.lyrics[lineIndex] = lyric
             }
           }
 
-          if (dt.endSlurs) inSlur = false
-          if (dt.beginSlurs) inSlur = true
+          if (dt.endSlurs) {
+            inSlur = false
+          }
+
+          if (dt.beginSlurs) {
+            inSlur = true
+          }
         }
       }
     })
@@ -451,6 +472,7 @@ export default class Staff {
 
 const timeToDurQ = time => {
   const { beats, beatType } = time
+
   if (beatType === 8) {
     return beats % 3 === 0 ? 1.5 * Q : 0.5 * Q
   }
@@ -483,18 +505,15 @@ const hasMatchedPitch = (dt, ndt) => {
         case 'note':
           return ndt.pitch.midiNumber === dt.pitch.midiNumber
         case 'chord':
-          return ndt.pitches.some(pitch =>
-                                  pitch.midiNumber === dt.pitch.midiNumber)
+          return ndt.pitches.some(pitch => pitch.midiNumber === dt.pitch.midiNumber)
       }
     case 'chord':
       switch (ndt.name) {
         case 'note':
-          return dt.pitches.some(pitch =>
-                                 pitch.midiNumber === ndt.pitch.midiNumber)
+          return dt.pitches.some(pitch => pitch.midiNumber === ndt.pitch.midiNumber)
         case 'chord':
           return dt.pitches.some((pitch, p) => {
-            return ndt.pitches.some(npitch =>
-                                      pitch.midiNumber === npitch.midiNumber)
+            return ndt.pitches.some(npitch => pitch.midiNumber === npitch.midiNumber)
           })
       }
   }
@@ -502,7 +521,9 @@ const hasMatchedPitch = (dt, ndt) => {
 
 const getMatchedPitch = (pitches, pitch) => {
   for (let i = 0; i < pitches.length; i++) {
-    if (pitches[i].midiNumber === pitch.midiNumber) return pitches[i]
+    if (pitches[i].midiNumber === pitch.midiNumber) {
+      return pitches[i]
+    }
   }
 }
 
@@ -512,7 +533,10 @@ const getMatchedPitches = (pitches, npitches) => {
   pitches.forEach(pitch => {
     npitches.forEach(npitch => {
       if (pitch.midiNumber === npitch.midiNumber) {
-        result.push({ curr: pitch, next: npitch })
+        result.push({ 
+          curr: pitch, 
+          next: npitch 
+        })
       }
     })
   })

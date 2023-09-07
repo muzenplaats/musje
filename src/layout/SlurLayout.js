@@ -39,6 +39,7 @@ export default class SlurLayout extends AbstractLayout {
       const measureLayout = lastItem(this.systemLayout.measuresLayouts)
       const clo = measureLayout.cellsLayouts[this.c]
       const rightBarLayout = clo.shownRightBarLayout || clo.rightBarLayout
+
       x2 = rightBarLayout.x
       y2 = rightBarLayout.y
     }
@@ -52,8 +53,14 @@ export default class SlurLayout extends AbstractLayout {
   // Slur to previous system
   get prevEndPoints() {
     const { x: x1, y: y1 } = this
+
     if (!this.slur.prev) {
-      return { x1, y1, x2: x1 - 30, y2: y1 - 20 }
+      return {
+        x1, 
+        y1, 
+        x2: x1 - 30, 
+        y2: y1 - 20 
+      }
     }
 
     const measureLayout = this.systemLayout.measuresLayouts[0]
