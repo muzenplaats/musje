@@ -5,11 +5,6 @@ import Staff from './Staff'
 
 /**
  * Part := Part-Head? St
- * 
- * => Part {
- *   head: PartHead {},
- *   staves: Array[Staff {}, ...]
- * }
  **/
 export default class Part {
   constructor(part = { staves: [] }) {

@@ -25,7 +25,31 @@ export default class AbstractLayout {
   set by(n) { this.y = n - this.dy }
   get by() { return this.y + this.dy }
 
-  set position(pos) { Object.assign(this, pos) }
+  set width(w) { 
+    if (isNaN(w)) {
+      throw new TypeError(`In ${this.name}: height must be a number but ${w} is set.`)
+    }
+    this._width = w
+  }
+
+  get width() { return this._width }
+
+  set height(h) { 
+    if (isNaN(h)) {
+      throw new TypeError(`In ${this.name}: height must be a number but ${h} is set.`)
+    }
+    this._height = h 
+  }
+
+  get height() { return this._height }
+
+  set position(pos) {
+    Object.assign(this, pos) 
+
+    if (isNaN(this.x) || isNaN(this.y)) {
+      throw new TypeError(`position of ${this.name} must be numbers: { x: ${this.x}, y: ${this.y} }`)
+    }
+  }
 
   get wh() { return { width: this.width, height: this.height }}
   get xy() { return { x: this.x, y: this.y } }

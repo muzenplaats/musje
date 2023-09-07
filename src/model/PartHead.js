@@ -3,10 +3,6 @@ import Lexer from './Lexer'
 
 /**
  * PartHead := '==' part-name SS? words
- * => PartHead {
- *   partName: String,
- *   midi: {}
- * }
  **/
 export default class PartHead {
   constructor(head = {}) {

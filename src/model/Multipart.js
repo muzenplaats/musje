@@ -1,9 +1,6 @@
 import Lexer from './Lexer'
 import Layer from './Layer.js'
 
-// tmp
-import Duration from './Duration' 
-
 /**
  * Multipart := '<<' WS? Layer ('|' Layer) '>>'
  **/

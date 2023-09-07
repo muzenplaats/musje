@@ -4,14 +4,6 @@ import Lexer from './Lexer'
  * Head := (name value WS)*
  * name := 'title:' | 'subtitle:' | 'composer:' | 'lyricist:' | 'arranger:'
  * value := without-comment
- * => Head {
- *   title: String,
- *   subtitle: String,
- *   composer: String,
- *   lyricist: String,
- *   arranger: String,
- *   source: String
- * }
  **/
 export default class Head {
   constructor(head = {}) {

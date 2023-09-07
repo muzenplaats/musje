@@ -14,7 +14,7 @@ const ACCIDENTAL_TO_ALTER = { bb: -2, b: -1, n: 0, '': 0, '#': 1, '##': 2 }
 
 /**
  * Cell := (Bar WS?)? ((Time | Clef | Key |  Note | Rest |
- *                     Multipart | Chord | Direction) WS?) (Bar WS?)?
+ *                     Chord | Multipart | Direction) WS?) (Bar WS?)?
  **/
 export default class Cell {
   constructor(cell = { data: [] }) {

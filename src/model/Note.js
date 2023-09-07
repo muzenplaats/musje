@@ -26,7 +26,7 @@ export default class Note extends PlayStopHandleInterface {
       if (tie) this.tie = new Tie(tie)
       if (beginSlurs) this.beginSlurs = beginSlurs.map(slur => new Slur(slur))
       if (endSlurs) this.endSlurs = endSlurs.map(slur => new Slur(slur))
-      if (tuplet) this.tuplet = tuplet
+      if (tuplet) this.tuplet = new Tuplet(tuplet)
       if (lyrics) this.lyrics = lyrics.map(lyric => new Lyric(lyric))
     }
   }

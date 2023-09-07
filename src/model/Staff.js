@@ -6,7 +6,8 @@ import Lyrics from './Lyrics'
 import Dummy from './Dummy'
 
 /**
- * Staff := ('--' SS? NL)? WS? (Cell WS?)* Lyrics* 
+ * Staff := staff-head? WS? (Cell WS?)* Lyrics* 
+ * staff-head := '--' SS? NL
  **/
 export default class Staff {
   constructor(staff) {

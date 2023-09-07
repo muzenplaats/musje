@@ -8,12 +8,13 @@ export default class MultipartLayout extends AbstractLayout {
     this.multipart = multipart
     this.style = style
 
-    this.width = 50
-    this.height = 50
+    this.width = 60
+    this.height = 30
+    this.dx = 25
+    this.dy = 25
   }
 
   set position(pos) {
-    // super.position = pos
-    super.position = { x: 100, y: 100 }
+    super.position = pos
   }
 }

@@ -6,9 +6,6 @@ import { range } from '../utils/helpers'
 
 /**
  * Body := Part*
- * => Body {
- *   parts: Array[Part {}, Part {}, ...]
- * }
  **/
 export default class Body {
   constructor(body = { parts: [] }) {
@@ -33,7 +30,9 @@ export default class Body {
 
     do {
       part = new Part(lexer)
-      if (!part.isEmpty) this.parts.push(part)
+      if (!part.isEmpty) {
+        this.parts.push(part)
+      }
     } while (lexer.is('part-head'))
   }
 

@@ -114,7 +114,7 @@ class DataLayout extends AbstractLayout {
     // this.setMinWidth()
 
     // Tmp
-    this.width = this.minWidth
+    // this.width = this.minWidth
     this.setHeight()
   }
 
@@ -153,6 +153,7 @@ class DataLayout extends AbstractLayout {
   setHeight() {
     const dy = max(this.layouts.map(layout => layout.dy).concat(0))
     const dy2 = max(this.layouts.map(layout => layout.dy2).concat(0))
+
     this.height = dy + dy2
     this.dy = dy
   }

@@ -14,10 +14,6 @@ import scoreElement from '../view/scoreElement'
 
 /**
  * Score := WS? Head Body
- * => Score {
- *   head: Head {},
- *   body: Body {}
- * } 
  **/
 export default class Score {
   constructor(score = {}) {
