@@ -10,6 +10,7 @@ export default function multipartElement(multipartLayout) {
   return el.create('g', [
     box(multipartLayout, 'green'),
     // box(dataLayout, 'blue'),
+
     // dataLayout.layouts.map(layout => {
     //   // return box(layout, 'orange')
     //   if ('note' in layout) return noteElement(layout)

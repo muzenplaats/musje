@@ -18,8 +18,12 @@ export default function pitchElement(pitchLayout) {
   `
 
   const showTie = tieLayout => {
-    if (!tieLayout || tieMode === 'single') return false
+    if (!tieLayout || tieMode === 'single') {
+      return false
+    }
+
     const { tie } =  tieLayout
+
     return tie.type !== 'end' || tieLayout.showPrev
   }
 
@@ -27,9 +31,15 @@ export default function pitchElement(pitchLayout) {
 
   const setColor = color => {
     elements.step.style.fill = color
-    if (pitch.accidental) elements.accidental.style.fill = color
+
+    if (pitch.accidental) {
+      elements.accidental.style.fill = color
+    }
+
     if (pitch.octave) {
-      elements.octaves.forEach(element => { element.style.fill = color })
+      elements.octaves.forEach(element => { 
+        element.style.fill = color 
+      })
     }
   }
 
@@ -38,11 +48,14 @@ export default function pitchElement(pitchLayout) {
 
   return el.create('g', [
     // box(stepLayout, 'magenta'),
+
     el.assign(elements, 'step')
       .create('text', { ...stepLayout.cxby, style: sty1 }, pitch.step),
+
     pitch.accidental ?
       el.assign(elements, 'accidental')
         .create('text', { ...accidentalLayout.cxby, style: sty2 }, accidentalLayout.char) : [],
+
     pitch.octave ? octavesLayout.layouts.map(layout => {
       return el.push(elements, 'octaves')
                .create('circle', layout.circle)

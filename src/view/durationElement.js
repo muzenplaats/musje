@@ -9,12 +9,19 @@ export default function durationElement(durationLayout) {
   const elements = {}
 
   const setColor = color => {
-    if (type < 4) {
-      elements.lines.forEach(element => { element.style.fill = color })
-    } else if (elements.beams) {
-      elements.beams.forEach(element => { element.style.fill = color })
+    const setFillColor = element => {
+      element.style.fill = color
     }
-    if (dots) elements.dots.forEach(element => {element.style.fill = color })
+
+    if (type < 4) {
+      elements.lines.forEach(setFillColor)
+    } else if (elements.beams) {
+      elements.beams.forEach(setFillColor)
+    }
+
+    if (dots) {
+      elements.dots.forEach(setFillColor)
+    }
   }
 
   duration.onplay = () => setColor('#b5c')
@@ -31,11 +38,17 @@ export default function durationElement(durationLayout) {
 
     type > 4 ? flatten(beamsLayout.layouts.map(layout => {
       const { type: btype } = layout.beam
+
       if (btype === 'single' || btype === 'begin') {
         const rect = Object.assign({}, layout.rect)
-        if (btype === 'begin') rect.width = layout.beamedWidth
+
+        if (btype === 'begin') {
+          rect.width = layout.beamedWidth
+        }
+
         return el.push(elements, 'beams').create('rect', rect)
       }
+
       return []
     })) : [],
 

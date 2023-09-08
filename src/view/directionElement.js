@@ -5,10 +5,12 @@ export default function directionElement(directionLayout) {
   const { direction, textLayout } = directionLayout
   const { words, dynamics } = direction
 
-  const getStyle = ({ family, size }) => `
-    font-family: ${family}
-    font-size: ${size}
-  `
+  const getStyle = ({ family, size }) => {
+    return `
+      font-family: ${family}
+      font-size: ${size}
+    `
+  }
 
   return el.create('g', [
     // box(directionLayout, 'green'),

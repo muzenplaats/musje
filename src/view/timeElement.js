@@ -2,9 +2,11 @@ import el from '../utils/el'
 
 export default function timeElement(timeLayout) {
   const { time, beatsLayout, lineLayout, beatTypeLayout } = timeLayout
+
   const sty1 = `font-family: ${beatsLayout.family}
                 font-size: ${beatsLayout.size}
                 text-anchor: middle`
+
   const sty2 = `font-family: ${beatTypeLayout.family}
                 font-size: ${beatTypeLayout.size}
                 text-anchor: middle`

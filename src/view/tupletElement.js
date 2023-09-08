@@ -5,6 +5,7 @@ import pathD from '../math/pathD'
 export default function tupletElement(tupletLayout) {
   const { tuplet, textLayout, lift, strokeWidth, pitchTupletSep } = tupletLayout
   let { x1, y1, x2, y2 } = tupletLayout.endPoints
+
   const cx = (x1 + x2) / 2
   const halfTextWidth = textLayout.width / 2
   const textSep = 3 // tmp
@@ -44,7 +45,9 @@ export default function tupletElement(tupletLayout) {
   return el.create('g', [
     // box(curveLayout, 'orange'),
     // box(textLayout, 'orange'),
+
     pathEl,
+
     el.assign(elements, 'text').create('text', {
       ...textLayout.cxcy, style: getStyle(textLayout)
     }, textLayout.text)

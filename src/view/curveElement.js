@@ -5,12 +5,16 @@ import pathD from '../math/pathD'
 export default function curveElement(curveLayout) {
   const { tie, slur, lift, strokeWidth } = curveLayout
   let endPoints
+
+  // The curve can be a tie or a slur.
   if (tie) {
     endPoints = curveLayout.showPrev ? curveLayout.prevEndPoints :
                                        curveLayout.endPoints
   } else if (slur) {
-    endPoints = slur.value === '(' ? curveLayout.endPoints : curveLayout.prevEndPoints
+    endPoints = slur.value === '(' ? curveLayout.endPoints : 
+                                     curveLayout.prevEndPoints
   }
+
   const { x1, y1, x2, y2 } = endPoints
 
   const dx = x2 - x1
@@ -36,6 +40,7 @@ export default function curveElement(curveLayout) {
               .horiBy(-thinWidth)
               .curveTo(cx22, cy22, cx21, cy21, x1, y1)
               .close(),
+
     style: 'fill: black'
   })
 

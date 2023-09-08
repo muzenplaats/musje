@@ -5,12 +5,14 @@ import braceElement from './braceElement'
 export default function systemHeadElement(systemHeadLayout) {
   const { partNamesLayouts, bracesLayouts } = systemHeadLayout
 
-  const getStyle = layout => `
-    font-family: ${layout.family}
-    font-size: ${layout.size}
-    text-anchor: end
-    alignment-baseline: middle
-  `
+  const getStyle = layout => {
+    return `
+      font-family: ${layout.family}
+      font-size: ${layout.size}
+      text-anchor: end
+      alignment-baseline: middle
+    `
+  }
 
   return el.create('g', [
     // box(systemHeadLayout, 'green'),
@@ -21,6 +23,7 @@ export default function systemHeadElement(systemHeadLayout) {
         ...layout.x2cy, style: getStyle(layout)
       }, layout.text)
     }),
+
     bracesLayouts ? bracesLayouts.map(layout => braceElement(layout)) : []
   ])
 }

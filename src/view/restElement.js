@@ -12,6 +12,7 @@ export default function restElement(restLayout) {
 
   return el.create('g', [
     // box(restLayout, 'green'),
+
     el('text', { ...restLayout.zeroLayout.cxby, style }, 0),
     durationElement(durationLayout)
   ])
