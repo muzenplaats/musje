@@ -20,6 +20,7 @@ export default function cellElement(cellLayout) {
 
     dataLayout.layouts.map(layout => {
       // return box(layout, 'orange')
+
       if ('note' in layout) return noteElement(layout)
       if ('rest' in layout) return restElement(layout)
       if ('chord' in layout) return chordElement(layout)

@@ -45,11 +45,13 @@ export default class MeasureLayout extends AbstractLayout {
     const dataLayoutWidth = this.cellsLayouts[0].dataLayout.width
 
     reflowSticks(this.sticks, dataLayoutWidth)
+
     this.setCellsSticks()
   }
 
   set position(pos) {
     super.position = pos
+
     const { x, x2, y } = this
     const { stavesSep } = this.style.system
 
@@ -205,7 +207,7 @@ const makeEmptyStick = () => {
 }
 
 const makeCellSticks = cellLayout => {
-  const sticks = []
+  let sticks = []
   let currStick = makeEmptyStick()
 
   cellLayout.dataLayout.layouts.forEach(layout => {
@@ -234,13 +236,17 @@ const makeCellSticks = cellLayout => {
       }
 
     } else if (multipart) {
-      // Todo:
-
-      currStick.tcQ = multipart.tcQ
-      currStick.main = layout
-      sticks.push(currStick)
+      // Temp idea
+      sticks = sticks.concat(makeCellSticks(layout.layersLayouts[0]))
+      // sticks = sticks.concat(makeCellSticks(layout.layersLayouts[0]))
       currStick = makeEmptyStick()
 
+
+      // layout.layersLayouts.forEach(layerLayout => {
+      //   layerLayout.dataLayout.l        
+      // })
+
+      // layout.layersLayouts.forEach(makeCellSticks)  // layer is a subset of cell.
     }
   })
 
@@ -293,7 +299,7 @@ const setStickDx = (stick, dxName = 'dx') => {
 
     if (lyrics) {
       dx = max(lyrics.map(lyric => lyric[dxName]).concat(dx)
-                                                 .filter(dx => dx !== undefined))
+             .filter(dx => dx !== undefined))
     }
   })
 
@@ -367,6 +373,7 @@ const setStickX = (currXs, stick, prevStick, style) => {
 const updateCurrXs = (currXs, stick) => {
   stick.cells.forEach((cell, c) => {
     if (!cell) return
+
     const cellCurrXs = currXs.cells[c]
     const { main, dirsAbove, dirsBelow, lyrics } = cell
 

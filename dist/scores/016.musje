@@ -17,6 +17,9 @@ I once was lost, but now I'm found, was blind, but now I see.
 
 == Test Multipart
 
+3/4 /tmp <35> | << 1'- 3'_1'_>> || 0-
+
+/*
 3/4
 /"First idea" <35> | <31'>- <<5|3'_1'_>> || 0-
 
@@ -25,3 +28,4 @@ I once was lost, but now I'm found, was blind, but now I see.
 3/4 
 /"Second idea"
 <35> | <<3- 5 | 1'- 3'_1'_>> || 0-
+*/

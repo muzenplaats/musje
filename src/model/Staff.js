@@ -104,7 +104,7 @@ export default class Staff {
     let gDurQ = 0
     const groups = []
 
-    this.cells.forEach(cell => {
+    const processCell = cell => {
       const dumpGroup = () => {
         if (group.length) { 
           groups.push(group)
@@ -123,6 +123,10 @@ export default class Staff {
           return
         }
 
+        if (dt.name === 'multipart') {
+          dt.layers.forEach(processCell)  // layer is a subset of cell
+        }
+
         if (!gDurQ) return
         if (!dt.duration) return
 
@@ -139,7 +143,9 @@ export default class Staff {
       })
 
       dumpGroup()
-    })
+    }
+
+    this.cells.forEach(processCell)
 
     return groups
   }

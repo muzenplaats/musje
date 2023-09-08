@@ -8,6 +8,7 @@ export default class Measure {
     this.parts = measure.parts
     this.cells = this.mapCell(cell => cell)
     this.partIndices = this.mapCell((cell, c, s, p) => p)
+
     this.setPartsToCellsIndices()
   }
 

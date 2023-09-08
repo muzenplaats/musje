@@ -9,7 +9,7 @@ export default function measureElement(measureLayout) {
   return el.create('g', [
     // box(measureLayout, 'green'),
 
-    cellsLayouts.map(layout => cellElement(layout)),
+    cellsLayouts.map(cellElement),
 
     leftBarLayouts ? leftBarLayouts.map(layout => barElement(layout)) : [],
     rightBarLayouts ? rightBarLayouts.map(layout => barElement(layout)) : []
