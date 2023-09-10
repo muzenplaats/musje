@@ -1,4 +1,30 @@
 
+/*
+  Rect: { x, y, width height }
+  Derived: { x1, y1, cx, cy, x2, y2 }
+
+      (x, y)    x1
+  = (x1, y1)    x   bx           cx                y2  |
+                |    |            |                 |  v
+        y1  y - +-----------------------------------+ -----
+                |    :            .                 | dy  ^
+           by - | ...:..............................| --  |
+                |    :            .                 |  ^
+                |    :            |                 |  |
+           cy - | . -- . -- . -- . -- . -- .-- . -- |     height
+                |    :            |                 | dy2
+                |    :            .                 |
+                |    :            |                 |  |  |
+                |    :            .                 |  v  v
+          y2 - +------------------------------------+ -----
+              ->| dx |<-            dx2           ->|  (x2, y2)
+                |<-             width             ->|
+
+  Rect displacement: { dx, dy }
+  Derived: { dx2, dy2, bx, by}
+*/
+
+
 export default class AbstractLayout {
   set x1(n) { this.x = n }
   get x1() { return this.x }
@@ -25,6 +51,22 @@ export default class AbstractLayout {
   set by(n) { this.y = n - this.dy }
   get by() { return this.y + this.dy }
 
+  set x(n) { this._x = n }
+  get x() {
+    if (typeof this._x === 'undefined') {
+      throw new Error('In ' + this.name + ': x is not defined.')
+    }
+    return this._x
+  }
+
+  set y(n) { this._y = n }
+  get y() {
+    if (typeof this._y === 'undefined') {
+      throw new Error('In ' + this.name + ': y is not defined.')
+    }
+    return this._y
+  }
+
   set width(w) { 
     if (isNaN(w)) {
       throw new TypeError(`In ${this.name}: height must be a number but ${w} is set.`)
@@ -47,21 +89,23 @@ export default class AbstractLayout {
     Object.assign(this, pos) 
 
     if (isNaN(this.x) || isNaN(this.y)) {
-      throw new TypeError(`position of ${this.name} must be numbers: { x: ${this.x}, y: ${this.y} }`)
+      throw new TypeError(`Position of ${this.name} must be composed of numbers: { x: ${this.x}, y: ${this.y} }`)
     }
   }
 
-  get wh() { return { width: this.width, height: this.height }}
+  get wh() { return { width: this.width, height: this.height } }
   get xy() { return { x: this.x, y: this.y } }
   get xby() { return { x: this.x, y: this.by } }
-  get cxby() { return { x: this.cx, y: this.by }}
-  get x2by() { return { x: this.x2, y: this.by }}
-  get x2cy() { return { x: this.x2, y: this.cy }}
-  get cxcy() { return { x: this.cx, y: this.cy }}
+  get cxby() { return { x: this.cx, y: this.by } }
+  get x2by() { return { x: this.x2, y: this.by } }
+  get x2cy() { return { x: this.x2, y: this.cy } }
+  get cxcy() { return { x: this.cx, y: this.cy } }
+
   get rect() {
     const { x, y, width, height } = this
     return { x, y, width, height }
   }
+
   get circle() {
     const { cx, cy, r } = this
     return { cx, cy, r }

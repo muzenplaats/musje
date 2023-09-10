@@ -25,7 +25,7 @@ export default function cellElement(cellLayout) {
       if ('rest' in layout) return restElement(layout)
       if ('chord' in layout) return chordElement(layout)
       if ('time' in layout) return timeElement(layout)
-      if ('direction' in  layout) return directionElement(layout)
+      if ('direction' in layout) return directionElement(layout)
       if ('multipart' in layout) return multipartElement(layout)
     }),
 

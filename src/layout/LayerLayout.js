@@ -1,7 +1,7 @@
 import AbstractLayout from './AbstractLayout'
 import MusicDataLayout from './MusicDataLayout'
 
-
+/* Ref: CellLayout */
 export default class LayerLayout extends AbstractLayout {
   constructor(layer, style) {
     super()
@@ -18,6 +18,9 @@ export default class LayerLayout extends AbstractLayout {
 
     // this.setMinWidth()
 
+    // Temp
+    this.width = 50
+
     // this.width = this.minWidth and will be reflowed at align: justify
     this.height = this.dataLayout.dy + this.dataLayout.dy2
     this.dy2 = this.dataLayout.dy2
@@ -31,21 +34,27 @@ export default class LayerLayout extends AbstractLayout {
   //   }
   // }
 
-  reflow(width) {
-    const dw = width - this.width
-    // console.log('reflow cell', dw)
+  // reflow(width) {
+  //   const dw = width - this.width
+  //   // console.log('reflow cell', dw)
 
-    this.width = width
-    this.dataLayout.width += dw
-  }
-
-  // set position(pos) {
-  //   super.position = pos
+  //   this.width = width
+  //   this.dataLayout.width += dw
   // }
+
+  set position(pos) {
+    super.position = pos
+    let { x, by } = this
+
+    this.dataLayout.position = { x, by }
+
+    // Temp
+    this.dataLayout.width = 30
+    this.dataLayout.height = 15
+  }
 
   toJSON() {
     const { dataLayout } = this
-
     return { 
       ...super.toJSON(), dataLayout
     }

@@ -1,45 +1,8 @@
 import AbstractLayout from './AbstractLayout'
 import LayerLayout from './LayerLayout'
 
-/*
-Multipart {
-  layers: Array [
-    Layer {}, Layer {}, ...
-  ]
-}
 
-Layer {
-  data: Array [
-    Note {}, Rest {}, Chord {}, Direction {}, ...
-  ]
-}
-
-Analogous
-
-Measure {
-  parts: Array[],
-  leftBar: Bar {},
-  rightBar: Bar {},
-
-  setPartsToCellsIndices() {}
-}
-
-Cell {
-  data: Array [
-    Time {}, Clef {}, Key {}, Note {}, Rest {}, Chord {}, Multipart {}, Direction {} 
-  ],
-  leftBar: Bar {},
-  rightBar: Bar {},
-
-  setAlters() {},
-  setModifications() {},
-  linkTuplets() {},
-  extracBars() {}
-}
-
-*/
-
-
+/* Ref: MeasureLayout */
 export default class MultipartLayout extends AbstractLayout {
   constructor(multipart, style) {
     super()
@@ -57,5 +20,14 @@ export default class MultipartLayout extends AbstractLayout {
 
   set position(pos) {
     super.position = pos
+    const { x, y } = this
+
+    this.layersLayouts.forEach((layout, c) => {
+      layout.position = {
+        x,
+        y2: y - c * 20
+      }
+      // layout.position = { x, by: y + this.staves.by0s[c] }
+    })
   }
 }

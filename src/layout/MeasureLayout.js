@@ -236,17 +236,21 @@ const makeCellSticks = cellLayout => {
       }
 
     } else if (multipart) {
+
       // Temp idea
+      // (Not correct)
+      currStick.tcQ = multipart.tcQ
+      currStick.main = layout
+      sticks.push(currStick)
+
+      layout.layersLayouts.forEach(layerLayout => {
+
+      })
+
       sticks = sticks.concat(makeCellSticks(layout.layersLayouts[0]))
       // sticks = sticks.concat(makeCellSticks(layout.layersLayouts[0]))
+
       currStick = makeEmptyStick()
-
-
-      // layout.layersLayouts.forEach(layerLayout => {
-      //   layerLayout.dataLayout.l        
-      // })
-
-      // layout.layersLayouts.forEach(makeCellSticks)  // layer is a subset of cell.
     }
   })
 

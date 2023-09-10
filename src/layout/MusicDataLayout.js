@@ -8,10 +8,10 @@ import DirectionLayout from './DirectionLayout'
 import { max, lastItem } from '../utils/helpers'
 
 
-export default class DataLayout extends AbstractLayout {
+export default class MusicDataLayout extends AbstractLayout {
   constructor(data, style) {
     super()
-    this.name = 'data-layout'
+    this.name = 'music-data-layout'
     this.data = data
     this.style = style
     this.setLayouts()
@@ -67,6 +67,7 @@ export default class DataLayout extends AbstractLayout {
     super.position = pos
     const { dataSep, dataDirectionSep } = this.style.cell
     let { x, by } = this
+
     // this.layouts.forEach(layout => {
     //   layout.position = { x, by }
     //   x = layout.x2 + dataSep
@@ -76,7 +77,9 @@ export default class DataLayout extends AbstractLayout {
       const { dirsAbove, main, dirsBelow, x: sx } = stick
       const bx = x + sx
 
-      if (main) main.position = { bx, by }
+      if (main) {
+        main.position = { bx, by }
+      }
 
       // Tmp
       if (dirsAbove && dirsAbove.length) {
