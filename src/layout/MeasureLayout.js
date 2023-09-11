@@ -145,14 +145,18 @@ export default class MeasureLayout extends AbstractLayout {
     })
   }
 
-  // Prepare stics for aligning music data in time.
+  // Prepare sticks for the alignment of music data in time.
   makeSticks() {
-    const cellsSticks = this.cellsLayouts
-                            .map(cellLayout => makeCellSticks(cellLayout))
+    // cellsSticks = [
+    //   [stk_00, stk_01, ...],  // cell_0
+    //   [stk_10, stk_11, ...],  // cell_1
+    //   ...
+    // ]
+    const cellsSticks = this.cellsLayouts.map(makeCellSticks)
     this.sticks = []
 
     while (hasCellsSticks(cellsSticks)) {
-      this.sticks.push(peelSticksWithSmallestTcQ(cellsSticks))
+      this.sticks.push(peelSticksAtSmallestTcQ(cellsSticks))
     }
 
     // console.log('Sticks for a MeasureLayout', this.sticks)
@@ -200,68 +204,67 @@ export default class MeasureLayout extends AbstractLayout {
 const makeEmptyStick = () => {
   return { 
     dirsAbove: [], 
-    main: null, 
+    main: null,  // Note {} | Rest {} | Chord {} | Time {}
     dirsBelow: [], 
     lyrics: [] 
   }
+
+  /*
+  {
+    main: Multipart {},
+    layers: [sticks_ly_0, sticks_ly_1, ...]
+  }
+  */
 }
 
 const makeCellSticks = cellLayout => {
-  let sticks = []
-  let currStick = makeEmptyStick()
+  const makeSticks = dataLayout => {
+    let sticks = []
+    let currStick = makeEmptyStick()
 
-  cellLayout.dataLayout.layouts.forEach(layout => {
-    const { note, rest, chord, time, direction, multipart } = layout
-    // const dt = note || rest || chord || direction || multipart || time
-    const main = note || rest || chord || time
+    dataLayout.layouts.forEach(layout => {
+      const { note, rest, chord, time, direction, multipart } = layout
+      // const dt = note || rest || chord || direction || multipart || time
+      const main = note || rest || chord || time || multipart
 
-    if (main) {
-      currStick.tcQ = main.tcQ
-      currStick.main = layout
+      if (main) {
+        currStick.tcQ = main.tcQ
+        currStick.main = layout
 
-      if (main.lyrics) {
-        currStick.lyrics = layout.lyricsLayouts
+        if (main.lyrics) {
+          currStick.lyrics = layout.lyricsLayouts
+        } else if (multipart) {
+          currStick.layers = layout.layersLayouts.map(layerLayout => {
+            return makeSticks(layerLayout.dataLayout)
+          })
+        }
+
+        sticks.push(currStick)
+        currStick = makeEmptyStick()
+
+      } else if (direction) {
+        currStick.tcQ = direction.tcQ
+
+        if (direction.placement === 'above') {
+          currStick.dirsAbove.push(layout)
+        } else {
+          currStick.dirsBelow.push(layout)
+        }
+
       }
+    })
 
-      sticks.push(currStick)
-      currStick = makeEmptyStick()
+    return sticks    
+  }
 
-    } else if (direction) {
-      currStick.tcQ = direction.tcQ
-
-      if (direction.placement === 'above') {
-        currStick.dirsAbove.push(layout)
-      } else {
-        currStick.dirsBelow.push(layout)
-      }
-
-    } else if (multipart) {
-
-      // Temp idea
-      // (Not correct)
-      currStick.tcQ = multipart.tcQ
-      currStick.main = layout
-      sticks.push(currStick)
-
-      layout.layersLayouts.forEach(layerLayout => {
-
-      })
-
-      sticks = sticks.concat(makeCellSticks(layout.layersLayouts[0]))
-      // sticks = sticks.concat(makeCellSticks(layout.layersLayouts[0]))
-
-      currStick = makeEmptyStick()
-    }
-  })
-
-  return sticks
+  return makeSticks(cellLayout.dataLayout)
 }
 
 const hasCellsSticks = cellsSticks => {
   for (let i = 0; i < cellsSticks.length; i++) {
     const cellSticks = cellsSticks[i]
 
-    if (cellSticks.length) {
+    if (cellSticks.length > 0) {
       return true
     }
   }
@@ -269,17 +272,18 @@ const hasCellsSticks = cellsSticks => {
   return false
 }
 
-const peelSticksWithSmallestTcQ = cellsSticks => {
-  const firstAtCells = cellsSticks.map(sticks => sticks[0])
-  const minTcQ = min(firstAtCells.map(cstick => cstick ? cstick.tcQ : Infinity))
+const peelSticksAtSmallestTcQ = cellsSticks => {
+  const firstSticksAtCells = cellsSticks.map(sticks => sticks[0])
+  const minTcQ = min(firstSticksAtCells.map(stick => stick ? stick.tcQ : Infinity))
 
-  const cells = firstAtCells.map(cstick => {
-    return  cstick && cstick.tcQ === minTcQ ? cstick : null
+  const cells = firstSticksAtCells.map(stick => {
+    return  stick && stick.tcQ === minTcQ ? stick : null
   })
-                              
-  cellsSticks.forEach((sticks, i) => { 
-    if (cells[i]) {
-      sticks.shift() 
+
+  // Peel off
+  cellsSticks.forEach((cellSticks, c) => { 
+    if (cells[c]) {
+      cellSticks.shift()
     }
   })
 

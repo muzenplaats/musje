@@ -313,7 +313,9 @@ export default class Staff {
       let tcQ = 0
 
       cell.data.forEach(dt => {
-        Object.assign(dt, { t, tQ, tc, tcQ })
+        Object.assign(dt, { 
+          t, tQ, tc, tcQ 
+        })
 
         if (dt.name === 'multipart') {
           let max_tl = 0

@@ -20,12 +20,12 @@ export default class MultipartLayout extends AbstractLayout {
 
   set position(pos) {
     super.position = pos
-    const { x, y } = this
+    const { x, y2 } = this
 
     this.layersLayouts.forEach((layout, c) => {
       layout.position = {
         x,
-        y2: y - c * 20
+        y2: y2 - c * 20
       }
       // layout.position = { x, by: y + this.staves.by0s[c] }
     })

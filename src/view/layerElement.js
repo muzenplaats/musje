@@ -9,16 +9,16 @@ export default function layerElement(layerLayout) {
   const { dataLayout } = layerLayout
 
   return el.create('g', [
-    box(layerLayout, 'orange'),
-    box(dataLayout, 'blue'),
+    // box(layerLayout, 'orange'),
+    // box(dataLayout, 'blue'),
 
     dataLayout.layouts.map(layout => {
       // return box(layout, 'orange')
 
-      if ('note' in layout) return noteElement(layout)
-      if ('rest' in layout) return restElement(layout)
-      if ('chord' in layout) return chordElement(layout)
-      if ('direction' in layout) return directionElement(layout)
+      // if ('note' in layout) return noteElement(layout)
+      // if ('rest' in layout) return restElement(layout)
+      // if ('chord' in layout) return chordElement(layout)
+      // if ('direction' in layout) return directionElement(layout)
     })
   ])
 }
