@@ -13,9 +13,15 @@ export default class MeasureLayout extends AbstractLayout {
     this.style = style
     this.cellsLayouts = measure.cells.map(cell => new CellLayout(cell, style))
 
+    // To be sorted out...
     this.makeSticks()
     this.alignSticks()
     this.setCellsSticks()
+
+    // To be added...
+    this.makeBunches()
+    this.alignBunches()
+    // this.setCellsAndLayersSticks()
 
     this.cellsLayouts.forEach(layout => {
       layout.dataLayout.setMinWidth()
@@ -145,6 +151,64 @@ export default class MeasureLayout extends AbstractLayout {
     })
   }
 
+  // Prepare bunches of sticks in the measure for the time alignment of music data.
+  // The bunches
+  makeBunches() {
+    // | 3/4 5 6 7 |
+    // --
+    // | 3/4 <<1 2- | 3-.>> |
+    // makeCellSticks
+    //
+    // =>
+    // this.bunches = [
+    //   {
+    //     // A bunch of sticks
+    //     bunch: [
+    //       { main: '3/4', c: 0 },  // this is a stick.
+    //       { main: '3/4', c: 1 }   // the indices, c, mp and l, is to put the stick
+    //     ],                        // back in the given cell, multipart and layer.
+    //     tcQ                       // can the sticks be in place beforehand?
+    //   },                          // yes! so, drop the indices.
+    //   {
+    //     bunch: [
+    //       { main: '5', c: 0 },
+    //       { main: '1', c: 1, mp: 0, l: 0 },  // there can be many multiparts in a cell.
+    //       { main: '3-.', c: 1, mp: 0 l: 1 }
+    //     ],
+    //     tcQ
+    //   },
+    //   {
+    //     bunch: [
+    //       { main: '6', c: 0 },
+    //       { main: '2-', c: 1, l: 0 }
+    //     ],
+    //     tcQ
+    //   },
+    //   {
+    //     bunch: [
+    //       { main: '7' },
+    //     ],
+    //     tcQ
+    //   }
+    // ]
+
+    // const cellsSticks = this.cellsLayouts.map(makeCellSticks)
+    this.bunches = []
+
+    // while (hasCellsSticks(cellsSticks)) {
+    //   this.sticks.push(peelSticksAtSmallestTcQ(cellsSticks))
+    // }
+  }
+
+  alignBunches() {
+
+  }
+
+  setCellsAndLayersSticks() {
+
+  }
+
+
   // Prepare sticks for the alignment of music data in time.
   makeSticks() {
     // cellsSticks = [
@@ -152,6 +216,8 @@ export default class MeasureLayout extends AbstractLayout {
     //   [stk_10, stk_11, ...],  // cell_1
     //   ...
     // ]
+    // (This is complicated with multipart layers!)
+
     const cellsSticks = this.cellsLayouts.map(makeCellSticks)
     this.sticks = []
 
@@ -201,6 +267,7 @@ export default class MeasureLayout extends AbstractLayout {
   }
 }
 
+
 const makeEmptyStick = () => {
   return { 
     dirsAbove: [], 
@@ -208,21 +275,24 @@ const makeEmptyStick = () => {
     dirsBelow: [], 
     lyrics: [] 
   }
-
-  /*
-  {
-    main: Multipart {},
-    layers: [sticks_ly_0, sticks_ly_1, ...]
-  }
-  */
 }
 
+/*
+  makeCellSticks(cellLayout) => [
+    { main: '3/4' },
+    { main: null, layers: [
+        { main: '' },
+        { main: '' }
+      ] 
+    }
+  ]
+*/
 const makeCellSticks = cellLayout => {
-  const makeSticks = dataLayout => {
+  const makeSticks = layout => {
     let sticks = []
     let currStick = makeEmptyStick()
 
-    dataLayout.layouts.forEach(layout => {
+    layout.dataLayout.layouts.forEach(layout => {
       const { note, rest, chord, time, direction, multipart } = layout
       // const dt = note || rest || chord || direction || multipart || time
       const main = note || rest || chord || time || multipart
@@ -233,10 +303,6 @@ const makeCellSticks = cellLayout => {
 
         if (main.lyrics) {
           currStick.lyrics = layout.lyricsLayouts
-        } else if (multipart) {
-          currStick.layers = layout.layersLayouts.map(layerLayout => {
-            return makeSticks(layerLayout.dataLayout)
-          })
         }
 
         sticks.push(currStick)
@@ -251,13 +317,15 @@ const makeCellSticks = cellLayout => {
           currStick.dirsBelow.push(layout)
         }
 
+      // Multipart is a container of sticks, which is not a stick itself.
+      } else if (multipart) {
+        currStick.layers = layout.layersLayouts.map(makeSticks)
       }
     })
-
     return sticks    
   }
 
-  return makeSticks(cellLayout.dataLayout)
+  return makeSticks(cellLayout)
 }
 
 const hasCellsSticks = cellsSticks => {
