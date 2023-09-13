@@ -17,7 +17,6 @@ export default class MusicDataLayout extends AbstractLayout {
 
     this.setLayouts()
 
-    this.dx = this.layouts.length === 0 ? 0 : this.layouts[0].dx
     // this.setMinWidth()  // will be set by measureLayout.
     this.setHeight()
   }
@@ -38,12 +37,10 @@ export default class MusicDataLayout extends AbstractLayout {
     }).filter(dt => dt)
   }
 
-  // This will be called by MeasureLayout
-  setMinWidth() {
+  setWidth() {
     let firstStick = this.sticks[0]
 
     if (!firstStick) {
-      this.minWidth = 0
       this.width = 0
       return
     }
@@ -58,8 +55,13 @@ export default class MusicDataLayout extends AbstractLayout {
       lastStick = lastItem(lastStick.main.layersLayouts[0].sticks)
     }
 
-    this.minWidth = firstStick.dx + lastStick.x + (lastStick.dx2 || 0)  // tmp: 0
-    this.width = this.minWidth
+    this.width = firstStick.dx + lastStick.x //+ (lastStick.dx2 || 0)  // tmp: 0
+  }
+
+  // This will be called by MeasureLayout
+  setMinWidth() {
+    this.setWidth()
+    this.minWidth = this.width
   }
 
   setHeight() {

@@ -9,8 +9,8 @@ export default function layerElement(layerLayout) {
   const { dataLayout } = layerLayout
 
   return el.create('g', [
-    box(layerLayout, 'orange'),
-    box(dataLayout, 'blue'),
+    // box(layerLayout, 'orange'),
+    // box(dataLayout, 'blue'),
 
     dataLayout.layouts.map(layout => {
       // return box(layout, 'orange')
