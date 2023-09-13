@@ -6,7 +6,7 @@ export default function multipartElement(multipartLayout) {
   const { layersLayouts } = multipartLayout
 
   return el.create('g', [
-    // box(multipartLayout, 'green'),
+    box(multipartLayout, 'green'),
 
     layersLayouts.map(layerElement)
   ])

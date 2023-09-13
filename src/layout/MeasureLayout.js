@@ -2,7 +2,8 @@ import AbstractLayout from './AbstractLayout'
 import CellLayout from './CellLayout'
 import BarLayout from './BarLayout'
 import Bar from '../model/Bar'
-import { min, max, lastItem, range, zeros, forEachRight } from '../utils/helpers'
+import { max, lastItem, range } from '../utils/helpers'
+import BunchesArranger from './BunchesArranger'
 
 export default class MeasureLayout extends AbstractLayout {
   constructor(measure, style) {
@@ -12,16 +13,7 @@ export default class MeasureLayout extends AbstractLayout {
     this.measure = measure
     this.style = style
     this.cellsLayouts = measure.cells.map(cell => new CellLayout(cell, style))
-
-    // To be sorted out...
-    this.makeSticks()
-    this.alignSticks()
-    this.setCellsSticks()
-
-    // To be added...
-    this.makeBunches()
-    this.alignBunches()
-    // this.setCellsAndLayersSticks()
+    this.bunchesArranger = new BunchesArranger(this.cellsLayouts, style)
 
     this.cellsLayouts.forEach(layout => {
       layout.dataLayout.setMinWidth()
@@ -32,16 +24,13 @@ export default class MeasureLayout extends AbstractLayout {
     this.width = this.minWidth
   }
 
-  // SetHeight by SystemLayout
+  // This will be called by SystemLayout
   setHeight(height, staves) {
     this.height = height
     this.staves = staves
   }
 
   reflow(width) {
-    // console.log('reflow measure..')
-     // width += 50
-
     this.width = width
 
     this.cellsLayouts.forEach(cellLayout => { 
@@ -49,10 +38,7 @@ export default class MeasureLayout extends AbstractLayout {
     })
 
     const dataLayoutWidth = this.cellsLayouts[0].dataLayout.width
-
-    reflowSticks(this.sticks, dataLayoutWidth)
-
-    this.setCellsSticks()
+    this.bunchesArranger.reflow(dataLayoutWidth)
   }
 
   set position(pos) {
@@ -65,7 +51,10 @@ export default class MeasureLayout extends AbstractLayout {
       if (this.atSysBegin) layout.addShownLeftBar()
       if (this.atSysEnd) layout.addShownRightBar()
 
-      layout.position = { x, by: y + this.staves.by0s[c] }
+      layout.position = { 
+        x, 
+        by: y + this.staves.by0s[c] 
+      }
     })
 
     if (this.atSysBegin) {
@@ -151,383 +140,8 @@ export default class MeasureLayout extends AbstractLayout {
     })
   }
 
-  // Prepare bunches of sticks in the measure for the time alignment of music data.
-  // The bunches
-  makeBunches() {
-    // | 3/4 5 6 7 |
-    // --
-    // | 3/4 <<1 2- | 3-.>> |
-    // makeCellSticks
-    //
-    // =>
-    // this.bunches = [
-    //   {
-    //     // A bunch of sticks
-    //     bunch: [
-    //       { main: '3/4', c: 0 },  // this is a stick.
-    //       { main: '3/4', c: 1 }   // the indices, c, mp and l, is to put the stick
-    //     ],                        // back in the given cell, multipart and layer.
-    //     tcQ                       // can the sticks be in place beforehand?
-    //   },                          // yes! so, drop the indices.
-    //   {
-    //     bunch: [
-    //       { main: '5', c: 0 },
-    //       { main: '1', c: 1, mp: 0, l: 0 },  // there can be many multiparts in a cell.
-    //       { main: '3-.', c: 1, mp: 0 l: 1 }
-    //     ],
-    //     tcQ
-    //   },
-    //   {
-    //     bunch: [
-    //       { main: '6', c: 0 },
-    //       { main: '2-', c: 1, l: 0 }
-    //     ],
-    //     tcQ
-    //   },
-    //   {
-    //     bunch: [
-    //       { main: '7' },
-    //     ],
-    //     tcQ
-    //   }
-    // ]
-
-    // const cellsSticks = this.cellsLayouts.map(makeCellSticks)
-    this.bunches = []
-
-    // while (hasCellsSticks(cellsSticks)) {
-    //   this.sticks.push(peelSticksAtSmallestTcQ(cellsSticks))
-    // }
-  }
-
-  alignBunches() {
-
-  }
-
-  setCellsAndLayersSticks() {
-
-  }
-
-
-  // Prepare sticks for the alignment of music data in time.
-  makeSticks() {
-    // cellsSticks = [
-    //   [stk_00, stk_01, ...],  // cell_0
-    //   [stk_10, stk_11, ...],  // cell_1
-    //   ...
-    // ]
-    // (This is complicated with multipart layers!)
-
-    const cellsSticks = this.cellsLayouts.map(makeCellSticks)
-    this.sticks = []
-
-    while (hasCellsSticks(cellsSticks)) {
-      this.sticks.push(peelSticksAtSmallestTcQ(cellsSticks))
-    }
-
-    // console.log('Sticks for a MeasureLayout', this.sticks)
-  }
-
-  // Calc min-width, x = 0 right after cell: padding-left
-  alignSticks() {
-    if (!this.sticks.length) return
-
-    const firstStick = this.sticks[0]
-
-    setStickDx(firstStick)
-    firstStick.x = firstStick.minX = firstStick.dx
-    setStickDx2(lastItem(this.sticks))
-
-    const currXs = initCurrXs(this.sticks)
-
-    this.sticks.forEach((stick, s) => {
-      if (s > 0) {
-        setStickX(currXs, stick, this.sticks[s - 1], this.style)
-      }
-
-      updateCurrXs(currXs, stick)
-    })
-
-    // console.log('Sticks for a MeasureLayout', this.sticks)
-  }
-
-  setCellsSticks() {
-    this.sticks.forEach(stick => {
-      stick.cells.forEach((cell, c) => {
-        const cellStick = Object.assign({}, cell, stick)
-        delete cellStick.cells
-        this.cellsLayouts[c].sticks.push(cellStick)
-      })
-    })
-  }
-
   toJSON() {
     const { cellsLayouts } = this
     return { ...super.toJSON(), cellsLayouts }
   }
-}
-
-
-const makeEmptyStick = () => {
-  return { 
-    dirsAbove: [], 
-    main: null,  // Note {} | Rest {} | Chord {} | Time {}
-    dirsBelow: [], 
-    lyrics: [] 
-  }
-}
-
-/*
-  makeCellSticks(cellLayout) => [
-    { main: '3/4' },
-    { main: null, layers: [
-        { main: '' },
-        { main: '' }
-      ] 
-    }
-  ]
-*/
-const makeCellSticks = cellLayout => {
-  const makeSticks = layout => {
-    let sticks = []
-    let currStick = makeEmptyStick()
-
-    layout.dataLayout.layouts.forEach(layout => {
-      const { note, rest, chord, time, direction, multipart } = layout
-      // const dt = note || rest || chord || direction || multipart || time
-      const main = note || rest || chord || time || multipart
-
-      if (main) {
-        currStick.tcQ = main.tcQ
-        currStick.main = layout
-
-        if (main.lyrics) {
-          currStick.lyrics = layout.lyricsLayouts
-        }
-
-        sticks.push(currStick)
-        currStick = makeEmptyStick()
-
-      } else if (direction) {
-        currStick.tcQ = direction.tcQ
-
-        if (direction.placement === 'above') {
-          currStick.dirsAbove.push(layout)
-        } else {
-          currStick.dirsBelow.push(layout)
-        }
-
-      // Multipart is a container of sticks, which is not a stick itself.
-      } else if (multipart) {
-        currStick.layers = layout.layersLayouts.map(makeSticks)
-      }
-    })
-    return sticks    
-  }
-
-  return makeSticks(cellLayout)
-}
-
-const hasCellsSticks = cellsSticks => {
-  for (let i = 0; i < cellsSticks.length; i++) {
-    const cellSticks = cellsSticks[i]
-
-    if (cellSticks.length > 0) {
-      return true
-    }
-  }
-
-  return false
-}
-
-const peelSticksAtSmallestTcQ = cellsSticks => {
-  const firstSticksAtCells = cellsSticks.map(sticks => sticks[0])
-  const minTcQ = min(firstSticksAtCells.map(stick => stick ? stick.tcQ : Infinity))
-
-  const cells = firstSticksAtCells.map(stick => {
-    return  stick && stick.tcQ === minTcQ ? stick : null
-  })
-
-  // Peel off
-  cellsSticks.forEach((cellSticks, c) => { 
-    if (cells[c]) {
-      cellSticks.shift()
-    }
-  })
-
-  return { cells, tcQ: minTcQ }
-}
-
-const setStickDx = (stick, dxName = 'dx') => {
-  let dx = 0
-
-  stick.cells.forEach(cell => {
-    if (!cell) return
-
-    const { main, dirsAbove, dirsBelow, lyrics } = cell
-
-    if (main) {
-      dx = Math.max(dx, main[dxName])
-    }
-
-    // if (dirsAbove) dx = max(dirsAbove.map(dir => dir[dxName]).concat(dx))
-    // if (dirsBelow) dx = max(dirsBelow.map(dir => dir[dxName]).concat(dx))
-
-    if (lyrics) {
-      dx = max(lyrics.map(lyric => lyric[dxName]).concat(dx)
-             .filter(dx => dx !== undefined))
-    }
-  })
-
-  stick[dxName] = dx
-}
-
-const setStickDx2 = stick => setStickDx(stick, 'dx2')
-
-const initCurrXs = sticks => {
-  const currXs = { cells: [] }
-
-  const updateArr = (currXsCell, cell, name) => {
-    const { length } = cell[name]
-    if (!length) return
-
-    if (currXsCell[name]) {
-      if (currXsCell[name].length < length) {
-        currXsCell[name] = zeros(length)
-      }
-    } else {
-      currXsCell[name] = zeros(length)
-    }
-  }
-
-  sticks.forEach(stick => {
-    stick.cells.forEach((cell, c) => {
-      if (!cell) return
-
-      const currXsCell = currXs.cells[c] = currXs.cells[c] || { main: 0 }
-
-      if (cell.dirsAbove) updateArr(currXsCell, cell, 'dirsAbove')
-      if (cell.dirsBelow) updateArr(currXsCell, cell, 'dirsBelow')
-      if (cell.lyrics) updateArr(currXsCell, cell, 'lyrics')
-    })
-  })
-
-  // console.log('currXs', currXs)
-  return currXs
-}
-
-const setStickX = (currXs, stick, prevStick, style) => {
-  const { dataSep } = style.cell
-  const { lyricsHSep } =  style.note
-  // console.log('prevStick', prevStick)
-  let x = prevStick.x + style.stepFont.width / 2 + dataSep / 2
-
-  stick.cells.forEach((cell, c) => {
-    if (!cell) return
-
-    const cellCurrXs = currXs.cells[c]
-    const { main, dirsAbove, dirsBelow, lyrics } = cell
-
-    if (main) {
-      x = Math.max(x, cellCurrXs.main + dataSep + main.dx)
-    }
-
-    // if (dirsAbove) dx = max(dirsAbove.map(dir => dir[dxName]).concat(dx))
-    // if (dirsBelow) dx = max(dirsBelow.map(dir => dir[dxName]).concat(dx))
-
-    if (lyrics) {
-      lyrics.forEach((lyric, l) => {
-        x = Math.max(x, cellCurrXs.lyrics[l] + lyricsHSep + lyric.dx)
-      })
-    }
-  })
-
-  stick.x = x
-  stick.minX = x
-}
-
-const updateCurrXs = (currXs, stick) => {
-  stick.cells.forEach((cell, c) => {
-    if (!cell) return
-
-    const cellCurrXs = currXs.cells[c]
-    const { main, dirsAbove, dirsBelow, lyrics } = cell
-
-    if (main) {
-      cellCurrXs.main = stick.x + main.dx2
-    }
-
-    // if (dirsAbove) dx = max(dirsAbove.map(dir => dir[dxName]).concat(dx))
-    // if (dirsBelow) dx = max(dirsBelow.map(dir => dir[dxName]).concat(dx))
-
-    if (lyrics) {
-      lyrics.forEach((lyric, l) => {
-        cellCurrXs.lyrics[l] = stick.x + lyric.dx2
-      })
-    }
-  })
-}
-
-const reflowSticks = (sticks, dataLayoutWidth) => {
-  if (sticks.length <= 1) return
-
-  const { dx, minX: firstMinX } = sticks[0]
-  const { dx2, minX: lastMinX } = lastItem(sticks)
-  const oldRange = lastMinX - firstMinX
-  const newRange = dataLayoutWidth - dx - dx2
-
-  const spacingRatioReflow = () => {
-    const ratio = newRange / oldRange
-    // console.log(firstMinX, lastMinX, dx, dx2, oldRange, newRange, ratio)
-
-    sticks.forEach(stick => {
-      stick.x = ratio * (stick.minX - dx) + dx
-    })
-  }
-
-  const timingFavoredBackReflow = () => {
-    const lastTcQ = lastItem(sticks).tcQ
-    const slen = sticks.length
-
-    const getTimingX = stick => {
-      const ratio = lastTcQ ? stick.tcQ / lastTcQ : 1
-      return newRange * ratio + dx
-    }
-
-    forEachRight(sticks, (stick, i) => {
-      if (i === slen - 1) { 
-        stick.x = getTimingX(stick)
-        return 
-      }
-
-      const nextStick = sticks[i + 1]
-      const timingX = getTimingX(stick)
-      const limDx = nextStick.minX - stick.minX
-      const spaceLimitX = nextStick.x - limDx
-
-      // console.log(i, newRange, lastTcQ, dx, timingX, spaceLimitX, stick, nextStick)
-      stick.x = Math.min(timingX, spaceLimitX)
-    })
-  }
-
-  const deoverflow = () => {
-    sticks.forEach((stick, s) => {
-      if (stick.tcQ === 0) { 
-        stick.x = stick.minX
-        return 
-      }
-
-      const prevStick = sticks[s - 1]
-      const limDx = stick.minX - prevStick.minX
-
-      if (stick.x - prevStick.x < limDx) {
-        stick.x = prevStick.x + limDx
-      }
-    })
-  }
-
-  // spacingRatioReflow()
-
-  timingFavoredBackReflow()
-  deoverflow()
 }

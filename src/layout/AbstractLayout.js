@@ -69,7 +69,7 @@ export default class AbstractLayout {
 
   set width(w) { 
     if (isNaN(w)) {
-      throw new TypeError(`In ${this.name}: height must be a number but ${w} is set.`)
+      throw new TypeError(`In ${this.name}: width must be a number but ${w} is set.`)
     }
     this._width = w
   }
@@ -89,7 +89,8 @@ export default class AbstractLayout {
     Object.assign(this, pos) 
 
     if (isNaN(this.x) || isNaN(this.y)) {
-      throw new TypeError(`Position of ${this.name} must be composed of numbers: { x: ${this.x}, y: ${this.y} }`)
+      throw new TypeError(`Position of ${this.name} must be composed of numbers; get: { x: ${this.x}, y: ${this.y} }\n` +
+                          `Caused by #position = ${JSON.stringify(pos, null, 2)}`)
     }
   }
 

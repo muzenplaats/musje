@@ -1,6 +1,5 @@
 import MeasureLayout from './MeasureLayout'
-import { lastItem, max, min, sum, findIndexRight,
-         flatten, range } from '../utils/helpers'
+import { lastItem, max, min, sum, findIndexRight, flatten, range } from '../utils/helpers'
 
 class FlowDataSectionInterface {
   get isBalanced() { return this.maxLen - this.minLen <= 1 }

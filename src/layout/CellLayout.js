@@ -56,21 +56,19 @@ export default class CellLayout extends AbstractLayout {
     const { shownLeftBarLayout, shownRightBarLayout } = this.cell
 
     this.minWidth = this.dataLayout.minWidth + paddingLeft + paddingRight +
-                    (shownLeftBarLayout ? shownLeftBarLayout.width :
-                                    this.leftBarLayout.width / 2) +
-                    (shownRightBarLayout ? shownRightBarLayout.width :
-                                     this.rightBarLayout.width / 2)
+                    (shownLeftBarLayout ? shownLeftBarLayout.width : this.leftBarLayout.width / 2) +
+                    (shownRightBarLayout ? shownRightBarLayout.width : this.rightBarLayout.width / 2)
 
     if (!this.width || this.width < this.minWidth) {
       this.width = this.minWidth
     }
   }
 
-  reflow(width) {
-    const dw = width - this.width
+  reflow(newWidth) {
+    const dw = newWidth - this.width
     // console.log('reflow cell', dw)
 
-    this.width = width
+    this.width = newWidth
     this.dataLayout.width += dw
   }
 

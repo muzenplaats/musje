@@ -151,6 +151,10 @@ note, chord {
   lyrics-h-sep: 50%
 }
 
+multipart {
+  layers-sep: 100%
+}
+
 direction {
   tmp: 0
 }

@@ -12,17 +12,17 @@ export default class LayerLayout extends AbstractLayout {
     this.style = style
     this.dataLayout = new MusicDataLayout(layer.data, style)
 
-    // v  todo
     this.sticks = []  // will be filled by MeasureLayout
     this.dataLayout.sticks = this.sticks
 
     // this.setMinWidth()
 
     // Temp
-    this.width = 50
+    // this.width = this.dataLayout.width
 
     // this.width = this.minWidth and will be reflowed at align: justify
     this.height = this.dataLayout.dy + this.dataLayout.dy2
+    this.dx = this.dataLayout.dx
     this.dy2 = this.dataLayout.dy2
   }
 
@@ -41,6 +41,10 @@ export default class LayerLayout extends AbstractLayout {
   //   this.width = width
   //   this.dataLayout.width += dw
   // }
+
+  get width() {
+    return this.dataLayout.width
+  }
 
   set position(pos) {
     super.position = pos

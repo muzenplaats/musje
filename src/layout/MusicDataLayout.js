@@ -14,11 +14,11 @@ export default class MusicDataLayout extends AbstractLayout {
     this.name = 'music-data-layout'
     this.data = data
     this.style = style
-    this.setLayouts()
-    // this.setMinWidth()
 
-    // Tmp
-    // this.width = this.minWidth
+    this.setLayouts()
+
+    this.dx = this.layouts.length === 0 ? 0 : this.layouts[0].dx
+    // this.setMinWidth()  // will be set by measureLayout.
     this.setHeight()
   }
 
@@ -38,22 +38,29 @@ export default class MusicDataLayout extends AbstractLayout {
     }).filter(dt => dt)
   }
 
-  // Set by MeasureLayout
+  // This will be called by MeasureLayout
   setMinWidth() {
-    const firstStick = this.sticks[0]
-    const lastStick = lastItem(this.sticks)
+    let firstStick = this.sticks[0]
 
-    this.minWidth = firstStick.dx + lastStick.x + lastStick.dx2
+    if (!firstStick) {
+      this.minWidth = 0
+      this.width = 0
+      return
+    }
+
+    if (firstStick.main.name === 'multipart-layout') {
+      firstStick = firstStick.main.layersLayouts[0].sticks[0]
+    }
+
+    let lastStick = lastItem(this.sticks)
+
+    if (lastStick.main.name === 'multipart-layout') {
+      lastStick = lastItem(lastStick.main.layersLayouts[0].sticks)
+    }
+
+    this.minWidth = firstStick.dx + lastStick.x + (lastStick.dx2 || 0)  // tmp: 0
     this.width = this.minWidth
   }
-
-  // setMinWidth() {
-  //   const { dataSep } = this.style.cell
-  //   const { layouts } = this
-  //   const { length } = layouts
-  //   this.minWidth = length ? (length - 1) * dataSep : 0
-  //   layouts.forEach(layout => { this.minWidth += layout.width })
-  // }
 
   setHeight() {
     const dy = max(this.layouts.map(layout => layout.dy).concat(0))
@@ -68,16 +75,15 @@ export default class MusicDataLayout extends AbstractLayout {
     const { dataSep, dataDirectionSep } = this.style.cell
     let { x, by } = this
 
-    // this.layouts.forEach(layout => {
-    //   layout.position = { x, by }
-    //   x = layout.x2 + dataSep
-    // })
-
-    this.sticks.forEach(stick => {
+    const setDtPosition = stick => {
       const { dirsAbove, main, dirsBelow, x: sx } = stick
-      const bx = x + sx
+      let bx = x + sx
 
       if (main) {
+        if (main.name === 'multipart-layout') {
+          bx = x + main.layersLayouts[0].dataLayout.sticks[0].dx
+        }
+
         main.position = { bx, by }
       }
 
@@ -92,7 +98,9 @@ export default class MusicDataLayout extends AbstractLayout {
         const y = by + dataDirectionSep
         dirsBelow[0].position = { bx, y }
       }
-    })
+    }
+
+    this.sticks.forEach(setDtPosition)
   }
 
   toJSON() {
