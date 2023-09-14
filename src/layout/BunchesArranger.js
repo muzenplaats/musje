@@ -190,25 +190,19 @@ export default class BunchesArranger {
 
     sticksForCells.forEach(cellSticks => {
       const numLayers = max(cellSticks.map(stick => stick.layers ? stick.layers.length : 1).concat(0))
+      const layersSticks = new Array(numLayers).fill([])
 
-      if (numLayers === 1) {
-        sticksForLayers.push(cellSticks)
+      cellSticks.forEach(stick => {
+        if (stick.layers) {
+          stick.layers.forEach((layerSticks, l) => {
+            layersSticks[l] = layersSticks[l].concat(layerSticks)
+          })
+        } else {
+          layersSticks[0].push(stick)
+        }
+      })
 
-      } else if (numLayers > 1) {
-        const layersSticks = new Array(numLayers).fill([])
-
-        cellSticks.forEach(stick => {
-          if (stick.layers) {
-            stick.layers.forEach((layerSticks, l) => {
-              layersSticks[l] = layersSticks[l].concat(layerSticks)
-            })
-          } else {
-            layersSticks[0].push(stick)
-          }
-        })
-
-        sticksForLayers = sticksForLayers.concat(layersSticks)
-      }
+      sticksForLayers = sticksForLayers.concat(layersSticks)
     })
 
     return sticksForLayers
@@ -301,6 +295,13 @@ export default class BunchesArranger {
     firstBunch.setDx()
     firstBunch.x = firstBunch.minX = firstBunch.dx
     lastBunch.setDx2()
+
+// Maybe...
+    this.bunches.forEach(bunch => {
+      bunch.setDx()
+      bunch.setDx2()
+    })
+// End of maybe.
 
     const currXs = this.initCurrXs()
 

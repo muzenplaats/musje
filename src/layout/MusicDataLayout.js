@@ -55,7 +55,7 @@ export default class MusicDataLayout extends AbstractLayout {
       lastStick = lastItem(lastStick.main.layersLayouts[0].sticks)
     }
 
-    this.width = firstStick.dx + lastStick.x //+ (lastStick.dx2 || 0)  // tmp: 0
+    this.width = firstStick.dx + lastStick.x + lastStick.dx2
   }
 
   // This will be called by MeasureLayout
