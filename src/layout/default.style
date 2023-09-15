@@ -152,7 +152,7 @@ note, chord {
 }
 
 multipart {
-  layers-sep: 10%
+  layers-sep: 50%
 }
 
 direction {

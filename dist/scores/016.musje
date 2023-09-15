@@ -21,8 +21,8 @@ I once was lost, but now I'm found, was blind, but now I see.
 <5,7,> | <1,5,>- <5,1> | <1,1>- <5,1> | <4,6,>- <4,6,> | <1,1>- <5,1> | <1,5,>- <1,5,> | <5,1>- <5,7,> | <1,1>- |]
 */
 
-
-// Second version: Multipart suppoert
+/*
+// Second version: Multipart support
 
 == Piano
 3/4
@@ -31,7 +31,30 @@ I once was lost, but now I'm found, was blind, but now I see.
 <<1'- 5 | 3'- 2'_3'_>> | <<5- 5 | 5'- 2'_3'_>> |
 <<3- 5 | 5'- 3'_1'_>> | <<b7- 7 | 3'- 3'_2'_ >> |
 <41'>- <46> | <35>- <35> | <<3- 5 | 1'- 3'_1'_>> |
-<1'3'>- <42'> | <31'>-
+<1'3'>- <42'> | <31'>- |]
+
+lyrics: (To support lyrics for multipart in this staff...)
+
+--
+3/4
+<1,5,> | <1,1>- <5,1> | <1,1>- <5,1> | <4,6,>- <4,6,> | <1,1>- <5,1> | <1,5,>- <3,5,> | <5,1>- <1,1> | <5,7,>-
+<5,7,> | <1,5,>- <5,1> | <1,1>- <5,1> | <4,6,>- <4,6,> | <1,1>- <5,1> | <1,5,>- <1,5,> | <5,1>- <5,7,> | <1,1>- |]
+
+lyrics: A-maz-ing grace! How sweet the sound, That save a wretch like me!
+I once was lost, but now I'm found, was blind, but now I see.
+*/
+
+
+// Third version: Visual improvement by adding chords to reduce multipart lengths
+
+== Piano
+3/4
+<35> | <31'>- <<5 | 3'_1'_>> | <b73'>- <72'> |
+<41'>- <46> | <35>- <35> | <31'>- <<5 | 3'_1'_>> |
+<1'3'>- <<5 | 2'_3'_>> | <55'>- <<5 | 2'_3'_>> |
+<35'>- <<5 | 3'_1'_>> | <b73'>- <<7 | 3'_2'_ >> |
+<41'>- <46> | <35>- <35> | <31'>- <<5 | 3'_1'_>> |
+<1'3'>- <42'> | <31'>- |]
 
 lyrics: (To support lyrics for multipart in this staff...)
 
@@ -43,3 +66,4 @@ lyrics: (To support lyrics for multipart in this staff...)
 lyrics: A-maz-ing grace! How sweet the sound, That save a wretch like me!
 I once was lost, but now I'm found, was blind, but now I see.
 
+// Todo: support lyrics and slurs in the multipart...

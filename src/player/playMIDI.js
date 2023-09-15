@@ -1,6 +1,9 @@
 import MIDI from '../../lib/midi'
 import { sum } from '../utils/helpers'
 
+// Todo: rewrite the player in a class...
+
+
 window.onload = () => {
   MIDI.loadPlugin({
     soundfontUrl: './soundfont/',
@@ -31,6 +34,8 @@ export function play() {
     case 'staff': playStaff(obj); break
     case 'cell': playCell(obj); break
     case 'note': playNote(obj); break
+    case 'chord': playChord(obj); break
+    case 'multipart': playMultipart(obj); break
   }
 }
 
@@ -109,21 +114,23 @@ const playPart = (part, context) => {
 
 const playStaff = (staff, context) => {
   staff.cells.forEach(cell => {
-    cell.data.forEach(dt => {
-      switch (dt.name) {
-        case 'note': return playNote(dt, context)
-        case 'chord': return playChord(dt, context)
-      }
-    })
+    playCell(cell, context)
   })
 }
 
 const playCell = (cell, context) => {
   cell.data.forEach(dt => {
     switch (dt.name) {
-      case 'note': playNote(dt, context); break
-      case 'rest': break
-      case 'chord': playChord(dt, context); break
+      case 'note':
+        playNote(dt, context)
+        break
+      case 'rest':
+        break
+      case 'chord':
+        playChord(dt, context)
+        break
+      case 'multipart':
+        playMultipart(dt, context)
     }
   })
 }
@@ -172,4 +179,10 @@ const playChord = (chord, context) => {
       }
     })
   }, chord.t * 1000))
+}
+
+const playMultipart = (multipart, context) => {
+  multipart.layers.forEach(layer => {
+    playCell(layer, context)  // layer is a subset of cell
+  })
 }
