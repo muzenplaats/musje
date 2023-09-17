@@ -86,7 +86,9 @@ export default class Staff {
 
       group.forEach((dt, i) => {
         dt.duration.beams.forEach((beam, j) => {
-          if (beam.type !== 'begin') return
+          if (beam.type !== 'begin') {
+            return
+          }
 
           for (let n = i + 1; n < group.length; n++) {
             let theBeam = group[n].duration.beams[j]
@@ -151,16 +153,38 @@ export default class Staff {
   }
 
   linkTies() {
-    const getNextNote = (c, d) => {
+    const getNextNote = (c, d, l, ld) => {
       let ndt
+
+      if (typeof l === 'number') {
+        const { layers } = this.cells[c].data[d]
+        const ldt = layers[l].data[ld + 1]
+
+        if (ldt) {
+          return ldt
+        }
+
+        if (l < layers.length - 1) {
+          return getNextNote(c, d, l + 1, 0)
+        }
+
+        return getNextNote(c, d)
+      }
 
       do {
         let ncell = this.cells[c]
-        d++; ndt = ncell.data[d]
+        d++
+        ndt = ncell.data[d]
 
         if (!ndt) {
-          c++; d = 0; ncell = this.cells[c]
-          if (!ncell) break
+          c++
+          d = 0
+          ncell = this.cells[c]
+          
+          if (!ncell) {
+            break
+          }
+
           ndt = ncell.data[d]
         }
 
@@ -170,7 +194,11 @@ export default class Staff {
           }
 
           if (ndt.name === 'rest') {
-            break
+            break  // should be error?
+          }
+
+          if (ndt.name === 'multipart') {
+            ndt = getNextNote(c, d, 0, 0)
           }
         }
       } while (ndt)
@@ -180,15 +208,34 @@ export default class Staff {
 
     this.cells.forEach((cell, c) => {
       cell.data.forEach((dt, d) => {
-        if (!dt.tie) return
+
+        if (dt.name === 'multipart') {
+          dt.layers.forEach(layer => {
+            layer.data.forEach(ldt => {
+              if (!dt.tie) {
+                return
+              }
+            })
+          })
+        }
+
+        if (!dt.tie) {
+          return
+        }
 
         const { type } = dt.tie
+
         if (type === 'begin' || type === 'continue') {
           let { ndt, ncell } = getNextNote(c, d)
-          if (!ndt || !hasMatchedPitch(dt, ndt)) return
+
+          if (!ndt || !hasMatchedPitch(dt, ndt)) {
+            return
+          }
 
           const linkTiePair = (curr, next, dt, ndt) => {
-            if (!curr || !next) return
+            if (!curr || !next) {
+              return
+            }
 
             if (curr.tie) {
               if (curr.tie.type === 'end') curr.tie.type = 'continue'
@@ -278,7 +325,7 @@ export default class Staff {
 
   linkSlurs() {
     this.cells.forEach((cell, c) => {
-      cell.data.forEach((dt, d) => {
+      cell.linearData.forEach((dt, d) => {
         if (!dt.beginSlurs) return
 
         const nextData = makeNextData(this.cells, c, d)
@@ -381,12 +428,19 @@ export default class Staff {
       let tmpOmitSlur = false
 
       for (let c = 0; c < this.cells.length; c++) {
-        let cell = this.cells[c]
+        const cell = this.cells[c]
+        const fdata = cell.firstLayerData
 
-        for (let d = 0; d < cell.data.length; d++) {
-          let dt = cell.data[d]
-          if (!dt) break
-          if (dt.tie && dt.tie.type !== 'begin') continue
+        for (let d = 0; d < fdata.length; d++) {
+          const dt = fdata[d]
+
+          if (!dt) {
+            break
+          }
+
+          if (dt.tie && dt.tie.type !== 'begin') {
+            continue
+          }
 
           const headLyric = lyrics.list[0]
 
@@ -449,7 +503,7 @@ export default class Staff {
     let lyricss = [[]]
 
     this.cells.forEach(cell => {
-      cell.data.forEach(dt => {
+      cell.firstLayerData.forEach(dt => {
         if (!dt.lyrics) return
 
         dt.lyrics.forEach((lyric, i) => {
@@ -493,12 +547,20 @@ const makeNextData = (cells, c, d) => {
     let ncell, ndt
 
     while (!ndt) {
-      ncell = cells[c]; d++; ndt = ncell.data[d]
+      ncell = cells[c]
+      d++
+      ndt = ncell.linearData[d]
 
       if (!ndt) {
-        c++; d = 0; ncell = cells[c]
-        if (!ncell) break
-        ndt = ncell.data[d]
+        c++
+        d = 0
+        ncell = cells[c]
+        
+        if (!ncell) {
+          break
+        }
+
+        ndt = ncell.linearData[d]
       }
     }
 

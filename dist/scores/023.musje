@@ -5,7 +5,9 @@ composer: Ludwig van Beethoven
 arranger: Franz Liszt for piano
 source: https://musescore.com/hmscomp/beethoven-symphony-no-6-pastoral-1st-movement-piano-solo
 
+
 == Piano (Pia.): midi(channel: 2, program: 1, pan: 0)
+
 2/4
 /"Allegro ma non troppo" \p 
 0_ 6_b7_2'_ | 1'_b7=6= 5_1_ |
@@ -18,15 +20,5 @@ source: https://musescore.com/hmscomp/beethoven-symphony-no-6-pastoral-1st-movem
 
 2/4
 <4,,1,>-~ | <4,,1,>-~ | <4,,1,>- | /(.) <1,1,,>- |
-<<4,,- /*~*/ | 4, 2,>> | <<4,,- | 3,. 1,_>> | <<4,,- /*~*/ | 4, <2,b7,> >> | <<4,,- | 3,. 1,_>> | 4, 6, | 5,. 4,_ | b7,, 4, | 
-
-
-||
-0- |
-/"Note: these two measures are different."
-\"The former mutipart the latter chords and notes"
- 0- | 0- |
- <<1_6,_ 2_0_ | 6 b7>> | <16>_ 6,_ <2b7>_ 0_ |
-
-
-// To support tie in multipart...
+<<4,,-/*~*/ | 4, 2,>> | <<4,,- | 3,. 1,_>> | <<4,,-/*~*/ | 4, <2,b7,> >> |
+<<4,,- | 3,. 1,_>> | 4, 6, | 5,. 4,_ | b7,, 4, | 

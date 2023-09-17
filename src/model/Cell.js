@@ -47,6 +47,46 @@ export default class Cell {
     this.extractBars()
   }
 
+  // Support lyrics for multipart
+  get firstLayerData() {
+    if (this._firstLayerData) {
+      return this._firstLayerData
+    }
+
+    this._firstLayerData = []
+
+    this.data.forEach(dt => {
+      if (dt.name === 'multipart') {
+        this._firstLayerData = this._firstLayerData.concat(dt.layers[0].data)
+      } else {
+        this._firstLayerData.push(dt)
+      }
+    })
+
+    return this._firstLayerData
+  }
+
+  // Support slurs for multipart
+  get linearData() {
+    if (this._linearData) {
+      return this._linearData
+    }
+
+    this._linearData = []
+
+    this.data.forEach(dt => {
+      if (dt.name === 'multipart') {
+        dt.layers.forEach(layer => {
+          this._linearData = this._linearData.concat(layer.data)
+        })
+      } else {
+        this._linearData.push(dt)
+      }      
+    })
+
+    return this._linearData
+  }
+
   parse(lexer) {
     this.data = []
 
