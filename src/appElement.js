@@ -12,7 +12,7 @@ import './appElement.css'
 // import xmlElement from './utils/xmlElement'
 
 
-const defaultUrl = 'scores/023.musje'
+const defaultUrl = 'scores/016.musje'
 
 const scoresUrls = (function () {
   const fnames = [

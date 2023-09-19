@@ -20,11 +20,11 @@ export default function linkTies(cells) {
 
             let { ndt, ncell } = getNextNote(cells, c, d, l, ld)
 
-            if (!ndt || !hasMatchedPitch(dt, ndt)) {
+            if (!ndt || !hasMatchedPitch(ldt, ndt)) {
               return
             }
 
-            link(dt, ndt, cell, ncell)
+            link(ldt, ndt, cell, ncell)
           })
         })
       }
@@ -56,11 +56,12 @@ const getNextNote = (cells, c, d, l, ld) => {
 
   // The dt is multipart.
   if (typeof l === 'number') {
-    const { layers } = cells[c].data[d]
+    const cell = cells[c]
+    const layer = cell.data[d].layers[l]
 
     do {
       ld++
-      ndt = layers[l].data[ld]
+      ndt = layer.data[ld]
 
       if (!ndt) {
         return getNextNote(cells, c, d)
@@ -68,7 +69,7 @@ const getNextNote = (cells, c, d, l, ld) => {
 
       if (ndt) {
         if (ndt.name === 'note' || ndt.name === 'chord') {
-          return { ndt, ncell }
+          return { ndt, ncell: cell }
         }
 
         if (ndt.name === 'rest') {
@@ -105,7 +106,7 @@ const getNextNote = (cells, c, d, l, ld) => {
       }
 
       if (ndt.name === 'multipart') {
-        return getNextNote(cells, c, d, 0, 0)
+        return getNextNote(cells, c, d, 0, -1)  // tmp: only deal with l = 0
       }
     }
   } while (ndt)
@@ -197,7 +198,7 @@ const link = (dt, ndt, cell, ncell) => {
       }
       break
     default:
-      throw new TypeError(dt.name)
+      throw new TypeError('Tie linking dt: ' + dt.name)
   }
 }
 

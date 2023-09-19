@@ -47,6 +47,12 @@ export default class Cell {
     this.extractBars()
   }
 
+  // Considering for 2D-linked list
+  get up() {}
+  get down()  {}
+  get left() {}
+  get right() {}
+
   // Support lyrics for multipart
   get firstLayerData() {
     if (this._firstLayerData) {
@@ -120,7 +126,7 @@ export default class Cell {
   }
 
   setAlters() {
-    const currAccidental = { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '' }
+    let currAccidental = { 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '' }
 
     const setAlter = pitch => {
       const { step, accidental } = pitch
@@ -132,13 +138,23 @@ export default class Cell {
       pitch.alter = ACCIDENTAL_TO_ALTER[currAccidental[step]]
     }
 
-    this.data.forEach(dt => {
+    const setDtAlter = dt => {
       switch (dt.name) {
-        case 'note': return setAlter(dt.pitch)
-        case 'chord': return dt.pitches.forEach(setAlter)
-        case 'multipart': return
+        case 'note':
+          setAlter(dt.pitch)
+          return
+        case 'chord':
+          dt.pitches.forEach(setAlter)
+          return
+        case 'multipart':
+          dt.layers.forEach(layer => {
+            layer.data.forEach(setDtAlter)
+          })
+          return
       }
-    })
+    }
+
+    this.data.forEach(setDtAlter)
   }
 
   setModifications() {

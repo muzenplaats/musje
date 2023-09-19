@@ -17,7 +17,7 @@ export default class TieLayout extends AbstractLayout {
     const { tieMode } = this.style.chord
     const { note, nextNote } = this.tie
 
-    if (tieMode === 'single' && note.name === 'note' && nextNote.name === 'chord') {
+    if (tieMode === 'single' && note && note.name === 'note' && nextNote.name === 'chord') {
       return nextNote.tie
     }
 
