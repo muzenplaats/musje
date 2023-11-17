@@ -1,9 +1,109 @@
 # Musje 3-dev
 
+(Draft Ideas)
+
+## Grammar
+
+```
+src/Grammar.mus
+```
+
+## Usage
+
+In the  `Person.mus` file:
+```mus
+Pass Comment {
+  # somewhere
+  Define Split from Function {
+    Catch content
+
+    Parameter {
+      Name { str }
+      Type { String }
+    }
+    JavaScript {
+      return content.Parameter[0].split(' ')
+    }
+  }
+}
+
+Person {
+  Include Split from 'somewhere'
+
+  Define FirstName as String
+  Define LastName as String
+  Define Age as Number
+  Define Sex from Binary { Male | Female | ... }
+
+  FirstName { Johon }
+  LastName { Smith }
+  Name {
+    Get { content.FirstName[0] ' ' content.LastName[0] }
+    Set {
+      Value { name }
+      Split name by ' '
+      Reset content.FirstName[0] = fname  # possibly observed by others
+      Reset content.LastName[0] = lname
+    }
+  }
+  Age { 25 }
+  Sex { Male }
+}
+```
+
+## Developemnt
+The codename is the same as musje v2: `gezondheid`.
+
+**Building blocks**
+```mus
+Use SimpleType
+Use ComplexType
+
+Define String from SimpleType {
+  Catch content
+  JavaScript {
+    import { mltrim } from './helpers'
+    return mltrim(content)
+  }
+}
+Define Number from SimpleType {
+  Catch content
+  JavaScript {
+    return +content
+  }
+}
+
+# ^Defined
+Set s = String { abc }
+Set n = Number { 123 }
+
+# Define ...
+
+Add ASuite {
+  # a suite of parsable
+
+  Usage {
+    Set s1 = String { a }
+    Set s2 = 'b'
+    Set s3 = s1 s2 'c'
+    Set n = Number { 1 } + 2
+  }
+}
+```
 
 
+## References
 
-**Musje 2 (same as the master branch)**
+- LISP/Scheme (list of pairs)
+- Fortran/C (tree of nodes)
+- ASM
+
+
+<hr>
+<br><br>
+
+**Musje 2**<br>
+(Same as in the master branch)
 
 ![alt musje 123](https://github.com/malcomwu/musje/blob/master/dist/assets/musje123-64x64.jpg) <br>
 A numbered musical notation in sheet music.
