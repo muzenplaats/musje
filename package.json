@@ -1,7 +1,7 @@
 {
   "name": "musje",
-  "description": "A numbered musical notation in sheet music.",
-  "version": "2.0.9",
+  "description": "A numbered musical notation in sheet music revive.",
+  "version": "3.0.0-pre-build",
   "main": "musje.js",
   "scripts": {
     "serve": "webpack-dev-server --mode development",
