@@ -1,4 +1,4 @@
-# Musje 2
+# Musje 3-dev
 
 ![alt musje 123](https://github.com/malcomwu/musje/blob/master/dist/assets/musje123-64x64.jpg) <br>
 A numbered musical notation in sheet music.
