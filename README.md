@@ -6,6 +6,8 @@
 Do not change any files or folders but only the `src/v3-dev-branch` folder and this `README.md` file
 because this branch is temporarily standalone.
 
+Goto https://github.com/muzenplaats/musje/tree/v3-dev/src/v3-dev-branch
+
 ## Grammar
 
 ```
