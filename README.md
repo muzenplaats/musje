@@ -103,7 +103,7 @@ Add ASuite {
 <br><br>
 
 **Musje 2**<br>
-(Same as in the master branch)
+(The below is a quick reference of the prvious version.)
 
 ![alt musje 123](https://github.com/malcomwu/musje/blob/master/dist/assets/musje123-64x64.jpg) <br>
 A numbered musical notation in sheet music.
