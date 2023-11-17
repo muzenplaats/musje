@@ -2,6 +2,10 @@
 
 (Draft Ideas)
 
+## Notice
+Do not touch any files or folders but only the `src/v3-dev-branch` folder and this `README.md` file
+because this branch is temporarily standalone.
+
 ## Grammar
 
 ```
