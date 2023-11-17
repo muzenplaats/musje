@@ -1,0 +1,91 @@
+Use Tokens from './definitions/Tokens'
+Use Comment from './definitions/Comment'
+Use Grammar from './definitions/Grammar'
+
+Define tokens = Tokens {
+  {: \{
+  }: \}
+  =: =
+  #: #
+  sm-ident: [a-z][a-zA-Z]*
+  cap-ident: [A-Z][a-zA-Z]*
+  ident: sm-ident | cap-ident
+  All: .*
+  S: [ ]
+}
+
+Pass Comment {
+  CapIdent {
+    InnerCI {  # to be locked
+        {}}
+    }  # <- locked by indentation
+  }
+}
+
+Grammar {
+  Take tokens
+
+  Document := WS Non-Component-Declaration* WS
+                 Component-Declaration WS
+                 Non-Component-Declaration* WS
+
+  Declaration = (Component-Declaration | Degraded-Declaration |
+                 Parsed-Declaration) WS
+
+  Componet-Declaration := cap-ident WS '{' Content '}'  # indent-}-lock
+  Degraded-Declaration := cap-ident WS ident+ '{' Content '}'  # cdr notion
+  Parsed-Declaration := cap-ident WS parsable  # <- in the Suite
+
+  Content := SimpleContent | ComplexContent
+  SimpleContent := brace-locked-section
+  ComplexContent := WS (Declaration WS)*
+
+  SLComment := '#' All
+  SS := S* SLComment?
+  WS := (' ' | NL | SLComment)*
+
+
+  Suite {
+    Description { Hot reloadable module suite }
+    Annotation {
+      Lexer context (lexer.to(Suite1))
+      lexer.to(Suite2)
+      lexer.to(Suite)
+      For the parsable (pexpression, literal, ...)
+    }
+
+    Tokens {
+      (: (
+      ): )
+      addop: [\+\-] | [ ]+  # plus, minus or concat
+      mulop: [\*\/|]  # multiple, divide or ...
+    }
+    Grammar {
+      Parsed-Declaration := cap-ident (assignment | expression)
+      assignment := sm-ident WS '=' WS expression
+      expression := term (addop term)*
+      term := factor (mulop term)*
+      factor := value  # ?...
+      value := (paren | function | ident | Component-Declaration)
+    }
+
+    Usage {
+      Include D from 'somewhere'
+      Define C from SimpleType {...}
+      Define constant e = 2.71
+
+      Say f = 5
+      Vary f = 6
+
+      Set a = A { a }
+      Set b = B {
+        Observe a
+      }
+      Reset a = A { aa }
+      Clear a
+
+      Set a = 1 + 2
+    }
+  }
+}
+
