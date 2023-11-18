@@ -1,0 +1,87 @@
+Score {
+  Head {
+    title: Some of the Scale
+    arranger: Malcom Wu
+  }
+
+  Body {
+    == Piano
+    4/4 1 2 3 4 | 5 6 7 1’ |
+    Lyrics:
+    Do Re Mi Fa  So La Si Do’
+    —
+    Annotation { Accompany Staff }
+    4/4 /Oct 1, /G { blue 5, }
+           /Oct 3, /Dm { green 2, } |
+           /C 3, /Dm { green 4, }
+           /G { blue 2, } /C 5, |
+    Lyrics:
+    Do, So, Mi, So,  Mi, Fa, Re, So,
+  }
+}
+
+Set green = Style { color: green }
+Set blue = Style { color: blue }
+
+
+
+
+
+
+# Degradation
+(For testing in musje 2)
+
+
+
+
+title: Some of the Scale
+arranger: Malcom Wu
+
+== Piano
+4/4 1 2 3 4 | 5 6 7 1’ |
+Lyrics:
+Do Re Mi Fa  So La Si Do’
+—
+// Accompany Staff
+4/4 /Oct 1, /G 5,
+                        // new feature { blue 5, }
+       /Oct 3, /Dm 2 | // { green 2, } |
+       /C 3, /Dm 4,  // { green 4, }
+       /G 2, /C 5, |  // { blue 2, }
+Lyrics:
+Do, So, Mi, So,  Mi, Fa, Re, So,
+
+
+
+
+
+
+
+
+
+# Derivation
+
+Note {
+  blue
+  Pitch { step: 2, octave: -1 }
+  Duration { type: 4 }
+}
+Note {  blue 2, }
+{ blue 2, }  # Note omitted
+
+
+
+# Why
+
+Define Measure from ComplexType {
+  Define MusicData from Entity {
+    Catch content
+    Occur {
+      Clef | Time | Key | Note | Direction |
+      Rest | Chord | Multipart | Bar
+    }
+  }
+
+  Catch content
+  Occur in MusicData*
+}

@@ -1,0 +1,57 @@
+
+Abc {
+  Def {}
+  Ghi {
+    Jkl
+  }
+}
+
+let indentStep = 2
+let level = 0
+lexer.token(‘{‘)  // in the mlcnt
+level++
+
+lexer.tokens(‘SS’, ‘NL’)
+lexer.indent(level)
+
+if (lexer.is(‘component’)) {
+  this.nodeList.push(new Component(lexer, idntlevel)
+}
+…
+Shown.
+
+
+
+
+
+
+
+
+//  Restrict whitespace convention into
+// the grammar domain range for the
+// wanting benefit.
+// technically moves some linter errors
+// into the parser. Similar as schema
+// to grammar for validation.
+
+
+Tokens = {
+  // …
+  escrbrc: ‘\\\}’
+}
+
+
+Component :=
+            cap-ident S ‘{‘ Content ‘}’
+Content := escwithout-‘}’,escrbrc ‘}’ WS
+                  | mlcontent-test
+mlcontent-test := SS NL
+  indent(level) /* line.rest */ NL
+  indent(level) ‘}’
+
+mlc-test2 :=//
+
+
+
+lexer.token(‘SS’, ‘NL’)
+le

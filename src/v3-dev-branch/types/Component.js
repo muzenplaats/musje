@@ -1,35 +1,38 @@
-// import Lexer from '../Lexer')
-// import { mltrimleft } = from '../helper'
-
 const Lexer = require('../Lexer')
-const { mltrimleft } = require('../helpers')
+const { defaultIndentStep } = require('../helpers')
 
 /*
   (Proof of concept component (not correct))
-  Component := cap-ident WS '{'  mlwithout-'}'   '}' WS
+  Component := cap-ident S '{' NL
+               indent(idntlevel) node-list '}' WS
+  node-list := (Component(idntlevel) NL indent(idntlevel))*
  */
 // export default class Component {
 const Component = module.exports = class Component {
-  constructor(src) {
+  constructor(src, indentLevel, indentStep = defaultIndentStep) {
     this.name = 'component'
-    this.src = src
+    this.indentLevel = indentLevel
+    this.indentStep = indentStep
 
     if (typeof src === 'string') {
       this.parse(new Lexer(src))
     } else if (src instanceof Lexer) {
       this.parse(src)
     } else {
-      // ...
+      this.componentName = src.componentName
+      this.content = src.content
     }
   }
 
   parse(lexer) {
     lexer.token('cap-ident', lexeme => { this.componentName = lexeme })
 
-    lexer.skipWhite()
+    lexer.token('S')
     lexer.token('{')
+    // lexer.nextLine()
 
-    lexer.mlwithout('}', lexeme => { this.content = mltrimleft(lexeme) })
+
+    lexer.mlwithout('}', lexeme => { this.content = lexeme })
 
     lexer.token('}')
     lexer.skipWhite()
