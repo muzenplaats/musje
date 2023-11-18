@@ -1,8 +1,10 @@
+// !This is modified.
 /* makeLexerClass.js v1.3.0-gamma */
 
 const repeat = (rep, num) => new Array(num + 1).join(rep)
 const { concat } = []
 const flatten = arr => concat.apply([], arr)
+class LexerError extends Error {}
 
 class Lines {
   constructor(str, nlSpliter = 'both') {
@@ -337,7 +339,7 @@ module.exports = function makeLexerClass(patterns) {
       if (ln > 0) messageLines.push('|' + this.lines.data[ln - 1])
       messageLines.push('|' + this.lines.data[ln])
       messageLines.push(repeat(' ', this.line.col + 1) + '^')
-      throw new Error(messageLines.join('\n'))
+      throw new LexerError(messageLines.join('\n'))
     }
 
     skipSS() { this.optional('SS') }
