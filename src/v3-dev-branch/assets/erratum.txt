@@ -1,0 +1,77 @@
+Erratum 
+
+Some people might have found it wrong. The SimpleType is the #CDTA section. So ‘}’ is escaped by ‘\\}’. The ComplexType is the #PCDTA.
+
+So the original version is correct:
+
+Use SimpleType 
+Use CompexType
+
+In which both are singletons.
+
+I haven’t studied it yet.
+Some interesting materials behind might be in schematron, a rarely used schema definition for the XML document. The popular ones are document type definition (DTD) and XMLSchema. XMLSchema is not XML schema. It is W3C recommended XML schema. The w3school is not W3C school.
+
+Where is the SimpleContent and ComplexContent? They are readily in:
+
+Define A from SimpleType {
+  Catch content  # SimpleContent
+  content
+}
+
+Define B from ComplexType {
+  Catch content  # ComplexContent
+  content
+}
+
+Is JavaScript {…} ComplexType or SimpleType? ComplexType so that the brace ‘}’ inside does not need to be escaped. What is it? The content has a text node in content.nodeList[0].
+
+The indentation has been worked out by ComplexType. The CompexContent does not have those indents. The indentation information cannot be seen by the JavaScript processor. It only see the cell, which is the text node been parsed.
+
+
+
+
+
+
+
+
+Usage (okay?)
+
+AComp {
+  Set a = 1
+  JavaScript {
+    const b = a
+    // …
+    return content
+  }
+}
+
+I have limited information here. But I say okay. Not run_cell() but a module pattern 
+
+;(function ({ a }) {
+
+} (symtable))
+// Sorted 
+
+
+
+
+
+
+
+1. An a is undefined such as the error.
+2. Convert the cell to 
+        String.raw’const b = ${a}’
+3. Ask this language process what is a.
+4. …
+5. scope.a
+6. Or symtable.a
+
+function container({ a }) {
+  const src = content.textNode
+  const b = a
+  // …
+  return content
+}
+
+?
