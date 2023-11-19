@@ -4,26 +4,30 @@ const { color, equalObj } = require('./helpers')
 
 // Quick-and-dirty test:
 
-const test = (Class, src) => {
+let testCounter = 0
+
+const test = (Class, src, flag) => {
+  const print = flag === 'mute' ? () => {} : console.log
   const instance = new Class(src)
+  console.log(color('bright', `Test [${++testCounter}]:`))
   console.log(color('magenta', '- Source:'))
   console.log(src)
 
-  console.log(color('magenta', '- To Data:'))
+  print(color('magenta', '- To data (plain object):'))
   const jsonStr = JSON.stringify(instance, null, 2)
-  console.log(jsonStr)
+  print(jsonStr)
 
-  console.log(color('magenta', '- To Description:'))
+  print(color('magenta', '- To description:'))
   const serialized = '' + instance
-  console.log(serialized)
+  print(serialized)
   const assert1 = serialized === src
-  console.log('Assert serialization:', assert1)
+  print('Assert serialization:', assert1)
 
-  console.log(color('magenta', '- Instance from data(plain object)'))
+  print(color('magenta', '- From data (plain object)'))
   const instance2 = new Document(JSON.parse(jsonStr))
-  console.log(instance2)
+  print(instance2)
   const assert2 = JSON.stringify(instance2, null, 2) === jsonStr
-  console.log('Assert data:', assert2)
+  print('Assert data:', assert2)
 
   const result = assert1 && assert2
 
@@ -34,12 +38,14 @@ const test = (Class, src) => {
 }
 
 console.log('# Test Document:')
-test(Document, 'Abc {...}')
+test(Document, 'Abc {...}', 'mute')
 
-test(Document, `
-Def {
+test(Document,
+`Def {
   AChildComponent {
     This is simple content.
   )]
-}
-`)
+}`)
+
+console.log('Todo: children components')
+console.log()

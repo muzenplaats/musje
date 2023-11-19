@@ -47,6 +47,9 @@ const Document = module.exports = class Document {
     throw new Error('Root component not defined!')
   }
 
+  fromXML() { /* ... */ }
+  toXML() { /* ... */ }
+
   toString() {
     return this.nodeList.join('')
   }
