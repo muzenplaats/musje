@@ -47,7 +47,7 @@ export default function appElement() {
         // Tmp
         score.addStyle(`
           score {
-            width: 800px
+            width: 600px
           }
         `)
 
