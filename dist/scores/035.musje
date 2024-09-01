@@ -1,0 +1,42 @@
+title: 杜鵑圓舞曲
+subtitle: Cuckoo Waltz
+arranger: 王慶勳
+// source: C-19
+
+// /[C]&[#C]  // feature: transpose instrument
+
+/"Tempo di Valse" \mf 3/4 
+/> \0 3' | \0 1' 0 /> \0 3' |  // feature: accents and chiang
+
+\0 1' 0 /> \0 3' | \0 1' \f 0 /> \^ 5' | /> \^~~ 5-.~ | \~~ 5 0 \0 3 |:
+
+\"p-mf^" 1 \^ 0 \^ 3 | \A 1 \^ 0 \^ 3 |
+\A 5 \^ (5_3_ \^ 1_3_) | \A 2 \^ 0 \^ 4 | 
+\A 7, \^ 0 \^ 2 | \A 5, \^ 0 \^ 2 | \A 4 \^ (4_2_ \^ 7,_2_) | 
+
+\A 1 \^ 0 \^ 3 | \A 1 \^ 0 \^ 3 |
+\A 5 \^ (5_3_ \^ 1_3_) | \A 2 \^ 0 \^ 4 | 
+\A 7, \^ 0 \^ 2 | \A 5, \^ 0 \^ 2 | \A 4 \^ (4_2_ \^ 7,_2_) | 
+
+/"[---- I" 1 0 /--------] 3 :| /"[---- II" 1 0 /-----] 1'  | /tr~~ 6-.~ | /~~~ 6-.
+
+
+/*
+note := grace-notes pitch accent duration chiang
+grace-notes := '{' ... notes '}'
+accent := [xX] | '>' | ...
+*/
+
+/*
+scheme I.
+chiang := 'A' | '^' | ... 鏘 +琶音
+
+scheme II.
+@ staff 2: accompany staff
+
+== harmonica
+3/4 \mf 3' | 1' 0 3' | 1' 0 3' | 1' 0 \f 5' | 5-.~ | 5 0 3 |: \p-mf 1 0 3 | 1 0 3 |
+--
+        0  | 0  0 0  | 0  0 0  | 0  0    ^  | ^~   | ~ 0 0 |:       A ^ ^ | A ^ ^ |
+
+*/
